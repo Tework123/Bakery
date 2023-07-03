@@ -19,14 +19,12 @@ def create_app(config):
 
     with app.app_context():
         from application.main import bp as bp_main
-
         app.register_blueprint(bp_main, url_prefix='/main')
 
         from application.admin import bp as bp_admin
-
         app.register_blueprint(bp_admin, url_prefix='/admin')
 
+        db.drop_all()
         db.create_all()
-        # db.drop_all()
 
     return app

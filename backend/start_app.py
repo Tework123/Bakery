@@ -10,6 +10,10 @@ CONFIG_TEST = ''
 app = create_app(CONFIG)
 
 
+
+
+
+
 @app.route('/')
 def index():
     return redirect(url_for('main.index'))

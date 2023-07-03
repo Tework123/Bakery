@@ -2,12 +2,12 @@ from flask import jsonify
 
 from application.admin import bp
 
-menu = [['Начальная страница', '/home'], ['О нас', '/we'], ['Войти', '/login']]
+# menu = [['Начальная страница', '/home'], ['О нас', '/we'], ['Войти', '/login']]
 
 
 @bp.route('/', methods=['GET'])
 def index():
-    data = 'test'
+    data = 'tests'
     response = jsonify({'data': data})
     response.status_code = 200
     return response
