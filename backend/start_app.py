@@ -1,17 +1,14 @@
 from flask import redirect, url_for
 
 from config import DevelopmentConfig
+from config import ProductionConfig
 
 from application import create_app
 
-CONFIG = DevelopmentConfig
+CONFIG = ProductionConfig
 CONFIG_TEST = ''
 
 app = create_app(CONFIG)
-
-
-
-
 
 
 @app.route('/')

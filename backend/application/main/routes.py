@@ -1,9 +1,13 @@
+import datetime
+import json
+
 from flask import jsonify, request
 from flask_login import login_user
 
 from application import db
 from application.models import Users, Card
 from flask_restful import Resource, reqparse, abort, marshal_with, fields
+
 from . import api_main
 from .fields_validation import register_data, register_validation, login_data, login_validation, card_data
 
@@ -14,7 +18,10 @@ from .fields_validation import register_data, register_validation, login_data, l
 
 class Index(Resource):
     def get(self):
-        return {'data': 'Hello world'}
+        time = datetime.datetime.now()
+        time = json.dumps(time, default=str)
+        response = jsonify({'data': time})
+        return response
 
 
 class Register(Resource):

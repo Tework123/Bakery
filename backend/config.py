@@ -1,11 +1,20 @@
 import os.path
-from dotenv import load_dotenv, find_dotenv
+from dotenv import load_dotenv
+
+# в прошлом проекте у меня также не работало, так как внешний .env не копировался в контейнер, так что
+# нужно в любом случае два .env файла, один для Dockerfile2, другой для compose
+
+# basedir = os.path.abspath(os.path.dirname(__file__))
+# # basedir = '/'.join(basedir.split('/')[:-1])
+# print('*****************************************')
+# print(basedir)
+# print('*****************************************')
+# basedir = basedir+'/backend/'
+# print(basedir)
+# load_dotenv(os.path.join(basedir, '.env'))
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-basedir = '/'.join(basedir.split('/')[:-1])
-
 load_dotenv(os.path.join(basedir, '.env'))
-# load_dotenv(find_dotenv())
 
 
 class Config(object):
@@ -21,13 +30,10 @@ class Config(object):
     basepath = os.path.abspath("") + '/'
 
 
-
-
-
 class DevelopmentConfig(Config):
     name = 'DevelopmentConfig'
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI_POSTGRES_dev')
-    REDIS_URL = os.environ.get('REDIS_URL_LOCAL')
+    # REDIS_URL = os.environ.get('REDIS_URL_LOCAL')
 
 
 class TestingConfig(Config):

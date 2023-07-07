@@ -9,12 +9,13 @@ login_manager = LoginManager()
 
 
 def create_app(config):
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder='../build', static_url_path='/')
 
     app.config.from_object(config)
+    app.json.sort_keys = False
 
     db.init_app(app)
-    migrate.init_app(app)
+    migrate.init_app(app, db)
     login_manager.init_app(app)
 
     with app.app_context():
@@ -24,7 +25,7 @@ def create_app(config):
         from application.admin import bp as bp_admin
         app.register_blueprint(bp_admin, url_prefix='/admin')
 
-        db.drop_all()
-        db.create_all()
+        from application.command import bp as bp_command
+        app.register_blueprint(bp_command)
 
     return app
