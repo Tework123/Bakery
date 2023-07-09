@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -9,7 +10,9 @@ login_manager = LoginManager()
 
 
 def create_app(config):
-    app = Flask(__name__, static_folder='../build', static_url_path='/')
+    app = Flask(__name__)
+    # cors = CORS(app, resources={r"/main/*": {"origins": "*"}, r"/admin/*": {"origins": "*"}})
+    cors = CORS(app, origins="*")
 
     app.config.from_object(config)
     app.json.sort_keys = False

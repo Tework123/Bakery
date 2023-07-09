@@ -4,15 +4,25 @@ import './App.css';
 
 function App() {
   const [currentTime, setCurrentTime] = useState(0);
+  const [currentTime3, setCurrentTime3] = useState(0);
+
   const [login, setLogin] = useState("");
   const [register, setRegister] = useState("");
-
 
   useEffect(() => {
     axios.get("/main/").then((response) => {
       setCurrentTime(response.data.data);
     });
   }, []);
+
+  useEffect(() => {
+    axios.get("/admin/").then((response) => {
+      setCurrentTime3(response.data.data);
+    });
+  }, []);
+
+
+
 
   const changeLogin = (e) => {
     console.log(e.target.value);
@@ -41,8 +51,8 @@ function App() {
         <input placeholder='Регистрация' onChange={changeRegister} value={register}></input>
 
         <button onClick={sendRegister}>Зарегистрироваться</button>
-
         <p>The current time is {currentTime}.</p>
+        <p>The current time is {currentTime3}.</p>
 
 
 

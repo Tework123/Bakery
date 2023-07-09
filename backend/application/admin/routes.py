@@ -7,7 +7,7 @@ from application.admin import bp
 
 @bp.route('/', methods=['GET'])
 def index():
-    data = 'tests'
+    data = 'admin'
     response = jsonify({'data': data})
     response.status_code = 200
     return response
@@ -15,7 +15,7 @@ def index():
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
-    data = 'success'
+    data = 'admin_post'
     response = jsonify({'data': data})
     response.status_code = 200
     return response

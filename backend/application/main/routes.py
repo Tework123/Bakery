@@ -70,7 +70,7 @@ class CardActions(Resource):
         return card
 
 
-api_main.add_resource(Index, '/', endpoint='index')
+api_main.add_resource(Index, '/')
 api_main.add_resource(Login, '/login')
 api_main.add_resource(Register, '/register')
 api_main.add_resource(CardActions, '/card')
