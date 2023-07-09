@@ -13,6 +13,7 @@ services:
     restart: always
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./deployment/nginx:/etc/nginx/conf.d
       - ./deployment/certbot/conf:/etc/letsencrypt
@@ -29,12 +30,12 @@ services:
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
   #  nginx:
-#    image: nginx:1.25
-#    restart: unless-stopped
-#    ports:
-#      - "3000:80"
-#    volumes:
-#      - ./deployment/nginx:/etc/nginx/conf.d
+  #    image: nginx:1.25
+  #    restart: unless-stopped
+  #    ports:
+  #      - "3000:80"
+  #    volumes:
+  #      - ./deployment/nginx:/etc/nginx/conf.d
 
 
   db:
@@ -47,3 +48,27 @@ services:
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
       - POSTGRES_DB=$POSTGRES_DB
 
+
+  pgbackups:
+    container_name: backup
+    image: prodrigestivill/postgres-backup-local
+    restart: always
+    volumes:
+      - ./backup:/backups
+    links:
+      - db:db
+    depends_on:
+      - db
+    env_file:
+      - ./.env
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=$POSTGRES_DB
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_EXTRA_OPTS=-Z9 --schema=public --blobs
+      - SCHEDULE=@every 20h00m00s
+      - BACKUP_KEEP_DAYS=7
+      - BACKUP_KEEP_WEEKS=4
+      - BACKUP_KEEP_MONTHS=6
+      - HEALTHCHECK_PORT=81
