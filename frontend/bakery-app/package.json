@@ -38,5 +38,5 @@
     ]
   },
 
-  "proxy": "http://45.141.76.71:5000"
+  "proxy": "http://localhost:5000"
 }
