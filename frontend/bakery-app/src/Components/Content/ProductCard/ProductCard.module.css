@@ -1,0 +1,29 @@
+.card_container {
+    width: 220px;
+    height: 400px;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+}
+
+.card_image {
+    border: 1px solid red;
+    height: 220px;
+}
+
+.card_name {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.card_description {
+    flex-grow: 1;
+}
+
+.card_bottom_place {
+    display: flex;
+}
+
+.card_button__container {
+    margin-left: auto;
+}

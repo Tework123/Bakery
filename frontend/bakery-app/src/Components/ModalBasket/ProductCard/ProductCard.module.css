@@ -1,0 +1,42 @@
+.card_container {
+    background-color: white;
+    margin-bottom: 10px;
+    display: flex;
+    padding: 10px;
+    height: 100px;
+}
+
+.card_name {
+    font-weight: bold;
+}
+
+.card_image {
+    height: 90px;
+    width: 90px;
+    border: 1px solid red;
+    margin-right: 8px;
+}
+
+.card_description {
+    display: flex;
+    flex-direction: column;
+}
+
+.card_button_delete {
+    margin-left: auto;
+    align-self: center;
+}
+
+.card_dop_text {
+    flex-grow: 1;
+    font-size: 12px;
+}
+
+.card_button_add_delete {
+    border-radius: 20px;
+    padding: 4px 7px;
+    background-color: orange;
+    width: 60px;
+    display: flex;
+    justify-content: space-between;
+}

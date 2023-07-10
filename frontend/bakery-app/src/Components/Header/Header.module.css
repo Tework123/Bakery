@@ -1,0 +1,21 @@
+.header_main {
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 60px;
+    padding: 0 100px;
+
+    background-color: white;
+    box-shadow: 0px 5px 7px -5px rgba(34, 60, 80, 0.25);
+}
+
+.right_actions {
+    margin-left: auto;
+    display: flex;
+}
+
+.item {
+    margin-left: 10px;
+}
+

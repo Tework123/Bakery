@@ -1,68 +1,75 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios'
+import { useEffect, useRef, useState } from 'react';
 import './App.css';
+import AppWrapper from './Components/AppWrapper/AppWrapper';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 function App() {
-  const [currentTime, setCurrentTime] = useState(0);
-  const [currentTime3, setCurrentTime3] = useState(0);
 
-  const [login, setLogin] = useState("");
-  const [register, setRegister] = useState("");
+
+  let size = 20;
+  for (let i = 0; i < size; i++) {
+    for (let j = 0; j < size; j++) {
+      if ()
+      console.log("");
+    }
+  }
+
+
+
+  const [scroll, setScroll] = useState(0);
 
   useEffect(() => {
-    axios.get("/main/").then((response) => {
-      setCurrentTime(response.data.data);
-    });
-  }, []);
-
-  useEffect(() => {
-    axios.get("/admin/").then((response) => {
-      setCurrentTime3(response.data.data);
-    });
-  }, []);
-
-
+    window.addEventListener("scroll", () => {
+      setScroll(window.scroll)
+      console.log(scroll);
+    })
+      
+      return () => window.removeEventListener("scroll", () => {
+        setScroll(window.scroll)
+      })
+    }, []);
+  
 
 
-  const changeLogin = (e) => {
-    console.log(e.target.value);
-    setLogin(e.target.value)
+
+
+
+  //Отвечает за октрытие/закрытие модлаьного окна корзины, меняя правый паддинг и скрывая содержимое за экраном
+  const [style, setStyle] = useState({overflowY:'scroll'})
+  const [isModalBasketOpen, setModalBasketOpen] = useState(false)
+
+  const changeModalWindow = () => {
+    
+    debugger
+    console.log("До " + isModalBasketOpen);
+    setModalBasketOpen(!isModalBasketOpen);
+    console.log("После " + isModalBasketOpen);
+    debugger
+    if (!isModalBasketOpen) {
+      setStyle({overflowY:'hidden', paddingRight: 17})
+    } else {
+      setStyle({overflowY:'scroll', paddingRight: 0})
+    }
+    console.log(isModalBasketOpen);
+    console.log(style);
   }
 
-  const changeRegister = (e) => {
-    console.log(e.target.value);
-    setRegister(e.target.value)
-  }
 
-  function sendLogin() {
-    axios.post('/main/login', {login: login}).then((response) => {console.log(response.data.data)})
 
-  }
+  //Routing
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <AppWrapper changeModalWindow={changeModalWindow} isModalBasketOpen={isModalBasketOpen}/>
+    }
+  ])
 
-    function sendRegister() {
-    axios.post('/main/register', {register: register}).then((response) => {console.log(response.data.data)})
-
-  }
 
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <input placeholder='Регистрация' onChange={changeRegister} value={register}></input>
-
-        <button onClick={sendRegister}>Зарегистрироваться</button>
-        <p>The current time is {currentTime}.</p>
-        <p>The current time is {currentTime3}.</p>
-
-
-
-        <input placeholder='Логин' onChange={changeLogin} value={login}></input>
-        <button onClick={sendLogin}>Авторизоваться</button>
-
-      </header>
+    <div className="App" style={style}>
+      <RouterProvider router={router}/>
     </div>
-
-
   );
 }
 

@@ -1,0 +1,17 @@
+.navbar_container {
+    background-color: blueviolet;
+    min-height: 50px;
+    padding: 0 100px;
+
+    display: flex;
+    align-items: center;
+}
+
+.item {
+    margin-right: 10px;
+}
+
+.navbar_basket_button {
+    margin-left: auto;
+    margin-right: 0;
+}
