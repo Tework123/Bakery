@@ -1,69 +1,60 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios'
+import { useEffect, useRef, useState } from 'react';
 import './App.css';
+import AppWrapper from './Components/AppWrapper/AppWrapper';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 function App() {
-  const [currentTime, setCurrentTime] = useState(0);
-  const [currentTime3, setCurrentTime3] = useState(0);
 
-  const [login, setLogin] = useState("");
-  const [register, setRegister] = useState("");
+  //Routing
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <AppWrapper/>
+    }
+  ])
 
-  useEffect(() => {
-    axios.get("/main/").then((response) => {
-      setCurrentTime(response.data.data);
-    });
-  }, []);
+//  useEffect(() => {
+//    axios.get("/main/").then((response) => {
+//      setCurrentTime(response.data.data);
+//    });
+//  }, []);
+//
+//  useEffect(() => {
+//    axios.get("/admin/").then((response) => {
+//      setCurrentTime3(response.data.data);
+//    });
+//  }, []);
+//
+//
+//
+//
+//
+//  const changeLogin = (e) => {
+//    console.log(e.target.value);
+//    setLogin(e.target.value)
+//  }
+//
+//  const changeRegister = (e) => {
+//    console.log(e.target.value);
+//    setRegister(e.target.value)
+//  }
+//
+//  function sendLogin() {
+//    axios.post('/auth/login', {login: login}).then((response) => {console.log(response.data.data)})
+//
+//  }
+//
+//    function sendRegister() {
+//    axios.post('/auth/register', {register: register}).then((response) => {console.log(response.data.data)})
+//
+//  }
 
-  useEffect(() => {
-    axios.get("/admin/").then((response) => {
-      setCurrentTime3(response.data.data);
-    });
-  }, []);
-
-
-
-
-
-  const changeLogin = (e) => {
-    console.log(e.target.value);
-    setLogin(e.target.value)
-  }
-
-  const changeRegister = (e) => {
-    console.log(e.target.value);
-    setRegister(e.target.value)
-  }
-
-  function sendLogin() {
-    axios.post('/auth/login', {login: login}).then((response) => {console.log(response.data.data)})
-
-  }
-
-    function sendRegister() {
-    axios.post('/auth/register', {register: register}).then((response) => {console.log(response.data.data)})
-
-  }
 
 
   return (
     <div className="App">
-      <header className="App-header">
-        <input placeholder='Регистрация' onChange={changeRegister} value={register}></input>
-
-        <button onClick={sendRegister}>Зарегистрироваться</button>
-        <p>The current time is {currentTime}.</p>
-        <p>The current time is {currentTime3}.</p>
-
-
-
-        <input placeholder='Логин' onChange={changeLogin} value={login}></input>
-        <button onClick={sendLogin}>Авторизоваться</button>
-
-      </header>
+      <RouterProvider router={router}/>
     </div>
-
-
   );
 }
 

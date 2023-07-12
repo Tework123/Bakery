@@ -1,0 +1,14 @@
+.chapter_container {
+    margin-bottom: 40px;
+}
+
+.chapter_header {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.chapter_products {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
