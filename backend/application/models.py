@@ -4,7 +4,6 @@ from application import db, login_manager
 class Users(db.Model):
     id_user = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50), unique=True)
-    phone = db.Column(db.String(30), unique=True)
     role = db.Column(db.String(20))
     token = db.Column(db.String(200), nullable=True, index=True, unique=True)
 

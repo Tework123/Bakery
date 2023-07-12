@@ -15,7 +15,7 @@ class Register(Resource):
     def post(self):
         data = register_data.parse_args()
         register_validation(data)
-        user = Users(email=data['email'], phone=data['phone'], role='user')
+        user = Users(email=data['email'], role='user')
         db.session.add(user)
         db.session.flush()
         db.session.commit()

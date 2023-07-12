@@ -8,7 +8,7 @@ function Header() {
   const [isAuthorithised, setIsAuthorithised] = useState(false)
 
   function sendEmailAutho() {
-    axios.post('/auth/login', { login: login }).then((response) => {
+    axios.post('/auth/login', { email: login }).then((response) => {
       console.log(response.data.data)
       if (response.data.data === 'Вход выполнен успешно') {
         setIsAuthorithised(true)
@@ -18,7 +18,7 @@ function Header() {
   }
 
   function sendEmailRegistr() {
-    axios.post('/auth/register', { login: login }).then((response) => {
+    axios.post('/auth/register', { email: login }).then((response) => {
 
       console.log(response.data.data)
       if (response.data.data === 'Регистрация прошла успешно') {

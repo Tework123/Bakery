@@ -6,7 +6,7 @@ from application.models import Users
 
 register_data = reqparse.RequestParser()
 register_data.add_argument('email', type=str, help='Требуется email для регистрации', required=True)
-register_data.add_argument('phone', type=str, help='Требуется телефон для регистрации', required=True)
+# register_data.add_argument('phone', type=str, help='Требуется телефон для регистрации', required=True)
 
 
 def register_validation(data):
@@ -16,15 +16,15 @@ def register_validation(data):
         abort(400, message='Данный email уже занят')
     if '@' not in data['email'] or '.' not in data['email']:
         abort(400, message='Email записан некорректно')
-    if Users.query.filter_by(phone=data['phone']).first():
-        abort(400, message='Данный номер телефона уже занят')
-    if not bool(re.match(r'^(\+7|7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$',
-                         data['phone'])):
-        abort(400, message='Номер телефона записан некорректно')
+    # if Users.query.filter_by(phone=data['phone']).first():
+    #     abort(400, message='Данный номер телефона уже занят')
+    # if not bool(re.match(r'^(\+7|7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$',
+    #                      data['phone'])):
+    #     abort(400, message='Номер телефона записан некорректно')
 
 
 login_data = reqparse.RequestParser()
-login_data.add_argument('email', type=str, help='email for login required', required=True)
+login_data.add_argument('email', type=str, help='Требуется email для входа', required=True)
 
 
 def login_validation(data):
