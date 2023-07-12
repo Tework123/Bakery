@@ -1,25 +1,11 @@
-import time
-
-from flask import redirect, url_for, jsonify
+from flask import jsonify
+from flask_restful import Resource, Api
 
 from config import DevelopmentConfig
 from config import ProductionConfig
 
 from application import create_app
 
-CONFIG = ProductionConfig
-CONFIG_TEST = ''
+CONFIG = DevelopmentConfig
 
 app = create_app(CONFIG)
-
-
-# @app.route('/time')
-# def index():
-#     return {'data': time.time()}
-#
-#
-# @app.route('/time2')
-# def admin():
-#     return {'data': time.time()}
-
-#     # return redirect(url_for('main.index'))

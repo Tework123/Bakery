@@ -3,10 +3,10 @@ from application import db, login_manager
 
 class Users(db.Model):
     id_user = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(20))
     email = db.Column(db.String(50), unique=True)
-    password = db.Column(db.String(40))
-    phone = db.Column(db.String(30))
+    phone = db.Column(db.String(30), unique=True)
+    role = db.Column(db.String(20))
+    token = db.Column(db.String(200), nullable=True, index=True, unique=True)
 
     def is_authenticated(self):
         return True
@@ -23,7 +23,8 @@ def load_user(id):
     return Users.query.get(int(id))
 
 
-class Card(db.Model):
-    id_card = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(20))
-    price = db.Column(db.Integer)
+class CardProducts(db.Model):
+    card_id = db.Column(db.Integer, primary_key=True)
+    card_name = db.Column(db.String(20), unique=True)
+    card_price = db.Column(db.Integer)
+    card_image = db.Column(db.String(200))

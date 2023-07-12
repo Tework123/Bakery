@@ -25,8 +25,7 @@ class Config(object):
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     ADMINS = os.environ.get('ADMINS')
-    ADMIN_LOGIN = os.environ.get('ADMIN_LOGIN')
-    ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD')
+    MAIN_ADMIN_EMAIL = os.environ.get('MAIN_ADMIN_EMAIL')
     basepath = os.path.abspath("") + '/'
 
 

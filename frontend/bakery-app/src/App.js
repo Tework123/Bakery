@@ -24,6 +24,7 @@ function App() {
 
 
 
+
   const changeLogin = (e) => {
     console.log(e.target.value);
     setLogin(e.target.value)
@@ -35,12 +36,12 @@ function App() {
   }
 
   function sendLogin() {
-    axios.post('/main/login', {login: login}).then((response) => {console.log(response.data.data)})
+    axios.post('/auth/login', {login: login}).then((response) => {console.log(response.data.data)})
 
   }
 
     function sendRegister() {
-    axios.post('/main/register', {register: register}).then((response) => {console.log(response.data.data)})
+    axios.post('/auth/register', {register: register}).then((response) => {console.log(response.data.data)})
 
   }
 
