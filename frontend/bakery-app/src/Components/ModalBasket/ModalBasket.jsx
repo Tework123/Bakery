@@ -1,10 +1,17 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useRef } from 'react';
 import classes from './ModalBasket.module.css';
 import ProductCard from './ProductCard/ProductCard';
 
 function ModalBasket(props) {
 
-  console.log(props.isModalBasketOpen);
+
+
+
+  let ref = useRef(null)
+
+  const onScrollContainer = (e) => {
+    ref.current.scrollTop =ref.current.scrollTop + e.deltaY
+  }
 
   let styleModalContainer;
   let styleModalWindow;
@@ -25,15 +32,12 @@ function ModalBasket(props) {
     endOfTovar = ""
   }
 
-
-
-
     return (
-      <div className={classes.modalbasket_main}  style={styleModalContainer}>
-        <div className={classes.modalbasket_container} onClick={props.changeModalWindow}>
+      <div className={classes.modalbasket_main} style={styleModalContainer} onWheel={(e) => {onScrollContainer(e)}}>
+        <div className={classes.modalbasket_container} onClick={props.changeModalWindow} >
 
         </div>
-        <div className={classes.modalbasket_window} style={{...styleModalWindow, ...styleModalContainer}}>
+        <div ref={ref} className={classes.modalbasket_window} style={{...styleModalWindow, ...styleModalContainer}}>
           <div className={classes.modalbasket_description_line}>
             {String(basketQuanitiy) + " товар"}
           </div>

@@ -1,8 +1,17 @@
 import classes from './Navbar.module.css';
 
 function Navbar(props) {
+
+  let style
+  // if (props.scroll < 60) {
+  //   style = {position: 'static'}
+  // } else {
+  //   style = {position: 'fixed'}
+  // }
+
+
   return (
-    <nav className={classes.navbar_container}>
+    <nav className={classes.navbar_container} style={style}>
       <div className={classes.navbar_logo + " " + classes.item}>
 
       </div>

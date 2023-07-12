@@ -1,28 +1,26 @@
 .modalbasket_main {
-    display: flex;
-    top: 0;
-    left: 0;
-    width: 100%;
-    min-height: 100vh;
     position: fixed;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+
 }
 
 .modalbasket_container {
     background-color: rgba(0, 0, 0, 0.197);
     width: 100%;
-    height: inherit;
-    transition: all 1s;
+    height: 100%;
 }
 
 .modalbasket_window {
-    overflow-y: scroll;
     width: 450px;
-    height: 100vh;
+    height: 100%;
     background-color: #F3F3F7;
     margin-left: auto;
     display: flex;
     flex-direction: column;
-    transition: all 1s;
+    overflow-y:auto;
 }
 
 .modalbasket_busketproducts {

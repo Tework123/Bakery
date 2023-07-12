@@ -5,8 +5,15 @@ import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import Navbar from '../Navbar/Navbar';
 import classes from './AppWrapper.module.css';
+import { useState } from 'react';
+import { Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
 
 function AppWrapper(props) {
+
+
+
+
+
 
   const test_data = [
     {
@@ -67,16 +74,51 @@ function AppWrapper(props) {
     },
   ]
 
-  return (
-    <div className={classes.wrapper}>
 
-      <ModalBasket basketProducts={test_data} changeModalWindow={props.changeModalWindow} isModalBasketOpen={props.isModalBasketOpen}/>
-      
-      <Header/>
-      <Navbar changeModalWindow={props.changeModalWindow}/>
-      <CaruselBox/>
-      <Content products={test_data}/>
-      <Footer/>
+
+
+
+  createBrowserRouter(
+    createRoutesFromElements(
+      <Route
+
+       
+      />
+    )
+  )
+
+
+
+
+
+
+
+  //Отвечает за октрытие/закрытие модлаьного окна корзины, меняя правый паддинг и скрывая содержимое за экраном
+  const [style, setStyle] = useState({ overflowY: 'scroll' })
+  const [isModalBasketOpen, setModalBasketOpen] = useState(false)
+
+  const changeModalWindow = () => {
+    console.log(isModalBasketOpen);
+    setModalBasketOpen((isModalBasketOpen) => !isModalBasketOpen);
+
+    if (!isModalBasketOpen) {
+      setStyle({ overflowY: 'hidden', paddingRight: 17 })
+    } else {
+      setStyle({ overflowY: 'scroll', paddingRight: 0 })
+    }
+    console.log(isModalBasketOpen);
+  }
+
+  return (
+    <div className={classes.wrapper} style={style}>
+
+      <ModalBasket basketProducts={test_data} changeModalWindow={changeModalWindow} isModalBasketOpen={isModalBasketOpen} />
+
+      <Header />
+      <Navbar changeModalWindow={changeModalWindow}/>
+      <CaruselBox />
+      <Content products={test_data} />
+      <Footer />
     </div>
   );
 }
