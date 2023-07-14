@@ -2,7 +2,7 @@ import re
 
 from flask_restful import reqparse, abort
 
-from application.models import Users
+from application.models import User
 
 register_data = reqparse.RequestParser()
 register_data.add_argument('email', type=str, help='Требуется email для регистрации', required=True)
@@ -12,7 +12,7 @@ register_data.add_argument('email', type=str, help='Требуется email д�
 def register_validation(data):
     # может сделать вывод сразу всех ошибок через этот словарик, после проверки каждого поля.
     errors = {}
-    if Users.query.filter_by(email=data['email']).first():
+    if User.query.filter_by(email=data['email']).first():
         abort(400, message='Данный email уже занят')
     if '@' not in data['email'] or '.' not in data['email']:
         abort(400, message='Email записан некорректно')
@@ -28,6 +28,6 @@ login_data.add_argument('email', type=str, help='Требуется email для
 
 
 def login_validation(data):
-    user = Users.query.filter_by(email=data['email']).first()
+    user = User.query.filter_by(email=data['email']).first()
     if not user:
         abort(403, message='Данный email не зарегистрирован')

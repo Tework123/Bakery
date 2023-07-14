@@ -1,6 +1,7 @@
 import os
 
-from flask import jsonify, request
+from PIL import Image
+from flask import jsonify, request, url_for
 from flask_login import current_user
 from flask_restful import Resource, fields, marshal_with
 
@@ -9,14 +10,13 @@ from application.admin import api_admin
 from application.admin.fields_validation import card_data, \
     card_patch_data, create_admin_data, create_admin_validation, delete_admin_data, card_delete_data
 from application.auth.auth import admin_login_required
-from application.models import CardProducts, Users
+from application.models import CardProduct, User
 from config import Config
 from start_app import CONFIG
 
 
 # menu = [['Начальная страница', '/home'], ['О нас', '/we'], ['Войти', '/login']]
-# если заходит админ, то показывается тот же сайт, как для юзера, но добавляется админ панелька в меню,
-# там уже таблица с товарами и кнопочки
+
 
 # нужно сделать все роуты в постман красиво со всеми ошибками, для документации
 # нужно перенести это все в тестирование, о боже мой...
@@ -31,14 +31,14 @@ class CreateAdmin(Resource):
     admins_fields = {
         'id_user': fields.Integer,
         'email': fields.String,
-        'phone': fields.String,
+        # 'phone': fields.String,
         'role': fields.String
     }
 
     @admin_login_required(current_user)
     @marshal_with(admins_fields)
     def get(self):
-        admins = Users.query.filter_by(role='admin').all()
+        admins = User.query.filter_by(role='admin').all()
         return admins
 
     @admin_login_required(current_user)
@@ -50,7 +50,7 @@ class CreateAdmin(Resource):
 
         data = create_admin_data.parse_args()
         create_admin_validation(data)
-        user = Users(email=data['email'], role='admin')
+        user = User(email=data['email'], role='admin')
         db.session.add(user)
         db.session.flush()
         db.session.commit()
@@ -66,7 +66,7 @@ class CreateAdmin(Resource):
             return response
 
         data = delete_admin_data.parse_args()
-        Users.query.filter_by(email=data['email']).delete()
+        User.query.filter_by(email=data['email']).delete()
         db.session.commit()
         response = jsonify({'data': 'Админ удален успешно'})
         response.status_code = 403
@@ -83,27 +83,41 @@ class Cards(Resource):
 
     @marshal_with(card_fields)
     def get(self):
-        cards = CardProducts.query.all()
+        cards = CardProduct.query.all()
+
+        import base64
+        # либо так отправляем, либо другими способами, вот здесь можно и закешировать (у юзера, а не у админа)
+        # for card in cards:
+        #     file_path = CONFIG.basepath + 'application/static/' + card.card_image
+        #     with open(file_path, "rb") as image_file:
+        #         my_string = base64.b64encode(image_file.read()).decode("utf-8")
+        #
+        #     card.card_image = my_string
+        # card.card_image = url_for('static', filename=card.card_image)
+
         # выводятся данные и на фронте расставляются в табличку с кнопками удалить, добавить
         return cards
 
     @admin_login_required(current_user)
     def post(self):
         data = card_data.parse_args()
-        # file = request.files['card_image']
-        print(data['card_image'][5:])
+        image = data['card_image']
 
-        # надо получить доступ к названию файла с .jpg и подставить его в путь к файлу, а то через id тяжко
+        # сохранение полученной картинки
+        file_path = CONFIG.basepath + 'application/static/' + image.filename
 
-        file_path = CONFIG.basepath + 'application/static/' + data['card_image']
-        print(file_path)
         if not os.path.exists(file_path):
             data['card_image'].save(file_path)
+        try:
+            card = CardProduct(card_name=data['card_name'], card_price=data['card_price'], card_image=image.filename)
+            db.session.add(card)
+            db.session.flush()
+        except:
+            db.session.rollback()
+            response = jsonify({'data': 'Товар с таким же названием уже есть'})
+            response.status_code = 400
+            return response
 
-        card = CardProducts(card_name=data['card_name'], card_price=data['card_price'])
-
-        db.session.add(card)
-        db.session.flush()
         db.session.commit()
         response = jsonify({'data': 'Товар добавлен успешно'})
         response.status_code = 200
@@ -112,14 +126,20 @@ class Cards(Resource):
     @admin_login_required(current_user)
     def delete(self):
         data = card_delete_data.parse_args()
-        card = CardProducts.query.filter_by(card_id=data['card_id']).first()
+        card = CardProduct.query.filter_by(card_id=data['card_id']).first()
         if card is None:
             response = jsonify({'data': 'Такого товара нет'})
             response.status_code = 200
             return response
 
-        CardProducts.query.filter_by(card_id=data['card_id']).delete()
+        # удаление картинки товара
+        file_path = CONFIG.basepath + "application/static/" + card.card_image
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
+        CardProduct.query.filter_by(card_id=data['card_id']).delete()
         db.session.commit()
+
         response = jsonify({'data': 'Товар удален успешно'})
         response.status_code = 200
         return response
@@ -127,7 +147,7 @@ class Cards(Resource):
     @admin_login_required(current_user)
     def patch(self):
         data = card_patch_data.parse_args()
-        card = CardProducts.query.filter_by(card_id=data['card_id']).first()
+        card = CardProduct.query.filter_by(card_id=data['card_id']).first()
         if card:
             change = ''
             for item, key in data.items():
@@ -140,6 +160,9 @@ class Cards(Resource):
                         card.card_price = key
                     elif item == 'card_image':
                         card.card_image = key
+
+                        # сюда получается тоже не json отправлять, так как картинка может быть нужна, либо
+                        # несколько разных ручек сделать, под каждое поле
                     change += item
 
             db.session.commit()

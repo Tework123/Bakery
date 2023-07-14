@@ -4,7 +4,7 @@ import jwt
 from flask_login import login_user
 
 from application import db
-from application.models import Users
+from application.models import User
 from config import Config
 
 
@@ -60,17 +60,17 @@ def admin_login_required(user):
 
 
 def register_main_admin(email):
-    user = Users.query.filter_by(email=email).first()
+    user = User.query.filter_by(email=email).first()
     if user:
         user.token = create_token(email)
         db.session.commit()
         login_user(user)
         return True
-    user = Users(email=email, role='main_admin')
+    user = User(email=email, role='main_admin')
     db.session.add(user)
     db.session.flush()
     db.session.commit()
-    user = Users.query.filter_by(email=email).first()
+    user = User.query.filter_by(email=email).first()
     user.token = create_token(email)
     db.session.commit()
     login_user(user)

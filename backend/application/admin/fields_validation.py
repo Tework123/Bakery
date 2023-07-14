@@ -3,7 +3,7 @@ import re
 from werkzeug.datastructures import FileStorage
 from flask_restful import reqparse, abort
 
-from application.models import Users
+from application.models import User
 
 # создание карточки
 card_data = reqparse.RequestParser()
@@ -39,7 +39,7 @@ create_admin_data.add_argument('email', type=str, help='Требуется email
 def create_admin_validation(data):
     # может сделать вывод сразу всех ошибок через этот словарик, после проверки каждого поля.
     errors = {}
-    if Users.query.filter_by(email=data['email']).first():
+    if User.query.filter_by(email=data['email']).first():
         abort(400, message='Данный email уже занят')
     if '@' not in data['email'] or '.' not in data['email']:
         abort(400, message='Email записан некорректно')
