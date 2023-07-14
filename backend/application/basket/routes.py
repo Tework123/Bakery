@@ -9,8 +9,11 @@ from application.auth.auth import login_required
 from application.basket import api_basket
 from application.basket.fields_validation import basket_data, basket_data_delete
 from application.cards import api_cards
+from application.email.email import send_email
 from application.models import User, CardProduct, Order, OrderProduct
 from flask_restful import Resource, marshal_with, fields
+
+from start_app import CONFIG
 
 
 class Index(Resource):
@@ -27,6 +30,13 @@ class Index(Resource):
     @login_required(current_user)
     @marshal_with(card_fields)
     def get(self):
+        subject = 'Bakery email'
+        body = 'Bakery HERE?'
+        # x = 1 / 0
+
+
+        # send_email(subject, CONFIG.MAIL_USERNAME, [current_user.email], body)
+
         basket = db.session.query(Order.order_id, Order.user_id, OrderProduct.card_id, OrderProduct.amount,
                                   CardProduct.card_name,
                                   CardProduct.card_image,
