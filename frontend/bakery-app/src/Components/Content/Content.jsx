@@ -25,7 +25,18 @@ function Content(props) {
 
   const chooseFileImage = (e) => {
     setSelectedImage(e.target.files[0])
+    console.log(e.target.files[0]);
 
+  }
+
+  const submitImage = () => {
+    const formData = new FormData();
+    console.log(selectedImage);
+    formData.append('image', selectedImage);
+    axios.post('/admin/cards', { post:  formData}).then((response) => {
+      console.log(response.data.data)
+  
+      })
   }
 
   return (
@@ -43,12 +54,9 @@ function Content(props) {
         name="myImage"
         onChange={(e) => {
           chooseFileImage(e)
-          axios.post('/admin/cards', { post: selectedImage }).then((response) => {
-            console.log(response.data.data)
-
-          })
         }}
       />
+      <button onClick={submitImage}></button>
   
 
       <header className={classes.content_header}>
