@@ -77,7 +77,15 @@ def register_main_admin(email):
     return True
 
 
-def create_token(email):
-    token = jwt.encode({'email': email, 'exp': int(time()) + 1000}, Config.SECRET_KEY,
+def create_token(email, exp=600):
+    token = jwt.encode({'email': email, 'exp': int(time()) + exp}, Config.SECRET_KEY,
                        algorithm='HS256')
     return token
+
+
+def verify_token(token):
+    try:
+        email = jwt.decode(token, Config.SECRET_KEY, algorithm='HS256')
+    except:
+        return None
+    return email

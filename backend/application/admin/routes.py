@@ -102,6 +102,7 @@ class Cards(Resource):
     def post(self):
         data = card_data.parse_args()
         image = data['card_image']
+        print(data)
 
         # сохранение полученной картинки
         file_path = CONFIG.basepath + 'application/static/' + image.filename
