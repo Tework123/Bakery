@@ -98,7 +98,7 @@ class Cards(Resource):
         # выводятся данные и на фронте расставляются в табличку с кнопками удалить, добавить
         return cards
 
-    @admin_login_required(current_user)
+    # @admin_login_required(current_user)
     def post(self):
         data = card_data.parse_args()
         image = data['card_image']
@@ -109,11 +109,13 @@ class Cards(Resource):
 
         if not os.path.exists(file_path):
             data['card_image'].save(file_path)
-        try:
+        # try:
+        if 1 == 1:
             card = CardProduct(card_name=data['card_name'], card_price=data['card_price'], card_image=image.filename)
             db.session.add(card)
             db.session.flush()
-        except:
+        # except:
+        else:
             db.session.rollback()
             response = jsonify({'data': 'Товар с таким же названием уже есть'})
             response.status_code = 400

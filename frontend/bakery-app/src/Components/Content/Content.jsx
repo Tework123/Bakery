@@ -25,7 +25,11 @@ function Content(props) {
 
   const chooseFileImage = (e) => {
     setSelectedImage(e.target.files[0])
+    console.log(e.target.files[0]);
+    axios.post('/admin/cards', { post:  e.target.files[0]}).then((response) => {
+    console.log(response.data.data)
 
+    })
   }
 
   return (
@@ -40,9 +44,9 @@ function Content(props) {
     <input
 
         type="file"
-        name="myImage"
+        name="card_image"
         onChange={(e) => {
-          chooseFileImage(e)
+          chooseFileImage(e.target.files[0])
           axios.post('/admin/cards', { post: selectedImage }).then((response) => {
             console.log(response.data.data)
 
