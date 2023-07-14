@@ -3,13 +3,28 @@ import './App.css';
 import AppWrapper from './Components/AppWrapper/AppWrapper';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
+let login;
+
 function App() {
+
+
+  const [isAuthorizated, setIsAuthorizated] = useState(false)
+  
+  const authorize = (loginText) => {
+    setIsAuthorizated(true)
+    login = loginText;
+  }
+
+  const unAuthorize = () => {
+    setIsAuthorizated(false)
+    login = null;
+  }
 
   //Routing
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <AppWrapper/>
+      element: <AppWrapper authorization={{isAuthorizated: isAuthorizated, authorize:authorize}} />
     }
   ])
 

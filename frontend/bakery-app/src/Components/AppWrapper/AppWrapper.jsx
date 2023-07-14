@@ -7,9 +7,9 @@ import Navbar from '../Navbar/Navbar';
 import classes from './AppWrapper.module.css';
 import { useState } from 'react';
 import { Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
+import ModalWindow from '../ModalWindow/ModalWindow';
 
 function AppWrapper(props) {
-
 
 
 
@@ -109,12 +109,44 @@ function AppWrapper(props) {
     console.log(isModalBasketOpen);
   }
 
+
+
+
+  //Другие модальные окна
+  const [isModalWindowOpen, setModalWindowOpen] = useState(false)
+  const MODAL_AUTHORIZATION = 'MODAL_AUTHORIZATION'
+  const MODAL_REGISTRATION = 'MODAL_REGISTRATION'
+  let typeModalWindowOpen;
+
+  const openModalWindow = (type) => {
+    setModalWindowOpen(true)
+    typeModalWindowOpen = type;
+  }
+
+  const closeModalWindow = () => {
+    setModalWindowOpen(false);
+    typeModalWindowOpen = null;
+  }
+
+
+
   return (
     <div className={classes.wrapper} style={style}>
+      <ModalBasket
+        basketProducts={test_data}
+        changeModalWindow={changeModalWindow}
+        isModalBasketOpen={isModalBasketOpen}/>
 
-      <ModalBasket basketProducts={test_data} changeModalWindow={changeModalWindow} isModalBasketOpen={isModalBasketOpen} />
+      {isModalWindowOpen && <ModalWindow
+                              type={typeModalWindowOpen}
+                              types={{MODAL_AUTHORIZATION: MODAL_AUTHORIZATION, MODAL_REGISTRATION: MODAL_REGISTRATION}}
+                              closeModalWindow={closeModalWindow}
+                              authorization={props.authorization}/>}
 
-      <Header />
+      <Header
+        types={{MODAL_AUTHORIZATION: MODAL_AUTHORIZATION}}
+        openModalWindow={openModalWindow}
+        isAuthorizated={props.authorization.isAuthorizated}/>
       <Navbar changeModalWindow={changeModalWindow}/>
       <CaruselBox />
       <Content products={test_data} />
