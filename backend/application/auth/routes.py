@@ -1,8 +1,8 @@
 from flask import jsonify
-from flask_login import login_user
+from flask_login import login_user, current_user
 
 from application import db
-from application.models import Users
+from application.models import User, Order
 from flask_restful import Resource
 
 from config import Config
@@ -15,8 +15,13 @@ class Register(Resource):
     def post(self):
         data = register_data.parse_args()
         register_validation(data)
-        user = Users(email=data['email'], role='user')
+        user = User(email=data['email'], role='user')
         db.session.add(user)
+        db.session.flush()
+        db.session.commit()
+        user = User.query.filter_by(email=data['email']).first()
+        basket = Order(user_id=user.user_id)
+        db.session.add(basket)
         db.session.flush()
         db.session.commit()
         response = jsonify({'data': 'Регистрация прошла успешно'})
@@ -36,7 +41,7 @@ class Login(Resource):
             return response
 
         login_validation(data)
-        user = Users.query.filter_by(email=data['email']).first()
+        user = User.query.filter_by(email=data['email']).first()
         user.token = create_token(data['email'])
         db.session.commit()
         login_user(user)
