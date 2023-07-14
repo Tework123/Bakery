@@ -1,0 +1,53 @@
+.gray_container {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.197);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.white_background_content {
+    display: inline-block;
+    background-color: white;
+    min-width: 400px;
+    min-height: 400px;
+    position: relative;
+}
+
+.close_button {
+    position: absolute;
+    right: 16px;
+    top: 10px;
+    font-size: 24px;
+}
+
+
+
+.authoriaion_content {
+    position: relative;
+    top: 70px;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.authoriaion_header {
+    margin-bottom: 20px;
+    font-size: 30px;
+}
+
+.authoriaion_input_item {
+    margin-bottom: 15px;
+    height: 30px;
+    width: 300px;
+    border: 0.6px solid black;
+    border-radius: 3px;
+}
+
+.authoriaion_new_account {
+    color: brown;
+}
