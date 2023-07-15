@@ -14,6 +14,7 @@ app = create_app(CONFIG)
 @app.route('/admin/privet', methods=['POST', 'GET'])
 def add_image():
     if request.method == 'POST':
-        image = request.files['card_image']
-        print(image)
+        image1 = request.files['card_image']
+        print(image1)
+
     return jsonify({'data': '123'})

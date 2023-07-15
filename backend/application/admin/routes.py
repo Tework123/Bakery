@@ -84,6 +84,7 @@ class Cards(Resource):
     @marshal_with(card_fields)
     def get(self):
         cards = CardProduct.query.all()
+        print(cards)
 
         import base64
         # либо так отправляем, либо другими способами, вот здесь можно и закешировать (у юзера, а не у админа)
@@ -101,26 +102,27 @@ class Cards(Resource):
     # @admin_login_required(current_user)
     def post(self):
         data = card_data.parse_args()
+
         image = data['card_image']
-        print(data)
+        print(image)
+        print(image)
 
         # сохранение полученной картинки
         file_path = CONFIG.basepath + 'application/static/' + image.filename
 
         if not os.path.exists(file_path):
             data['card_image'].save(file_path)
-        # try:
-        if 1 == 1:
-            card = CardProduct(card_name=data['card_name'], card_price=data['card_price'], card_image=image.filename)
+        try:
+            card = CardProduct(card_name=image.filename, card_price=len(image.filename), card_image=image.filename)
             db.session.add(card)
             db.session.flush()
-        # except:
-        else:
+        except:
             db.session.rollback()
             response = jsonify({'data': 'Товар с таким же названием уже есть'})
             response.status_code = 400
             return response
 
+        print('1111111111111111111')
         db.session.commit()
         response = jsonify({'data': 'Товар добавлен успешно'})
         response.status_code = 200
