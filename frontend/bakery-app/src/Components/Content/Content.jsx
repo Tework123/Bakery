@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Chapter from './Chapter/Chapter';
 import classes from './Content.module.css';
 import axios from 'axios';
@@ -20,6 +20,7 @@ function Content(props) {
     }
   ]
 
+  const [cards, setCards] = useState([])
   const [selectedImage, setSelectedImage] = useState(null);
 
 
@@ -32,32 +33,33 @@ function Content(props) {
   const submitImage = () => {
     const formData = new FormData();
     console.log(selectedImage);
-    formData.append('image', selectedImage);
-    axios.post('/admin/cards', { post:  formData}).then((response) => {
-      console.log(response.data.data)
+    formData.append('card_image', selectedImage);
+    axios.post('/admin/cards', formData).then((response) => {
+      console.log(response)
   
       })
   }
 
+
+
+  useEffect(() => {
+    // axios.get('/admin/cards').then((response) => {
+    //   setCards(response.data)
+    // })
+  }, [])
+
   return (
     <div className={classes.content_container}>
-
-{/* {       <img
-            alt="not found"
-            width={"250px"}
-            src={URL.createObjectURL(selectedImage)}
-        />} */}
-
-    <input
-
-        type="file"
-        name="myImage"
-        onChange={(e) => {
-          chooseFileImage(e)
-        }}
-      />
-      <button onClick={submitImage}></button>
-  
+      <form>
+        <input
+          type="file"
+          name="myImage"
+          onChange={(e) => {
+            chooseFileImage(e)
+          }}
+        />
+        <button onClick={submitImage}></button>
+      </form>
 
       <header className={classes.content_header}>
         <span className={classes.content_header_text}>

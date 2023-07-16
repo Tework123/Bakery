@@ -6,7 +6,7 @@ function Header(props) {
 
 
   const onClickEnter = () => {
-    props.openModalWindow(props.types.MODAL_AUTHORIZATION)
+    props.changeTypeModalWindow(props.types.MODAL_AUTHORIZATION)
   }
 
   return (
