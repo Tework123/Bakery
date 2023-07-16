@@ -10,7 +10,7 @@ from . import api_auth
 from .fields_validation import register_data, register_validation, login_data, login_validation
 from ..auth.auth import create_token, register_main_admin, verify_token
 from ..email.email import send_email_authentication, send_email_register
-# удалить .git в папке и создать снова без рута, привязать к github
+
 
 class Register(Resource):
     # как то наладить, чтобы мое письмо пересылало на url сайта, а там его ловил фронт и куки появлялись
