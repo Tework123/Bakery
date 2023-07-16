@@ -14,7 +14,7 @@ function AppWrapper(props) {
 
 
 
-
+  console.log(props);
   //Запрос, на то, зарегался ли человек
   const requestForSuccessfulRegistaration = () => {
     axios.get('/register/<string:token>').then((responce) => {
@@ -90,7 +90,6 @@ function AppWrapper(props) {
   const [isModalBasketOpen, setModalBasketOpen] = useState(false)
 
   const changeModalWindow = () => {
-    console.log(isModalBasketOpen);
     setModalBasketOpen((isModalBasketOpen) => !isModalBasketOpen);
 
     if (!isModalBasketOpen) {
@@ -98,7 +97,6 @@ function AppWrapper(props) {
     } else {
       setStyle({ overflowY: 'scroll', paddingRight: 0 })
     }
-    console.log(isModalBasketOpen);
   }
 
 
@@ -120,7 +118,6 @@ function AppWrapper(props) {
   const mainPage = (
     <React.Fragment>
       <ModalBasket
-        functions={{requestForSuccessfulRegistaration: requestForSuccessfulRegistaration}}
         basketProducts={test_data}
         changeModalWindow={changeModalWindow}
         isModalBasketOpen={isModalBasketOpen}/>
@@ -129,7 +126,7 @@ function AppWrapper(props) {
                               type={typeModalWindow}
                               types={{MODAL_AUTHORIZATION: MODAL_AUTHORIZATION, MODAL_REGISTRATION: MODAL_REGISTRATION}}
                               closeModalWindow={closeModalWindow}
-                              functions={props.functions}
+                              functions={{requestForSuccessfulRegistaration: requestForSuccessfulRegistaration}}
                               changeTypeModalWindow={changeTypeModalWindow}
                               authorization={props.authorization}/>}
       <Header
