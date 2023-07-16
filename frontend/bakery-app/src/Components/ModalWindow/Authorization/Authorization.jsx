@@ -19,6 +19,10 @@ function Authorization(props) {
     sendEmailAutho()
   }
 
+  const onClickNewAccount = () => {
+    props.changeTypeModalWindow(props.constTypesModal.MODAL_REGISTRATION)
+  }
+
 
 
   const onChangeLogin = (e) => {
@@ -35,8 +39,8 @@ function Authorization(props) {
       <div className={classes.authoriaion_header}>Войти</div>
       <input className={classes.authoriaion_input_item} placeholder='Логин' onChange={(e) => onChangeLogin(e)}></input>
       <input className={classes.authoriaion_input_item} placeholder='Пароль'></input>
-      <div className={classes.authoriaion_enter} onClick={onClickEnter}>Вход</div>
-      <div className={classes.authoriaion_new_account}>Ещё нет аккаунта</div>
+      <button className={classes.authoriaion_enter} onClick={onClickEnter}>Вход</button>
+      <button className={classes.authoriaion_new_account} onClick={onClickNewAccount}>Ещё нет аккаунта</button>
     </div>
   );
 }
