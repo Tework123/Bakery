@@ -8,13 +8,22 @@ import classes from './AppWrapper.module.css';
 import React, { useState } from 'react';
 import { Route, Routes} from 'react-router-dom';
 import ModalWindow from '../ModalWindow/ModalWindow';
+import axios from 'axios';
 
 function AppWrapper(props) {
 
 
 
 
+  //Запрос, на то, зарегался ли человек
+  const requestForSuccessfulRegistaration = () => {
+    axios.get('/register/<string:token>').then((responce) => {
+      props.authorization.authorize(responce.data.data)
+    })
+  }
+
   const test_data = [
+
     {
       name: 'Булочка с корицей',
       price: 100,
@@ -101,9 +110,7 @@ function AppWrapper(props) {
   const MODAL_REGISTRATION = 'MODAL_REGISTRATION'
 
   const changeTypeModalWindow = (type) => {
-    debugger
     setTypeModalWindow(type)
-    debugger
   }
 
   const closeModalWindow = () => {
@@ -113,6 +120,7 @@ function AppWrapper(props) {
   const mainPage = (
     <React.Fragment>
       <ModalBasket
+        functions={{requestForSuccessfulRegistaration: requestForSuccessfulRegistaration}}
         basketProducts={test_data}
         changeModalWindow={changeModalWindow}
         isModalBasketOpen={isModalBasketOpen}/>

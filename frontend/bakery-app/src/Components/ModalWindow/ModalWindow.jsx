@@ -9,7 +9,7 @@ function ModalWindow(props) {
     <Authorization authorization={props.authorization} changeTypeModalWindow={props.changeTypeModalWindow} constTypesModal={{MODAL_REGISTRATION: props.types.MODAL_REGISTRATION}}/>
   )
   const registrationModal = (
-    <Registration changeTypeModalWindow={props.changeTypeModalWindow} constTypesModal={{MODAL_REGISTRATION: props.types.MODAL_AUTHORIZATION}}/>
+    <Registration requestForSuccessfulRegistaration={props.functions.requestForSuccessfulRegistaration} changeTypeModalWindow={props.changeTypeModalWindow} constTypesModal={{MODAL_REGISTRATION: props.types.MODAL_AUTHORIZATION}}/>
   )
 
 
