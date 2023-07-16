@@ -7,8 +7,8 @@ from application.models import User
 
 # создание карточки
 card_data = reqparse.RequestParser()
-card_data.add_argument('card_name', type=str, location='form', help='Требуется имя товара', required=True)
-card_data.add_argument('card_price', type=int, location='form', help='Требуется цена товара', required=True)
+# card_data.add_argument('card_name', type=str, location='form', help='Требуется имя товара', required=True)
+# card_data.add_argument('card_price', type=int, location='form', help='Требуется цена товара', required=True)
 card_data.add_argument('card_image', type=FileStorage, location='files', help='Требуется картинка товара', required=True)
 
 # как то записать фоточку товара сюда
