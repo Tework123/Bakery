@@ -4,7 +4,7 @@ import axios from 'axios';
 
 function Registration(props) {
 
-  
+
   const [login, setlogin] = useState('')
   function sendEmailRegistr() {
     axios.post('/auth/register', { email: login }).then((response) => {
@@ -15,7 +15,7 @@ function Registration(props) {
   }
 
 
-
+    
 
   const onClickRegistr = () => {
     sendEmailRegistr()

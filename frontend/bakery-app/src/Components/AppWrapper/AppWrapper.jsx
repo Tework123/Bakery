@@ -6,7 +6,7 @@ import Header from '../Header/Header';
 import Navbar from '../Navbar/Navbar';
 import classes from './AppWrapper.module.css';
 import React, { useState } from 'react';
-import { Route, Routes} from 'react-router-dom';
+import { Route, Routes, useParams } from 'react-router-dom';
 import ModalWindow from '../ModalWindow/ModalWindow';
 import axios from 'axios';
 
@@ -14,12 +14,17 @@ function AppWrapper(props) {
 
 
 
-  console.log(props);
   //Запрос, на то, зарегался ли человек
+  const { token } = useParams()
+
+  console.log(token);
+
   const requestForSuccessfulRegistaration = () => {
-    axios.get('/register/<string:token>').then((responce) => {
-      props.authorization.authorize(responce.data.data)
-    })
+    if (token) {
+      axios.post(`/register/${token}`, { token: token }).then((responce) => {
+        props.authorization.authorize(responce.data.data)
+      })
+    }
   }
 
   const test_data = [
@@ -120,20 +125,20 @@ function AppWrapper(props) {
       <ModalBasket
         basketProducts={test_data}
         changeModalWindow={changeModalWindow}
-        isModalBasketOpen={isModalBasketOpen}/>
+        isModalBasketOpen={isModalBasketOpen} />
 
       {typeModalWindow && <ModalWindow
-                              type={typeModalWindow}
-                              types={{MODAL_AUTHORIZATION: MODAL_AUTHORIZATION, MODAL_REGISTRATION: MODAL_REGISTRATION}}
-                              closeModalWindow={closeModalWindow}
-                              functions={{requestForSuccessfulRegistaration: requestForSuccessfulRegistaration}}
-                              changeTypeModalWindow={changeTypeModalWindow}
-                              authorization={props.authorization}/>}
-      <Header
-        types={{MODAL_AUTHORIZATION: MODAL_AUTHORIZATION}}
+        type={typeModalWindow}
+        types={{ MODAL_AUTHORIZATION: MODAL_AUTHORIZATION, MODAL_REGISTRATION: MODAL_REGISTRATION }}
+        closeModalWindow={closeModalWindow}
+        functions={{ requestForSuccessfulRegistaration: requestForSuccessfulRegistaration }}
         changeTypeModalWindow={changeTypeModalWindow}
-        isAuthorizated={props.authorization.isAuthorizated}/>
-      <Navbar changeModalWindow={changeModalWindow}/>
+        authorization={props.authorization} />}
+      <Header
+        types={{ MODAL_AUTHORIZATION: MODAL_AUTHORIZATION }}
+        changeTypeModalWindow={changeTypeModalWindow}
+        isAuthorizated={props.authorization.isAuthorizated} />
+      <Navbar changeModalWindow={changeModalWindow} />
       <CaruselBox />
       <Content products={test_data} />
       <Footer />
@@ -157,8 +162,8 @@ function AppWrapper(props) {
   return (
     <div className={classes.wrapper} style={style}>
       <Routes>
-        <Route path='/*' element={mainPage}/>
-        <Route path='/profile' element={''}/>
+        <Route path='/*' element={mainPage} />
+        <Route path='/profile' element={''} />
       </Routes>
     </div>
   );

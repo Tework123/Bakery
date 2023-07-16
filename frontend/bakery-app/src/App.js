@@ -23,6 +23,10 @@ function App() {
   //Routing
   const router = createBrowserRouter([
     {
+      path: '/:token',
+      element: <AppWrapper authorization={{isAuthorizated: isAuthorizated, authorize:authorize}} />
+    },
+    {
       path: '/',
       element: <AppWrapper authorization={{isAuthorizated: isAuthorizated, authorize:authorize}} />
     }
