@@ -129,6 +129,7 @@ function AppWrapper(props) {
                               type={typeModalWindow}
                               types={{MODAL_AUTHORIZATION: MODAL_AUTHORIZATION, MODAL_REGISTRATION: MODAL_REGISTRATION}}
                               closeModalWindow={closeModalWindow}
+                              functions={props.functions}
                               changeTypeModalWindow={changeTypeModalWindow}
                               authorization={props.authorization}/>}
       <Header
