@@ -54,6 +54,9 @@ def create_app(config):
         from application.main import bp as bp_main
         app.register_blueprint(bp_main)
 
+        from application.email import bp as bp_email
+        app.register_blueprint(bp_email, url_prefix='/email')
+
         from application.profile import bp as bp_profile
         app.register_blueprint(bp_profile, url_prefix='/profile')
 

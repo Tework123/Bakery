@@ -1,6 +1,6 @@
 from threading import Thread
 
-from flask import current_app
+from flask import current_app, render_template
 from flask_mail import Message
 
 from application import mail
@@ -12,6 +12,8 @@ def send_async_email(app, msg):
     with app.app_context():
         mail.send(msg)
 
+
+# попробовать все операции гит не от root, а то он блокирует все
 
 # this func must get whole request about email
 def send_email(subject, sender, recipients, body, attachments=None):
@@ -26,5 +28,10 @@ def send_email(subject, sender, recipients, body, attachments=None):
 
 
 def send_email_authentication(email, token):
-    body = token
+    body = render_template('email/login.html', token=token, email=email)
     send_email('email_authentication', CONFIG.MAIL_USERNAME, [email], body)
+
+
+def send_email_register(email, token):
+    body = render_template('email/register.html', token=token, email=email)
+    send_email('email_register', CONFIG.MAIL_USERNAME, [email], body)
