@@ -30,20 +30,15 @@ class Index(Resource):
     @login_required(current_user)
     @marshal_with(card_fields)
     def get(self):
-        subject = 'Bakery email'
-        body = 'Bakery HERE?'
-        # x = 1 / 0
-
-
-        # send_email(subject, CONFIG.MAIL_USERNAME, [current_user.email], body)
-
+        print(current_user)
         basket = db.session.query(Order.order_id, Order.user_id, OrderProduct.card_id, OrderProduct.amount,
                                   CardProduct.card_name,
                                   CardProduct.card_image,
                                   (CardProduct.card_price * OrderProduct.amount).label("card_price")).join(OrderProduct,
                                                                                                            Order.order_id == OrderProduct.order_id).join(
             CardProduct, OrderProduct.card_id == CardProduct.card_id).where(
-            Order.user_id == current_user.user_id, Order.status == False).all()
+            Order.user_id == current_user.user_id, Order.status is False).first()
+        print(basket)
 
         # может быть еще какие-то данные вернуть, и картинки вставить
         return basket
@@ -71,6 +66,7 @@ class Index(Resource):
             db.session.add(card)
             db.session.flush()
             db.session.commit()
+
         response = jsonify({'data': f'Товар {data["card_name"]} добавлен в корзину'})
         response.status_code = 200
         return response
@@ -96,8 +92,18 @@ class Buy(Resource):
     # или выбрано - заберу сам
     # если адрес выбран, и оплата подтверждена от экваринга, то status order = True, и сообщения улетают работникам
     # потом этот адрес запоминается,
-    #
-    pass
+    def get(self):
+        basket = Order.query.filter_by(user_id=current_user.user_id).first()
+        if basket:
+            response = jsonify({'data': f'Перенаправление на страницу оплаты'})
+            # если страница оплаты возвращает True, то status = True
+            basket.status = True
+            response.status_code = 200
+            return response
+
+        response = jsonify({'data': f'Корзина пустая'})
+        response.status_code = 200
+        return response
 
 
 api_basket.add_resource(Index, '/')
