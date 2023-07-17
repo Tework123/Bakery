@@ -1,4 +1,4 @@
-from flask import jsonify, session
+from flask import jsonify, session, request
 from flask_login import login_user, current_user
 
 from application import db
@@ -29,6 +29,8 @@ class Register(Resource):
 
 class TokenRegister(Resource):
     def post(self):
+        name = request.cookies.get('token')
+        print(name)
         print('*******')
         print('*******')
         print('*******')
@@ -59,7 +61,7 @@ class TokenRegister(Resource):
             login_user(user)
             # session['user'] = user.user_id
 
-            response = jsonify({'data': 'Регистрация прошла успешно, можете сделать заказ'})
+            response = jsonify({'data': 'Регистрация прошла успешно, можете сделать заказ', 'user_id': user.user_id})
             # response.set_cookie('YouCookie', user.id)
             # response.set_cookie(user.user_id, 'user')
             response.status_code = 200

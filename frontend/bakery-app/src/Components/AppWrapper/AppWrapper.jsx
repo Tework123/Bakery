@@ -23,6 +23,7 @@ function AppWrapper(props) {
 
   //Запрос, на то, зарегался ли человек
   const { token } = useParams()
+
   const navigate = useNavigate();
 
   console.log(token);
@@ -31,10 +32,11 @@ function AppWrapper(props) {
     if (token && !props.authorization.isAuthorizated) {console.log('Отправка данных на сервер')
       axios.post(`/auth/token_register`, { token: token }).then((responce) => {
         console.log('Отправка данных на сервер222222222')
+        setCookie('token', token, { path: '/' });
+
         props.authorization.authorize(responce.data.data)
         navigate("/");
 
-        setCookie('token', token, { path: '/' });
         console.log('Текущие куки:');
         console.log(cookies);
       })
