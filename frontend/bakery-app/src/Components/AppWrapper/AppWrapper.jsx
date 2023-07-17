@@ -22,27 +22,44 @@ function AppWrapper(props) {
   const [cookies, setCookie] = useCookies(['token']);
 
   //Запрос, на то, зарегался ли человек
-  const { token } = useParams()
 
+  const { token } = useParams();
   const navigate = useNavigate();
+
 
   console.log(token);
 
   const requestForSuccessfulRegistaration = () => {
-    if (token && !props.authorization.isAuthorizated) {console.log('Отправка данных на сервер')
-      axios.post(`/auth/token_register`, { token: token }).then((responce) => {
-        console.log('Отправка данных на сервер222222222')
-        setCookie('token', token, { path: '/' });
+    if (!props.authorization.isAuthorizated) {
+      if (token) {
+        console.log('Отправка данных на сервер')
+        axios.post(`/auth/token`, { token: token }).then((responce) => {
+          console.log('Обработка данных с сервера')
+          props.authorization.authorize(responce.data.data)
 
-        props.authorization.authorize(responce.data.data)
-        navigate("/");
+          navigate("/");
 
-        console.log('Текущие куки:');
-        console.log(cookies);
-      })
+          setCookie('token', token, { path: '/' });
+          console.log('Текущие куки:');
+          console.log(cookies);
+        })
+      } else if (cookies) {
+        console.log('Отправка данных на сервер, если есть куки')
+        axios.post(`/auth/token`, { token: cookies.token }).then((responce) => {
+          console.log('Обработка данных с сервера')
+          props.authorization.authorize(responce.data.data)
+
+          navigate("/");
+
+          console.log('Текущие куки:');
+          console.log(cookies);
+        })
+      }
     }
   }
+
   requestForSuccessfulRegistaration()
+  
 
   const test_data = [
 
