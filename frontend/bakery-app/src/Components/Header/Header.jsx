@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import classes from './Header.module.css';
 import axios from 'axios';
+import { useCookies } from 'react-cookie';
 
 function Header(props) {
 
@@ -10,9 +11,10 @@ function Header(props) {
     props.changeTypeModalWindow(props.types.MODAL_AUTHORIZATION)
   }
 
-
+  const [cookies, setCookie] = useCookies(['token']);
 
   const onClickProfileTest = () => {
+    setCookie('token', 1234, { path: '/' , maxAge: 31536000})
     axios.get('/profile').then((response) => {
       console.log(response.data);
     })   
