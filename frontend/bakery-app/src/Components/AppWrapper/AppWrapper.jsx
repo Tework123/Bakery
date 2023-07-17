@@ -33,19 +33,19 @@ function AppWrapper(props) {
     if (!props.authorization.isAuthorizated) {
       if (token) {
         console.log('Отправка данных на сервер')
-        axios.post(`/auth/token`, { token: token }).then((responce) => {
+        axios.post(`/auth/token_register`, { token: token }).then((responce) => {
           console.log('Обработка данных с сервера')
           props.authorization.authorize(responce.data.data)
 
           navigate("/");
 
-          setCookie('token', token, { path: '/' });
+          setCookie('token', token, { path: '/' , maxAge: 31536000});
           console.log('Текущие куки:');
           console.log(cookies);
         })
-      } else if (cookies) {
+      } else if (cookies.token) {
         console.log('Отправка данных на сервер, если есть куки')
-        axios.post(`/auth/token`, { token: cookies.token }).then((responce) => {
+        axios.post(`/auth/token_register`, { token: cookies.token }).then((responce) => {
           console.log('Обработка данных с сервера')
           props.authorization.authorize(responce.data.data)
 
