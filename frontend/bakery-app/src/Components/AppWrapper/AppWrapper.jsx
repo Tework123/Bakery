@@ -9,6 +9,8 @@ import React, { useState } from 'react';
 import { Route, Routes, useParams } from 'react-router-dom';
 import ModalWindow from '../ModalWindow/ModalWindow';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+
 
 function AppWrapper(props) {
 
@@ -16,14 +18,18 @@ function AppWrapper(props) {
 
   //Запрос, на то, зарегался ли человек
   const { token } = useParams()
+  const navigate = useNavigate();
+
 
   console.log(token);
 
   const requestForSuccessfulRegistaration = () => {
-    if (token) {console.log('Отправка данных на сервер')
-      axios.post(`/auth/token`, { token: token }).then((responce) => {
+    if (token && !props.authorization.isAuthorizated) {console.log('Отправка данных на сервер')
+      axios.post(`/auth/token_register`, { token: token }).then((responce) => {
         console.log('Отправка данных на сервер222222222')
         props.authorization.authorize(responce.data.data)
+        navigate("/");
+
       })
     }
   }
