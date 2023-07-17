@@ -20,12 +20,14 @@ function AppWrapper(props) {
   console.log(token);
 
   const requestForSuccessfulRegistaration = () => {
-    if (token) {
-      axios.post(`/register/${token}`, { token: token }).then((responce) => {
+    if (token) {console.log('Отправка данных на сервер')
+      axios.post(`/auth/token`, { token: token }).then((responce) => {
+        console.log('Отправка данных на сервер222222222')
         props.authorization.authorize(responce.data.data)
       })
     }
   }
+  requestForSuccessfulRegistaration()
 
   const test_data = [
 

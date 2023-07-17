@@ -31,3 +31,7 @@ def login_validation(data):
     user = User.query.filter_by(email=data['email']).first()
     if not user:
         abort(403, message='Данный email не зарегистрирован')
+
+
+token_data = reqparse.RequestParser()
+token_data.add_argument('token', type=str, help='Требуется token', required=True)

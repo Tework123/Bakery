@@ -7,9 +7,48 @@ from flask_restful import Resource
 
 from config import Config
 from . import api_auth
-from .fields_validation import register_data, register_validation, login_data, login_validation
+from .fields_validation import register_data, register_validation, login_data, login_validation, token_data
 from ..auth.auth import create_token, register_main_admin, verify_token
 from ..email.email import send_email_authentication, send_email_register
+
+
+class Token(Resource):
+    def post(self):
+        print('*******')
+        print('*******')
+        print('*******')
+        print('*******')
+        data = token_data.parse_args()
+        print(data)
+
+        try:
+            email = verify_token(data['token'])
+        except:
+            response = jsonify({'data': 'Время действия ссылки истекло'})
+            response.status_code = 200
+            return response
+
+        if email:
+            user = User(email=email, role='user')
+            db.session.add(user)
+            db.session.flush()
+            db.session.commit()
+            user = User.query.filter_by(email=email).first()
+            basket = Order(user_id=user.user_id)
+            user.token = create_token(email, 86400 * 180)
+            db.session.add(basket)
+            db.session.flush()
+            db.session.commit()
+
+            # при регистрации сразу происходит вход в аккаунт
+            login_user(user)
+            response = jsonify({'data': 'Регистрация прошла успешно, можете сделать заказ'})
+            response.status_code = 200
+            return response
+
+        response = jsonify({'data': 'Что-то пошло не так, попробуйте зарегистрироваться еще раз'})
+        response.status_code = 200
+        return response
 
 
 class Register(Resource):
@@ -18,6 +57,11 @@ class Register(Resource):
     # если после этого снова через postman работать, видимо, только через браузер
     # ограничение от gmail в 100 писем в день, хаххах, переходим на телефон, а это пока для теста
     def get(self, token):
+        print('*******')
+        print('*******')
+        print('*******')
+        print('*******')
+
         try:
             email = verify_token(token)
         except:
@@ -111,4 +155,5 @@ class Login(Resource):
 
 
 api_auth.add_resource(Login, '/login', '/login/<string:token>')
-api_auth.add_resource(Register, '/register', '/register/<string:token>')
+api_auth.add_resource(Register, '/register', '/register/<string:token>', endpoint='register')
+api_auth.add_resource(Token, '/token')
