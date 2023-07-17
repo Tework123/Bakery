@@ -47,8 +47,6 @@ function AppWrapper(props) {
           console.log('Обработка данных с сервера')
           props.authorization.authorize(responce.data.data)
 
-          navigate("/");
-
           console.log('Текущие куки:');
           console.log(cookies);
         })
