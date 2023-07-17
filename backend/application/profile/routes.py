@@ -28,6 +28,7 @@ class Index(Resource):
     @login_required(current_user)
     @marshal_with(profile_fields)
     def get(self):
+        print('profile')
         print(current_user)
         # персональная информация: email, телефон(потом)
         # на одной странице история заказов
