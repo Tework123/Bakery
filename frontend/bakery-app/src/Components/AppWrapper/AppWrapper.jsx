@@ -9,6 +9,8 @@ import React, { useState } from 'react';
 import { Route, Routes, useParams } from 'react-router-dom';
 import ModalWindow from '../ModalWindow/ModalWindow';
 import axios from 'axios';
+
+import { useCookies } from 'react-cookie';
 import { useNavigate } from "react-router-dom";
 
 
@@ -16,10 +18,12 @@ function AppWrapper(props) {
 
 
 
+  //Куки
+  const [cookies, setCookie] = useCookies(['token']);
+
   //Запрос, на то, зарегался ли человек
   const { token } = useParams()
   const navigate = useNavigate();
-
 
   console.log(token);
 
@@ -30,6 +34,9 @@ function AppWrapper(props) {
         props.authorization.authorize(responce.data.data)
         navigate("/");
 
+        setCookie('token', token, { path: '/' });
+        console.log('Текущие куки:');
+        console.log(cookies);
       })
     }
   }
