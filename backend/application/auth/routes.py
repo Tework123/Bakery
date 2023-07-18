@@ -93,6 +93,9 @@ class Login(Resource):
 
     def post(self):
         print(current_user)
+        print('********************88888*******88*****')
+        print('********************88888*******88*****')
+        print('********************88888*******88*****')
 
         data = login_data.parse_args()
 
