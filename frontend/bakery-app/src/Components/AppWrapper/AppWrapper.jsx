@@ -21,7 +21,7 @@ function AppWrapper(props) {
 
   const requestForSuccessfulRegistaration = () => {
     if (token) {
-      axios.post(`/register/${token}`, { token: token }).then((responce) => {
+      axios.post(`/register/${tвoken}`, { token: token }).then((responce) => {
         props.authorization.authorize(responce.data.data)
       })
     }
