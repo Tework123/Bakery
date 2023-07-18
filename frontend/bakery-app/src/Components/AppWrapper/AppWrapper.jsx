@@ -39,19 +39,19 @@ function AppWrapper(props) {
 
           navigate("/");
 
-          setCookie('token', token, { path: '/' , maxAge: 31536000});
+          setCookie('token', token, { path: '/'});
           console.log('Текущие куки:');
           console.log(cookies);
         })
-      } else if (cookies.token) {
-        console.log('Отправка данных на сервер, если есть куки')
-        axios.post(`/auth/token_register`, { token: cookies.token }).then((responce) => {
-          console.log('Обработка данных с сервера')
-          props.authorization.authorize(responce.data.data)
+      // } else if (cookies.token) {
+      //   console.log('Отправка данных на сервер, если есть куки')
+      //   axios.post(`/auth/token_register`, { token: cookies.token }).then((responce) => {
+      //     console.log('Обработка данных с сервера')
+      //     props.authorization.authorize(responce.data.data)
 
-          console.log('Текущие куки:');
-          console.log(cookies);
-        })
+      //     console.log('Текущие куки:');
+      //     console.log(cookies);
+      //   })
       }
     }
   }

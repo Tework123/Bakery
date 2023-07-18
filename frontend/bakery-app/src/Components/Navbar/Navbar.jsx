@@ -1,4 +1,5 @@
 import classes from './Navbar.module.css';
+import axios from 'axios';
 
 function Navbar(props) {
 
@@ -9,9 +10,16 @@ function Navbar(props) {
   //   style = {position: 'fixed'}
   // }
 
-
+  const onClickProfileTest = () => {
+    axios.get('/profile').then((response) => {
+      console.log(response.data);
+    })   
+  }
   return (
     <nav className={classes.navbar_container} style={style}>
+       <div className={classes.item} onClick={onClickProfileTest}>
+              Личный кабинет
+            </div>
       <div className={classes.navbar_logo + " " + classes.item}>
 
       </div>

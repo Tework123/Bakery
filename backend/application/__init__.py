@@ -17,7 +17,7 @@ mail = Mail()
 
 def create_app(config):
     app = Flask(__name__)
-    cors = CORS(app, origins="*")
+    cors = CORS(app, origins="*", supports_credentials=True)
 
     app.config.from_object(config)
     app.json.sort_keys = False

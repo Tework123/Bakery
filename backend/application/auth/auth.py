@@ -11,7 +11,8 @@ from config import Config
 def login_required(user):
     def wrap(func):
         def wrapper(*args, **kwargs):
-            try:
+            # try:
+            if 1 == 1:
                 if user.token:
                     # походу можно без jwt токена здесь, чисто проверить через try except на наличие у юзера id например
                     # если анонимус - то ошибка, и все, а в login зададим remember 180 дней
@@ -23,7 +24,8 @@ def login_required(user):
                         response = jsonify({'data': 'Вы давно не заходили в свой аккаунт, попробуйте снова'})
                         response.status_code = 401
                         return response
-            except:
+            # except:
+            else:
                 response = jsonify({'data': 'Вы не зашли в аккаунт'})
                 response.status_code = 401
                 return response
@@ -88,6 +90,7 @@ def create_token(email, exp=600):
 
 
 def verify_token(token):
+    token = token[1:]
     email = jwt.decode(token, Config.SECRET_KEY, algorithms=['HS256'])['email']
 
     return email

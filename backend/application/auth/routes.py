@@ -1,4 +1,7 @@
-from flask import jsonify, session, request
+import datetime
+import random
+
+from flask import jsonify, session, request, make_response
 from flask_login import login_user, current_user
 
 from application import db
@@ -8,7 +11,7 @@ from flask_restful import Resource
 from config import Config
 from . import api_auth
 from .fields_validation import register_data, register_validation, login_data, login_validation, token_data, \
-    token_login_data
+    token_login_data, code_data
 from ..auth.auth import create_token, register_main_admin, verify_token
 from ..email.email import send_email_authentication, send_email_register
 
@@ -18,9 +21,31 @@ class Register(Resource):
     def post(self):
         data = register_data.parse_args()
         register_validation(data)
-
+        email = data['email']
         token = create_token(data['email'], 500)
+        # token = ''
+        # for i in range(4):
+        #     digit = random.randrange(0, 9)
+        #     token += str(digit)
         send_email_register(data['email'], token)
+
+        # if email:
+        #     user = User(email=email, role='user')
+        #     db.session.add(user)
+        #     db.session.flush()
+        #     db.session.commit()
+        #     user = User.query.filter_by(email=email).first()
+        #     basket = Order(user_id=user.user_id)
+        #     user.token = create_token(email, 86400 * 180)
+        #     db.session.add(basket)
+        #     db.session.flush()
+        #     db.session.commit()
+
+        # при регистрации сразу происходит вход в аккаунт
+        # login_user(user)
+        #     login_user(user, remember=True, duration=datetime.timedelta(days=30))
+        #     # login_user(user)
+        # response = jsonify({'data': 'Вы зарегистрированы'})
 
         response = jsonify({'data': 'Ссылка для подтверждения регистрации отправлена вам на почту'})
         response.status_code = 200
@@ -29,12 +54,6 @@ class Register(Resource):
 
 class TokenRegister(Resource):
     def post(self):
-        name = request.cookies.get('token')
-        print(name)
-        print('*******')
-        print('*******')
-        print('*******')
-        print('*******')
         data = token_data.parse_args()
         print(data)
 
@@ -45,6 +64,9 @@ class TokenRegister(Resource):
             response.status_code = 200
             return response
 
+        print(email)
+        print(email)
+
         if email:
             user = User(email=email, role='user')
             db.session.add(user)
@@ -52,18 +74,13 @@ class TokenRegister(Resource):
             db.session.commit()
             user = User.query.filter_by(email=email).first()
             basket = Order(user_id=user.user_id)
-            user.token = create_token(email, 86400 * 180)
             db.session.add(basket)
             db.session.flush()
             db.session.commit()
-
             # при регистрации сразу происходит вход в аккаунт
-            login_user(user)
-            # session['user'] = user.user_id
+            login_user(user, remember=True, duration=datetime.timedelta(days=30))
 
             response = jsonify({'data': 'Регистрация прошла успешно, можете сделать заказ', 'user_id': user.user_id})
-            # response.set_cookie('YouCookie', user.id)
-            # response.set_cookie(user.user_id, 'user')
             response.status_code = 200
             return response
 
@@ -135,7 +152,17 @@ class TokenLogin(Resource):
             return response
 
 
+class Code(Resource):
+    def post(self):
+        data = code_data.parse_args()
+        print(data)
+        response = jsonify({'data': f'Ваш код найден: {data}'})
+        response.status_code = 200
+        return response
+
+
 api_auth.add_resource(Login, '/login')
 api_auth.add_resource(TokenLogin, '/token_login')
 api_auth.add_resource(Register, '/register')
 api_auth.add_resource(TokenRegister, '/token_register')
+api_auth.add_resource(Code, '/code')
