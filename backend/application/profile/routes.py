@@ -1,7 +1,7 @@
 import datetime
 import json
 
-from flask import jsonify
+from flask import jsonify, request
 from flask_login import login_user, current_user
 
 from application import db
@@ -25,10 +25,12 @@ class Index(Resource):
         'card_price': fields.Price
     }
 
-    @login_required(current_user)
+    # @login_required(current_user)
     @marshal_with(profile_fields)
     def get(self):
         print(current_user)
+        name = request.cookies.get('token')
+
         # персональная информация: email, телефон(потом)
         # на одной странице история заказов
         # можно изменять информация прямо на этой страничке
@@ -38,7 +40,6 @@ class Index(Resource):
             Order.order_id == OrderProduct.order_id).join(
             CardProduct, OrderProduct.card_id == CardProduct.card_id).where(
             Order.user_id == current_user.user_id, Order.status is True).all()
-
         return profile_data
 
 

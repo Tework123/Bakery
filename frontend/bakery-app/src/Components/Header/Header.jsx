@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import classes from './Header.module.css';
+import axios from 'axios';
+import { useCookies } from 'react-cookie';
 
 function Header(props) {
 
@@ -9,6 +11,12 @@ function Header(props) {
     props.changeTypeModalWindow(props.types.MODAL_AUTHORIZATION)
   }
 
+  const onClickProfileTest = () => {
+    axios.get('/profile').then((response) => {
+      console.log(response.data);
+    })   
+  }
+
   return (
     <header className={classes.header_container}>
       <div className={classes.header_main}>
@@ -16,7 +24,7 @@ function Header(props) {
         <div>Телефон, адрес</div>
         <div className={classes.right_actions}>
           {props.isAuthorizated ?
-            <div className={classes.item}>
+            <div className={classes.item} onClick={onClickProfileTest}>
               Личный кабинет
             </div>
             :

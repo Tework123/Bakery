@@ -10,22 +10,59 @@ import { Route, Routes, useParams } from 'react-router-dom';
 import ModalWindow from '../ModalWindow/ModalWindow';
 import axios from 'axios';
 
+import { useCookies } from 'react-cookie';
+import { useNavigate } from "react-router-dom";
+
+
 function AppWrapper(props) {
 
 
 
+  //Куки
+  const [cookies, setCookie] = useCookies(['token']);
+
   //Запрос, на то, зарегался ли человек
-  const { token } = useParams()
+
+  const { token } = useParams();
+  const navigate = useNavigate();
+
 
   console.log(token);
 
   const requestForSuccessfulRegistaration = () => {
     if (token) {
-      axios.post(`/register/${tвoken}`, { token: token }).then((responce) => {
+      axios.post(`/register/${token}`, { token: token }).then((responce) => {
         props.authorization.authorize(responce.data.data)
       })
+    if (!props.authorization.isAuthorizated) {
+      if (token) {
+        console.log('Отправка данных на сервер')
+        axios.post(`/auth/token_register`, { token: token }).then((responce) => {
+          console.log('Обработка данных с сервера')
+          props.authorization.authorize(responce.data.data)
+
+          navigate("/");
+
+          setCookie('token', token, { path: '/'});
+          console.log('Текущие куки:');
+          console.log(cookies);
+        })
+      // } else if (cookies.token) {
+      //   console.log('Отправка данных на сервер, если есть куки')
+      //   axios.get(`/auth/token`, { token: cookies.token }).then((responce) => {
+      //     console.log('Обработка данных с сервера')
+      //     props.authorization.authorize(responce.data.data)
+
+      //     console.log('Текущие куки:');
+      //     console.log(cookies);
+      //   })
+        }
+      }
     }
   }
+
+  requestForSuccessfulRegistaration()
+  
 
   const test_data = [
 

@@ -6,6 +6,8 @@ from application.models import User
 
 register_data = reqparse.RequestParser()
 register_data.add_argument('email', type=str, help='Требуется email для регистрации', required=True)
+
+
 # register_data.add_argument('phone', type=str, help='Требуется телефон для регистрации', required=True)
 
 
@@ -31,3 +33,13 @@ def login_validation(data):
     user = User.query.filter_by(email=data['email']).first()
     if not user:
         abort(403, message='Данный email не зарегистрирован')
+
+
+token_data = reqparse.RequestParser()
+token_data.add_argument('token', type=str, help='Требуется token', required=True)
+
+token_login_data = reqparse.RequestParser()
+token_login_data.add_argument('token', type=str, help='Требуется token', required=True)
+
+code_data = reqparse.RequestParser()
+code_data.add_argument('code', type=str, help='Требуется code', required=True)
