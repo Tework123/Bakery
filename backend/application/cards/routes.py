@@ -13,9 +13,9 @@ from flask_restful import Resource, marshal_with, fields
 class Index(Resource):
     card_fields = {
         'card_id': fields.Integer,
-        'card_name': fields.String,
-        'card_price': fields.Price,
-        'card_image': fields.String
+        'name': fields.String,
+        'price': fields.Price,
+        'image': fields.String
     }
 
     @marshal_with(card_fields)

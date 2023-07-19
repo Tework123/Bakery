@@ -41,5 +41,3 @@ token_data.add_argument('token', type=str, help='Требуется token', requ
 token_login_data = reqparse.RequestParser()
 token_login_data.add_argument('token', type=str, help='Требуется token', required=True)
 
-code_data = reqparse.RequestParser()
-code_data.add_argument('code', type=str, help='Требуется code', required=True)

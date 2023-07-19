@@ -63,6 +63,9 @@ def create_app(config):
         from application.admin import bp as bp_admin
         app.register_blueprint(bp_admin, url_prefix='/admin')
 
+        from application.restaurant import bp as bp_restaurant
+        app.register_blueprint(bp_restaurant, url_prefix='/restaurant')
+
         from application.auth import bp as bp_auth
         app.register_blueprint(bp_auth, url_prefix='/auth')
 
