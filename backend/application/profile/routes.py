@@ -63,5 +63,27 @@ class OrderChoose(Resource):
         return order_choose
 
 
+# наверное нужно отдельную вкладку сделать для обычного пользователя, хотя можно и во вкладке профиля
+# заходишь туда, а на всем экране твои заказы
+# внизу история выполненных заказов
+class CurrentOrders(Resource):
+    def get(self):
+        # надо вернуть id_order, price общую и каждого товара, количество каждой позиции,
+        # также нужно вернуть каждый товар,
+        # возможно с фото, address, status
+
+        # хотя можно тоже при клике на него открывается новое окно или новая страница, а там уже подробности
+        # хотя много заказов висеть в готовке вряд ли у кого-то будет, поэтому можно даже картинки подгрузить
+        current_orders = db.session.query()
+        pass
+
+
 api_profile.add_resource(Index, '/')
 api_profile.add_resource(OrderChoose, '/<int:order_id>')
+api_profile.add_resource(CurrentOrders, '/current_orders')
+
+# верхняя url не так как надо работает, надо такие урл сделать:
+
+# /current_orders вернет текущие заказы(где статус != success и не баскет)
+# /pass_orders история заказов(где статус == success)
+# основная url пока не понятно что вернет

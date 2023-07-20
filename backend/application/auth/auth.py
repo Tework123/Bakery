@@ -83,6 +83,22 @@ def register_restaurant(email):
     return True
 
 
+def register_user(email):
+    user = User.query.filter_by(email=email).first()
+    if user:
+        login_user(user, remember=True, duration=datetime.timedelta(days=180))
+        return True
+    user = User(email=email, role='user')
+    db.session.add(user)
+    user = User.query.filter_by(email=email).first()
+    basket = Order(user_id=user.user_id)
+    db.session.add(basket)
+    db.session.flush()
+    db.session.commit()
+    login_user(user, remember=True, duration=datetime.timedelta(days=180))
+    return True
+
+
 def create_token(email, exp=600):
     token = jwt.encode({'email': email, 'exp': int(time()) + exp}, Config.SECRET_KEY,
                        algorithm='HS256')

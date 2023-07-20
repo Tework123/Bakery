@@ -27,8 +27,8 @@ def load_user(id):
 
 class CardProduct(db.Model):
     card_id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(60), unique=True)
-    text = db.Column(db.String(400))
+    name = db.Column(db.String(100), unique=True)
+    text = db.Column(db.String(1000))
     price = db.Column(db.Integer)
     image = db.Column(db.String(200), unique=True)
 
@@ -36,7 +36,7 @@ class CardProduct(db.Model):
 class Order(db.Model):
     order_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id', ondelete='CASCADE'))
-    text = db.Column(db.String(200))
+    text = db.Column(db.String(1000))
     address = db.Column(db.String(200), nullable=True)
     date = db.Column(db.DateTime, nullable=True)
     # заполнение корзины: basket, оплата: paid, кухня: prepared, ready,

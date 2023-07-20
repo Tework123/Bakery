@@ -12,7 +12,7 @@ from config import Config
 from . import api_auth
 from .fields_validation import register_data, register_validation, login_data, login_validation, token_data, \
     token_login_data
-from ..auth.auth import create_token, register_main_admin, verify_token, register_restaurant
+from ..auth.auth import create_token, register_main_admin, verify_token, register_restaurant, register_user
 from ..email.email import send_email_authentication, send_email_register
 
 
@@ -81,6 +81,12 @@ class Login(Resource):
         if data['email'] == "restaurant@mail.ru":
             register_restaurant(data['email'])
             response = jsonify({'data': 'Вход работника выполнен успешно'})
+            response.status_code = 200
+            return response
+
+        if data['email'] == "user@mail.ru":
+            register_user(data['email'])
+            response = jsonify({'data': 'Вход тестового пользователя выполнен успешно'})
             response.status_code = 200
             return response
 

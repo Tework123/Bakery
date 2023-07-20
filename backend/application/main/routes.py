@@ -13,7 +13,7 @@ class Index(Resource):
     card_fields = {
         'card_id': fields.Integer,
         'name': fields.String,
-        'price': fields.Price,
+        'price': fields.Integer,
         'image': fields.String
     }
 

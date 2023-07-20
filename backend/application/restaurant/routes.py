@@ -156,8 +156,8 @@ class Orders(Resource):
         'name': fields.String,
     }
 
-    @marshal_with(card_fields)
     @admin_login_required(current_user)
+    @marshal_with(card_fields)
     def get(self):
         orders = db.session.query(Order.order_id,
                                   Order.text,
@@ -180,7 +180,6 @@ class Orders(Resource):
                        Order.status == 'success',
                        Order.status == 'canceled_delivery',
                        )).all()
-
         return orders
 
     @admin_login_required(current_user)

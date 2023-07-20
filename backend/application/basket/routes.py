@@ -127,7 +127,7 @@ class Buy(Resource):
         sum_price = 0
         for i in order_products:
             sum_price += i.price
-
+        print(sum_price)
         response = {'data': f'Перенаправление на страницу оплаты, цена заказа: {sum_price}'}
 
         # если страница оплаты возвращает True, то status = paid и заказ появляется у ресторана,
