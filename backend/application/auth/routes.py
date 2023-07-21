@@ -2,7 +2,7 @@ import datetime
 import random
 
 from flask import jsonify, session, request, make_response
-from flask_login import login_user, current_user
+from flask_login import login_user, current_user, logout_user
 
 from application import db
 from application.models import User, Order
@@ -12,7 +12,9 @@ from config import Config
 from . import api_auth
 from .fields_validation import register_data, register_validation, login_data, login_validation, token_data, \
     token_login_data
-from ..auth.auth import create_token, verify_token, register
+from ..auth.auth import create_token, verify_token, register, login_required
+
+
 # from ..email.email import send_email_authentication, send_email_register
 
 
@@ -128,7 +130,17 @@ class TokenLogin(Resource):
             return response
 
 
+class Logout(Resource):
+    @login_required(current_user)
+    def get(self):
+        logout_user()
+        response = jsonify({'data': 'Вы вышли из аккаунта'})
+        response.status_code = 200
+        return response
+
+
 api_auth.add_resource(Login, '/login')
 api_auth.add_resource(TokenLogin, '/token_login')
 api_auth.add_resource(Register, '/register')
 api_auth.add_resource(TokenRegister, '/token_register')
+api_auth.add_resource(Logout, '/logout')

@@ -63,15 +63,15 @@ class Index(Resource):
         # если такой товар уже есть в корзине, то нужно увеличить его amount на один
         if order_product:
             order_product.amount += 1
-            order_product.price += data['price']
+            order_product.price += card.price
             db.session.commit()
         else:
-            card = OrderProduct(order_id=basket.order_id, card_id=data['card_id'], price=data['price'])
-            db.session.add(card)
+            order_product = OrderProduct(order_id=basket.order_id, card_id=data['card_id'], price=card.price)
+            db.session.add(order_product)
             db.session.flush()
             db.session.commit()
 
-        response = jsonify({'data': f'Товар {data["name"]} добавлен в корзину'})
+        response = jsonify({'data': f'Товар {card.name} добавлен в корзину'})
         response.status_code = 200
         return response
 

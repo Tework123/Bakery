@@ -28,6 +28,7 @@ class Cards(Resource):
     }
 
     # здесь отправка картинок и всего остального для работников ресторана(тут с кнопками)
+    @restaurant_login_required(current_user)
     @marshal_with(card_fields)
     def get(self):
         cards = CardProduct.query.all()

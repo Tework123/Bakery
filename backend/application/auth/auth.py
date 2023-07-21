@@ -104,7 +104,6 @@ def create_token(email, exp=600):
 
 
 def verify_token(token):
-    print(token)
     email = jwt.decode(token, Config.SECRET_KEY, algorithms=['HS256'])['email']
 
     return email
