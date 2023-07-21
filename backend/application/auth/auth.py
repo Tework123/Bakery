@@ -14,9 +14,8 @@ def login_required(user):
         def wrapper(*args, **kwargs):
             try:
                 user_id = user.user_id
-                # походу можно без jwt токена здесь, чисто проверить через try except на наличие у юзера id например
                 # если анонимус - то ошибка, и все, а в login зададим remember 180 дней
-                # токен чисто на почту отправляется
+                # токен на почту отправляется
             except:
                 response = jsonify({'data': 'Вы не зашли в аккаунт'})
                 response.status_code = 401
@@ -29,7 +28,7 @@ def login_required(user):
     return wrap
 
 
-def admin_login_required(user):
+def restaurant_login_required(user):
     def wrap(func):
         def wrapper(*args, **kwargs):
             try:
@@ -51,12 +50,43 @@ def admin_login_required(user):
     return wrap
 
 
-def register_main_admin(email):
+def admin_login_required(user):
+    def wrap(func):
+        def wrapper(*args, **kwargs):
+            try:
+                user_id = user.user_id
+            except:
+                response = jsonify({'data': 'Вы не зашли в аккаунт'})
+                response.status_code = 401
+                return response
+
+            if user.role != 'main_admin':
+                response = jsonify({'data': 'Вы не главный админ'})
+                response.status_code = 403
+                return response
+
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    return wrap
+
+
+def register(email, role):
     user = User.query.filter_by(email=email).first()
+
+    if role == 'main_admin':
+        register_response = 'Вход тестового главного админа выполнен успешно'
+    elif role == 'restaurant':
+        register_response = 'Вход тестового работника выполнен успешно'
+    else:
+        register_response = 'Вход тестового пользователя выполнен успешно'
+
     if user:
         login_user(user, remember=True, duration=datetime.timedelta(days=180))
-        return True
-    user = User(email=email, role='main_admin')
+        return register_response
+
+    user = User(email=email, role=role)
     db.session.add(user)
     user = User.query.filter_by(email=email).first()
     basket = Order(user_id=user.user_id)
@@ -64,39 +94,7 @@ def register_main_admin(email):
     db.session.flush()
     db.session.commit()
     login_user(user, remember=True, duration=datetime.timedelta(days=180))
-    return True
-
-
-def register_restaurant(email):
-    user = User.query.filter_by(email=email).first()
-    if user:
-        login_user(user, remember=True, duration=datetime.timedelta(days=180))
-        return True
-    user = User(email=email, role='restaurant')
-    db.session.add(user)
-    user = User.query.filter_by(email=email).first()
-    basket = Order(user_id=user.user_id)
-    db.session.add(basket)
-    db.session.flush()
-    db.session.commit()
-    login_user(user, remember=True, duration=datetime.timedelta(days=180))
-    return True
-
-
-def register_user(email):
-    user = User.query.filter_by(email=email).first()
-    if user:
-        login_user(user, remember=True, duration=datetime.timedelta(days=180))
-        return True
-    user = User(email=email, role='user')
-    db.session.add(user)
-    user = User.query.filter_by(email=email).first()
-    basket = Order(user_id=user.user_id)
-    db.session.add(basket)
-    db.session.flush()
-    db.session.commit()
-    login_user(user, remember=True, duration=datetime.timedelta(days=180))
-    return True
+    return register_response
 
 
 def create_token(email, exp=600):

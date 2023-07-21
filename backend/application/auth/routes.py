@@ -12,8 +12,8 @@ from config import Config
 from . import api_auth
 from .fields_validation import register_data, register_validation, login_data, login_validation, token_data, \
     token_login_data
-from ..auth.auth import create_token, register_main_admin, verify_token, register_restaurant, register_user
-from ..email.email import send_email_authentication, send_email_register
+from ..auth.auth import create_token, verify_token, register
+# from ..email.email import send_email_authentication, send_email_register
 
 
 class Register(Resource):
@@ -25,7 +25,7 @@ class Register(Resource):
         token = create_token(data['email'], 500)
 
         # отправка токена на email
-        send_email_register(data['email'], token)
+        # send_email_register(data['email'], token)
 
         response = jsonify({'data': 'Ссылка для подтверждения регистрации отправлена вам на почту'})
         response.status_code = 200
@@ -71,22 +71,18 @@ class Login(Resource):
     def post(self):
         data = login_data.parse_args()
 
-        # проверка на главного админа
-        if data['email'] == Config.MAIN_ADMIN_EMAIL:
-            register_main_admin(data['email'])
-            response = jsonify({'data': 'Вход главного админа выполнен успешно'})
-            response.status_code = 200
-            return response
+        # проверка на тестового главного админа, тестового работника, тестового пользователя
+        if data['email'] in [Config.MAIN_ADMIN_EMAIL, "restaurant@mail.ru", "user@mail.ru"]:
 
-        if data['email'] == "restaurant@mail.ru":
-            register_restaurant(data['email'])
-            response = jsonify({'data': 'Вход работника выполнен успешно'})
-            response.status_code = 200
-            return response
+            if data['email'] == Config.MAIN_ADMIN_EMAIL:
+                role = 'main_admin'
+            elif data['email'] == "restaurant@mail.ru":
+                role = 'restaurant'
+            else:
+                role = 'user'
 
-        if data['email'] == "user@mail.ru":
-            register_user(data['email'])
-            response = jsonify({'data': 'Вход тестового пользователя выполнен успешно'})
+            response_from_register = register(data['email'], role)
+            response = jsonify({'data': response_from_register})
             response.status_code = 200
             return response
 
@@ -94,7 +90,7 @@ class Login(Resource):
         user = User.query.filter_by(email=data['email']).first()
         if user:
             token = create_token(data['email'], 500)
-            send_email_authentication(data['email'], token)
+            # send_email_authentication(data['email'], token)
 
             response = jsonify({'data': 'Ссылка для подтверждения входа отправлена вам на почту'})
             response.status_code = 200

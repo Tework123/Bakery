@@ -11,7 +11,7 @@ function Navbar(props) {
   // }
 
   const onClickProfileTest = () => {
-    axios.get('/profile').then((response) => {
+    axios.get('/profile/pass_orders').then((response) => {
       console.log(response.data);
     })   
   }

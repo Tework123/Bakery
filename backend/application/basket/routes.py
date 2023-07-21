@@ -1,20 +1,14 @@
 import datetime
-import json
-import time
-
 from flask import jsonify
-from flask_login import login_user, current_user
+from flask_login import current_user
 
 from application import db
 from application.auth.auth import login_required
 from application.basket import api_basket
 from application.basket.fields_validation import basket_data, basket_data_delete
-from application.cards import api_cards
-from application.email.email import send_email
-from application.models import User, CardProduct, Order, OrderProduct
-from flask_restful import Resource, marshal_with, fields
 
-from start_app import CONFIG
+from application.models import CardProduct, Order, OrderProduct
+from flask_restful import Resource, marshal_with, fields
 
 
 class Index(Resource):
@@ -26,7 +20,7 @@ class Index(Resource):
         'amount': fields.Integer,
         'name': fields.String,
         'image': fields.String,
-        'price': fields.Price
+        'price': fields.Integer
     }
 
     @login_required(current_user)
@@ -53,6 +47,13 @@ class Index(Resource):
 
         # кнопка добавить в корзину на карточке товара и значок + около этого товара в корзине
         data = basket_data.parse_args()
+
+        card = CardProduct.query.filter_by(card_id=data['card_id']).first()
+        if card is None:
+            response = jsonify({'data': f'Такой товар не существует'})
+            response.status_code = 200
+            return response
+
         basket = Order.query.filter_by(user_id=current_user.user_id, status='basket').first()
         if basket is None:
             basket = Order(user_id=current_user.user_id)
@@ -80,6 +81,12 @@ class Index(Resource):
         # удаляет все продукты с данным id (значок корзины возможно)
         data = basket_data_delete.parse_args()
         basket = Order.query.filter_by(user_id=current_user.user_id, status='basket').first()
+        card = OrderProduct.query.filter_by(order_id=basket.order_id, card_id=data['card_id']).first()
+        if card is None:
+            response = jsonify({'data': f'В вашей корзине нет такого товара'})
+            response.status_code = 200
+            return response
+
         OrderProduct.query.filter_by(order_id=basket.order_id, card_id=data['card_id']).delete()
         db.session.commit()
 
@@ -101,7 +108,7 @@ class Buy(Resource):
         'amount': fields.Integer,
         'name': fields.String,
         'image': fields.String,
-        'price': fields.Price
+        'price': fields.Integer
     }
 
     @login_required(current_user)

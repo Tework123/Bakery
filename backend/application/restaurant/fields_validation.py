@@ -24,3 +24,9 @@ card_patch_data.add_argument('name', type=str, location='form', help='Требу
 card_patch_data.add_argument('price', type=int, location='form', help='Требуется цена товара', required=False)
 card_patch_data.add_argument('image', type=FileStorage, location='files', help='Требуется картинка товара',
                              required=False)
+
+# изменение статуса заказа
+order_patch_data = reqparse.RequestParser()
+order_patch_data.add_argument('order_id', type=str, help='Нужен id заказа', required=True)
+
+

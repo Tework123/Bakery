@@ -7,7 +7,7 @@ from flask_restful import Resource, fields, marshal_with
 from application import db
 from application.admin import api_admin
 from application.admin.fields_validation import \
-    create_admin_data, create_admin_validation, delete_admin_data
+    delete_admin_data, create_restaurant_data, create_restaurant_validation
 from application.auth.auth import admin_login_required
 from application.models import CardProduct, User
 from config import Config
@@ -21,28 +21,23 @@ class Index(Resource):
 
 
 class CreateRestaurant(Resource):
-    admins_fields = {
-        'id_user': fields.Integer,
+    restaurant_fields = {
+        'user_id': fields.Integer,
         'email': fields.String,
         # 'phone': fields.String,
         'role': fields.String
     }
 
     @admin_login_required(current_user)
-    @marshal_with(admins_fields)
+    @marshal_with(restaurant_fields)
     def get(self):
         admins = User.query.filter_by(role='restaurant').all()
         return admins
 
     @admin_login_required(current_user)
     def post(self):
-        if current_user.email != Config.MAIN_ADMIN_EMAIL:
-            response = jsonify({'data': 'Вы не являетесь главным админом'})
-            response.status_code = 403
-            return response
-
-        data = create_admin_data.parse_args()
-        create_admin_validation(data)
+        data = create_restaurant_data.parse_args()
+        create_restaurant_validation(data)
         user = User(email=data['email'], role='restaurant')
         db.session.add(user)
         db.session.flush()
@@ -53,11 +48,6 @@ class CreateRestaurant(Resource):
 
     @admin_login_required(current_user)
     def delete(self):
-        if current_user.email != Config.MAIN_ADMIN_EMAIL:
-            response = jsonify({'data': 'Вы не являетесь главным админом'})
-            response.status_code = 403
-            return response
-
         data = delete_admin_data.parse_args()
         User.query.filter_by(email=data['email']).delete()
         db.session.commit()
@@ -66,5 +56,12 @@ class CreateRestaurant(Resource):
         return response
 
 
+class SiteStatistics(Resource):
+    @admin_login_required(current_user)
+    def get(self):
+        return jsonify({'data': 'some statistics'})
+
+
 api_admin.add_resource(Index, '/')
-api_admin.add_resource(CreateRestaurant, '/create_admin')
+api_admin.add_resource(CreateRestaurant, '/create_restaurant')
+api_admin.add_resource(SiteStatistics, '/site_statistics')

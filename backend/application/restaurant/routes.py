@@ -7,10 +7,10 @@ from flask_restful import Resource, fields, marshal_with
 from sqlalchemy import or_, cast
 
 from application import db
-from application.auth.auth import admin_login_required
+from application.auth.auth import restaurant_login_required
 from application.models import CardProduct, Order, OrderProduct
 from application.restaurant import api_restaurant
-from application.restaurant.fields_validation import card_data, card_delete_data, card_patch_data
+from application.restaurant.fields_validation import card_data, card_delete_data, card_patch_data, order_patch_data
 from start_app import CONFIG
 
 
@@ -27,7 +27,7 @@ class Cards(Resource):
         'image': fields.String
     }
 
-    # здесь отправка картинок и всего остального для работников ресторана
+    # здесь отправка картинок и всего остального для работников ресторана(тут с кнопками)
     @marshal_with(card_fields)
     def get(self):
         cards = CardProduct.query.all()
@@ -45,7 +45,7 @@ class Cards(Resource):
         # выводятся данные и на фронте расставляются в табличку с кнопками удалить, добавить
         return cards
 
-    @admin_login_required(current_user)
+    @restaurant_login_required(current_user)
     def post(self):
         data = card_data.parse_args()
         image = data['image']
@@ -70,7 +70,7 @@ class Cards(Resource):
         response.status_code = 200
         return response
 
-    @admin_login_required(current_user)
+    @restaurant_login_required(current_user)
     def delete(self):
         data = card_delete_data.parse_args()
         card = CardProduct.query.filter_by(card_id=data['card_id']).first()
@@ -94,7 +94,7 @@ class Cards(Resource):
         response.status_code = 200
         return response
 
-    @admin_login_required(current_user)
+    @restaurant_login_required(current_user)
     def patch(self):
         data = card_patch_data.parse_args()
         card = CardProduct.query.filter_by(card_id=data['card_id']).first()
@@ -156,7 +156,7 @@ class Orders(Resource):
         'name': fields.String,
     }
 
-    @admin_login_required(current_user)
+    @restaurant_login_required(current_user)
     @marshal_with(card_fields)
     def get(self):
         orders = db.session.query(Order.order_id,
@@ -182,11 +182,22 @@ class Orders(Resource):
                        )).all()
         return orders
 
-    @admin_login_required(current_user)
+    # сработает когда нажимают на кнопку рядом с заказом - принято к выполнению, готово, отменить
+    @restaurant_login_required(current_user)
     def patch(self):
-        # нажимаем на кнопку рядом с заказом - принято к выполнению, готово, отменить
-        # с курьерами уже потом сделаем, после показа
-        pass
+        # Наверное надо опять передать какой знак, чтобы понять, какую кнопку нажал работник
+        # ready, prepared, canceled_restaurant
+        data = order_patch_data.parse_args()
+        order = Order.query.filter_by(order_id=data['order_id']).first()
+        if order is None:
+            response = jsonify({'data': 'Заказ не найден'})
+            response.status_code = 200
+            return response
+
+        order.status = 'success'
+        response = jsonify({'data': 'Статус заказа изменен'})
+        response.status_code = 200
+        return response
 
 
 api_restaurant.add_resource(Index, '/')

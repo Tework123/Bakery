@@ -39,8 +39,6 @@ class Order(db.Model):
     text = db.Column(db.String(1000))
     address = db.Column(db.String(200), nullable=True)
     date = db.Column(db.DateTime, nullable=True)
-    # заполнение корзины: basket, оплата: paid, кухня: prepared, ready,
-    # canceled_restaurant, курьер: delivered, success, canceled_delivery
     status = db.Column(db.String(20), default='basket')
 
 
