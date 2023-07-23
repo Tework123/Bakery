@@ -52,7 +52,7 @@ def create_app(config):
 
     with app.app_context():
         from application.main import bp as bp_main
-        app.register_blueprint(bp_main)
+        app.register_blueprint(bp_main, url_prefix='/main')
 
         from application.email import bp as bp_email
         app.register_blueprint(bp_email, url_prefix='/email')
