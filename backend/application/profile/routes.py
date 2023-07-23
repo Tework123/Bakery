@@ -70,9 +70,6 @@ class OrderChoose(Resource):
         return order_choose
 
 
-# наверное нужно отдельную вкладку сделать для обычного пользователя, хотя можно и во вкладке профиля
-# заходишь туда, а на всем экране твои заказы
-# внизу история выполненных заказов
 class CurrentOrders(Resource):
     card_fields = {
         'order_id': fields.Integer,

@@ -48,7 +48,9 @@ class Cards(Resource):
 
     @restaurant_login_required(current_user)
     def post(self):
+
         data = card_data.parse_args()
+
         image = data['image']
 
         # сохранение полученной картинки
@@ -56,6 +58,7 @@ class Cards(Resource):
 
         if not os.path.exists(file_path):
             data['image'].save(file_path)
+
         try:
             card = CardProduct(name=data['name'], price=data['price'], image=image.filename)
             db.session.add(card)

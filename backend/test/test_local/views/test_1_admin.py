@@ -1,7 +1,7 @@
 import pytest
 
 
-@pytest.mark.usefixtures('client')
+@pytest.mark.usefixtures('client', 'add_test_data_to_db')
 class TestAdminUnauthorized:
 
     @pytest.mark.parametrize('test_input, expected_error_description, expected_status_code',
@@ -54,7 +54,7 @@ class TestAdminAuthorized:
         response = client.get('/admin/create_restaurant')
 
         assert response.status_code == 200
-        assert response.get_json() == [{'email': 'restaurant1@mail.ru', 'role': 'restaurant', 'user_id': 2}]
+        assert response.get_json() == [{'email': 'restaurant1@mail.ru', 'role': 'restaurant', 'user_id': 7}]
 
     def test_site_statistics_get(self, client):
         response = client.get('/admin/site_statistics')

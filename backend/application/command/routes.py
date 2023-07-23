@@ -31,6 +31,21 @@ def add_orders():
     add_orders_base()
 
 
+@bp.cli.command('add_for_test_users')
+def add_for_test_users():
+    add_for_test_users_base()
+
+
+@bp.cli.command('add_for_test_cards')
+def add_for_test_cards():
+    add_cards_base()
+
+
+@bp.cli.command('add_for_test_orders')
+def add_for_test_orders():
+    add_for_test_orders_base()
+
+
 emails = ['adcde@mail.ru', 'restaurant@mail.ru', 'user@mail.ru', 'denchik123@mail.ru',
           'mishua_keto@mail.ru', 'kama_karsh@mail.ru', 'zaxar_sex@mail.ru', 'nekit_kach@mail.ru']
 
@@ -137,4 +152,67 @@ def add_orders_base():
         db.session.commit()
 
     print('add_orders')
+    print('***Complete***')
+
+
+def add_for_test_users_base():
+    emails = ['denchik123@mail.ru',
+              'mishua_keto@mail.ru', 'kama_karsh@mail.ru', 'zaxar_sex@mail.ru', 'nekit_kach@mail.ru']
+
+    roles = ['user', 'user', 'user', 'user', 'user', 'user']
+    users = []
+    address = ['Белгородская область, город Воскресенск, ул. Славы, 07',
+               'Ярославская область, город Дорохово, проезд Гагарина, 76',
+               'Московская область, город Одинцово, спуск Гоголя, 98',
+               'Ленинградская область, город Орехово-Зуево, бульвар Бухарестская, 48',
+               'Челябинская область, город Кетозник, наб. Котлетова, 26',
+               'Омская область, город Щекино, пр. Каршеринга, 16']
+
+    for i in range(len(emails)):
+        user = User(email=emails[i], address=address[i], role=roles[i])
+        users.append(user)
+    db.session.add_all(users)
+    db.session.flush()
+    db.session.commit()
+    print('add_test_users')
+    print('***Complete***')
+
+
+def add_for_test_orders_base():
+    user_id = [1, 2, 3, 4, 5, 1, 2, 3, 4, 5]
+    texts = ['Сложно сказать, почему независимые государства будут в равной степени предоставлены сами себе.',
+             '', '', '', '', '', '', '', '', '']
+    address = ['Белгородская область, город Воскресенск, ул. Славы, 07',
+               'Ярославская область, город Дорохово, проезд Гагарина, 76',
+               'Московская область, город Одинцово, спуск Гоголя, 98',
+               'Ленинградская область, город Орехово-Зуево, бульвар Бухарестская, 48',
+               'Челябинская область, город Кетозник, наб. Котлетова, 26',
+               'Омская область, город Щекино, пр. Каршеринга, 16',
+               '', '', '', '', '']
+    status_paid = ['paid', 'success', 'basket', 'paid', 'success', 'paid', 'success', 'basket', 'paid', 'success']
+
+    baskets = []
+    for i in range(len(user_id)):
+        basket = Order(user_id=user_id[i], text=texts[i], address=address[i],
+                       date=datetime.now(),
+                       status=status_paid[i])
+        baskets.append(basket)
+    db.session.add_all(baskets)
+    db.session.commit()
+
+    order_id = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    card_id = [1, 2, 3, 4, 5, 6, 7, 1, 2, 3]
+    amount = [1, 3, 2, 4, 5, 6, 1, 3, 1, 1]
+    prices = [100, 120, 130, 140, 100, 120, 130, 140, 100, 100]
+    order_products = []
+    for j in range(3):
+        for i in range(len(order_id)):
+            order_product = OrderProduct(order_id=order_id[i], card_id=card_id[i], amount=amount[i],
+                                         price=prices[i])
+            order_products.append(order_product)
+
+            db.session.add_all(order_products)
+            db.session.commit()
+
+    print('add_test_orders')
     print('***Complete***')
