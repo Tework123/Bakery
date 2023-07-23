@@ -15,7 +15,7 @@ from .fields_validation import register_data, register_validation, login_data, l
 from ..auth.auth import create_token, verify_token, register, login_required
 
 
-# from ..email.email import send_email_authentication, send_email_register
+from ..email.email import send_email_authentication, send_email_register
 
 
 class Register(Resource):
@@ -27,7 +27,7 @@ class Register(Resource):
         token = create_token(data['email'], 500)
 
         # отправка токена на email
-        # send_email_register(data['email'], token)
+        send_email_register(data['email'], token)
 
         response = jsonify({'data': 'Ссылка для подтверждения регистрации отправлена вам на почту'})
         response.status_code = 200
@@ -92,7 +92,7 @@ class Login(Resource):
         user = User.query.filter_by(email=data['email']).first()
         if user:
             token = create_token(data['email'], 500)
-            # send_email_authentication(data['email'], token)
+            send_email_authentication(data['email'], token)
 
             response = jsonify({'data': 'Ссылка для подтверждения входа отправлена вам на почту'})
             response.status_code = 200
