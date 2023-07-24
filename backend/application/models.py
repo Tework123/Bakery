@@ -2,13 +2,12 @@ from application import db, login_manager
 
 
 class User(db.Model):
-    # админ = ресторан, может добавлять, удалять карточки, менять цены,
-    # имеет свой адрес и почту, телефон может быть
     user_id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50), unique=True)
     address = db.Column(db.String(200), nullable=True)
-    # main
     role = db.Column(db.String(20))
+    verified = db.Column(db.Boolean, default=False)
+    code = db.Column(db.Integer)
 
     def is_authenticated(self):
         return True

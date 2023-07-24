@@ -41,7 +41,7 @@ def create_app(config):
         '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
 
     # action to logs/log.log
-    file_handler.setLevel(logging.DEBUG)
+    file_handler.setLevel(logging.ERROR)
     app.logger.addHandler(file_handler)
 
     # action to email

@@ -7,6 +7,6 @@ from config import ProductionConfig
 
 from application import create_app
 
-CONFIG = ProductionConfig
+CONFIG = DevelopmentConfig
 
 app = create_app(CONFIG)
