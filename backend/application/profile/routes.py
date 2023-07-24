@@ -1,8 +1,7 @@
-import datetime
-import json
-
+import sqlalchemy
 from flask import jsonify, request
 from flask_login import login_user, current_user
+from sqlalchemy import text, cast, or_
 
 from application import db
 from application.auth.auth import login_required
@@ -14,33 +13,101 @@ from application.profile import api_profile
 from start_app import CONFIG
 
 
-class Index(Resource):
+class PassOrders(Resource):
     profile_fields = {
         'order_id': fields.Integer,
-        'user_id': fields.Integer,
-        'card_id': fields.Integer,
-        'amount': fields.Integer,
-        'card_name': fields.String,
-        'card_image': fields.String,
-        'card_price': fields.Price
+        'date': fields.DateTime,
+        'price': fields.Integer,
+        'status': fields.String
     }
 
-    # @login_required(current_user)
+    @login_required(current_user)
     @marshal_with(profile_fields)
     def get(self):
-        print(current_user)
-        name = request.cookies.get('token')
+        profile_data = db.session.query(Order.order_id,
+                                        Order.date,
+                                        db.func.sum(OrderProduct.price).label('price'),
+                                        Order.status). \
+            join(OrderProduct, Order.order_id == OrderProduct.order_id) \
+            .group_by(Order.order_id, Order.date, Order.status) \
+            .where(Order.user_id == current_user.user_id, or_(Order.status == 'canceled_restaurant',
+                                                              Order.status == 'delivered',
+                                                              Order.status == 'success',
+                                                              Order.status == 'canceled_delivery')).all()
 
-        # персональная информация: email, телефон(потом)
-        # на одной странице история заказов
-        # можно изменять информация прямо на этой страничке
-        profile_data = db.session.query(Order.order_id, Order.date, CardProduct.card_name,
-                                        (CardProduct.card_price * OrderProduct.amount).label('card_price')).join(
-            OrderProduct,
-            Order.order_id == OrderProduct.order_id).join(
-            CardProduct, OrderProduct.card_id == CardProduct.card_id).where(
-            Order.user_id == current_user.user_id, Order.status is True).all()
         return profile_data
 
 
-api_profile.add_resource(Index, '/')
+class OrderChoose(Resource):
+    profile_fields = {
+        'data': fields.String,
+        'order_id': fields.Integer,
+        'status': fields.String,
+        'price': fields.Integer,
+        'name': fields.String,
+        'amount': fields.String,
+    }
+
+    @login_required(current_user)
+    @marshal_with(profile_fields)
+    def get(self, order_id):
+        order = Order.query.filter_by(user_id=current_user.user_id, order_id=order_id).first()
+        if order is None:
+            response = {'data': 'У вас нет такого заказа'}
+            return response, 200
+
+        order_choose = db.session.query(Order.order_id,
+                                        Order.status,
+                                        Order.date,
+                                        db.func.sum(OrderProduct.price).label('price'),
+                                        db.func.string_agg(CardProduct.name, ', ').label('name'),
+                                        db.func.string_agg(cast(OrderProduct.amount, sqlalchemy.String), ', ')
+                                        .label('amount')) \
+            .join(OrderProduct, Order.order_id == OrderProduct.order_id) \
+            .join(CardProduct, OrderProduct.card_id == CardProduct.card_id) \
+            .group_by(Order.order_id, Order.status).where(Order.order_id == order_id).all()
+
+        return order_choose
+
+
+class CurrentOrders(Resource):
+    card_fields = {
+        'order_id': fields.Integer,
+        'text': fields.String,
+        'date': fields.DateTime,
+        'address': fields.String,
+        'amount': fields.String,
+        'name': fields.String,
+        'status': fields.String
+
+    }
+
+    @login_required(current_user)
+    @marshal_with(card_fields)
+    def get(self):
+        current_orders = db.session.query(Order.order_id,
+                                          Order.text,
+                                          Order.address,
+                                          Order.date,
+                                          Order.status,
+                                          db.func.string_agg(CardProduct.name, ', ').label('name'),
+                                          db.func.string_agg(cast(OrderProduct.amount, sqlalchemy.String), ', ')
+                                          .label('amount')) \
+            .join(OrderProduct, Order.order_id == OrderProduct.order_id) \
+            .join(CardProduct, OrderProduct.card_id == CardProduct.card_id) \
+            .group_by(Order.order_id,
+                      Order.text,
+                      Order.address,
+                      Order.date) \
+            .where(Order.user_id == current_user.user_id,
+                   or_(Order.status == 'paid',
+                       Order.status == 'prepared',
+                       Order.status == 'ready',
+                       Order.status == 'delivered',
+                       )).all()
+        return current_orders
+
+
+api_profile.add_resource(PassOrders, '/pass_orders')
+api_profile.add_resource(OrderChoose, '/pass_orders/<int:order_id>')
+api_profile.add_resource(CurrentOrders, '/current_orders')

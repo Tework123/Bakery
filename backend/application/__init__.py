@@ -41,7 +41,7 @@ def create_app(config):
         '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
 
     # action to logs/log.log
-    file_handler.setLevel(logging.DEBUG)
+    file_handler.setLevel(logging.ERROR)
     app.logger.addHandler(file_handler)
 
     # action to email
@@ -52,7 +52,7 @@ def create_app(config):
 
     with app.app_context():
         from application.main import bp as bp_main
-        app.register_blueprint(bp_main)
+        app.register_blueprint(bp_main, url_prefix='/main')
 
         from application.email import bp as bp_email
         app.register_blueprint(bp_email, url_prefix='/email')
@@ -62,6 +62,9 @@ def create_app(config):
 
         from application.admin import bp as bp_admin
         app.register_blueprint(bp_admin, url_prefix='/admin')
+
+        from application.restaurant import bp as bp_restaurant
+        app.register_blueprint(bp_restaurant, url_prefix='/restaurant')
 
         from application.auth import bp as bp_auth
         app.register_blueprint(bp_auth, url_prefix='/auth')

@@ -27,8 +27,8 @@ def send_email(subject, sender, recipients, body, attachments=None):
     Thread(target=send_async_email, args=(current_app._get_current_object(), msg)).start()
 
 
-def send_email_authentication(email, token):
-    body = render_template('email/login.html', token=token, email=email)
+def send_email_authentication(email, code, token='token'):
+    body = render_template('email/login.html', token=token, email=email, code=code)
     send_email('email_authentication', CONFIG.MAIL_USERNAME, [email], body)
 
 
