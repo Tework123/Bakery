@@ -15,7 +15,7 @@ function Registration(props) {
   }
 
 
-    
+  
 
   const onClickRegistr = () => {
     sendEmailRegistr()
