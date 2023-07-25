@@ -1,6 +1,6 @@
 import time
 
-from flask import jsonify
+from flask import jsonify, url_for
 from flask_restful import Resource, fields, marshal_with
 
 from application.email.email import send_email
@@ -21,6 +21,15 @@ class Index(Resource):
     def get(self):
         cards = CardProduct.query.all()
 
+        print(cards)
+        cards_new = []
+        for row in cards:
+            row = {'card_id': row.card_id, 'name': row.name, 'price': row.price, 'image': row.image}
+            cards_new.append(row)
+
+        for i in cards_new:
+            i['image'] = url_for('static', filename=i['image'])
+
         # import base64
         # # либо так отправляем, либо другими способами, вот здесь можно и закешировать (у юзера, а не у админа)
         # for card in cards:
@@ -37,7 +46,7 @@ class Index(Resource):
         #     #     file.write(my_string)
         #     card.card_image = my_string
         # # card.card_image = url_for('static', filename=card.card_image)
-        return cards
+        return cards_new
     # при нажатии на карточку должно быть перенаправление на url с карточкой cargs/1 , на фронте должна
     # отрываться окошко
 

@@ -1,7 +1,7 @@
 import os
 
 import sqlalchemy
-from flask import jsonify
+from flask import jsonify, url_for
 from flask_login import current_user
 from flask_restful import Resource, fields, marshal_with
 from sqlalchemy import or_, cast
@@ -33,6 +33,7 @@ class Cards(Resource):
     def get(self):
         cards = CardProduct.query.all()
 
+
         import base64
         # либо так отправляем, либо другими способами, вот здесь можно и закешировать (у юзера, а не у админа)
         # for card in cards:
@@ -50,8 +51,10 @@ class Cards(Resource):
     def post(self):
 
         data = card_data.parse_args()
+        print(data)
 
         image = data['image']
+        print(image)
 
         # сохранение полученной картинки
         file_path = CONFIG.basepath + 'application/static/' + image.filename

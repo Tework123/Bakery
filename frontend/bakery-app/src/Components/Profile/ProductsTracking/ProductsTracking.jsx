@@ -29,6 +29,7 @@ function ProductsTracking(props) {
     formData.append('name', 'Имя карточки');
     formData.append('price', 999);
     axios.post('/restaurant/cards', formData).then((response) => {
+      console.log(response.data);
       console.log(response)
 
     })
@@ -45,7 +46,7 @@ function ProductsTracking(props) {
             chooseFileImage(e)
           }}
         />
-        <button onClick={submitImage}>Отправить картинку</button>
+        <button type='button' onClick={submitImage}>Отправить картинку</button>
       </form>
       <img alt="image from server not loaded" src={testImage}/>
       <div className={classes.producttr_search}>
