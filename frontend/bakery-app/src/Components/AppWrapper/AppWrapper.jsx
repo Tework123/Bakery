@@ -54,6 +54,7 @@ function AppWrapper(props) {
   //   }
   // }
 
+
   // requestForSuccessfulRegistaration()
   
 

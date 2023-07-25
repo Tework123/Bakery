@@ -11,11 +11,7 @@ function Profile(props) {
   
 
 
-  useEffect(() => {
-    // axios.get('/restaurant/cards').then((responce) => {
-    //   setTestImage(URL.createObjectURL(responce.data))
-    // })
-  }, [])
+
 
   const profileAccoutInfo = (
     <React.Fragment>

@@ -1,8 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import classes from './ProductsTracking.module.css';
 import axios from 'axios';
 
 function ProductsTracking(props) {
+
+  useEffect(() => {
+    axios.get('/restaurant/cards').then((responce) => {
+      console.log(responce.data);
+    })
+  }, [])
   
   const [cards, setCards] = useState([])
   const [selectedImage, setSelectedImage] = useState(null);
