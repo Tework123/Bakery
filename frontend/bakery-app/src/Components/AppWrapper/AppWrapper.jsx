@@ -13,18 +13,8 @@ import Profile from '../Profile/Profile';
 
 function AppWrapper(props) {
 
-
-
-
-  //Запрос, на то, зарегался ли человек
-
-  const { token } = useParams();
-
-
-  console.log(token);
-
   // const requestForSuccessfulRegistaration = () => {
-  //   if (token) {
+  //   if (!props.authorization.isAuthorizated) {
   //     axios.post(`/register/${token}`, { token: token }).then((responce) => {
   //       props.authorization.authorize(responce.data.data)
   //     })
