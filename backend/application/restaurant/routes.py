@@ -16,12 +16,6 @@ from start_app import CONFIG
 
 class Index(Resource):
     def get(self):
-        print('backend branch')
-        print('backend branch2')
-        print('backend branch3')
-        print('backend2')
-
-
         pass
 
 
