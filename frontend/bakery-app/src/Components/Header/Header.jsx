@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import classes from './Header.module.css';
 import axios from 'axios';
+import { NavLink } from 'react-router-dom';
 
 function Header(props) {
 
@@ -11,9 +12,7 @@ function Header(props) {
   }
 
   const onClickProfileTest = () => {
-    axios.get('/profile').then((response) => {
-      console.log(response.data);
-    })   
+     
   }
 
   return (
@@ -23,9 +22,12 @@ function Header(props) {
         <div>Телефон, адрес</div>
         <div className={classes.right_actions}>
           {props.isAuthorizated ?
+          <NavLink
+            to='/profile'>
             <div className={classes.item} onClick={onClickProfileTest}>
               Личный кабинет
             </div>
+            </NavLink>
             :
             <div className={classes.item} onClick={onClickEnter}>
               Вход

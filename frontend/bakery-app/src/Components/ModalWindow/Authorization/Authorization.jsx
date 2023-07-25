@@ -8,8 +8,10 @@ function Authorization(props) {
   function sendEmailAutho() {
     axios.post('/auth/login', { email: login }).then((response) => {
       console.log(response.data.data)
-      if (response.data.data === 'Вход выполнен успешно') {
+      if (response.data.data === 'Вход тестового работника выполнен успешно') {
+        debugger
         props.authorization.authorize(login)
+        props.changeTypeModalWindow('')
       }
     })
   }
@@ -25,8 +27,8 @@ function Authorization(props) {
   return (
     <div className={classes.authoriaion_content}>
       <div className={classes.authoriaion_header}>Войти</div>
-      <input className={classes.authoriaion_input_item} placeholder='Логин' onChange={(e) => onChangeLogin(e)}></input>
-      <button className={classes.authoriaion_enter} onClick={onClickEnter}>Вход</button>
+      <input className={classes.authoriaion_input_item} placeholder='Почта' onChange={(e) => onChangeLogin(e)}></input>
+      <button className={classes.authoriaion_enter} onClick={onClickEnter}>Отправить пинкод на почту</button>
     </div>
   );
 }
