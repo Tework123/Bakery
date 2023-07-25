@@ -29,16 +29,16 @@ function ProductsTracking(props) {
     formData.append('name', 'Имя карточки');
     formData.append('price', 999);
     axios.post('/restaurant/cards', formData).then((response) => {
-      console.log(response.data);
-      console.log(response)
 
+      console.log('Пришло: ' + response);
+      console.log(response)
     })
   }
 
   return (
     <div className={classes.producttr_container}>
       <header className={classes.title}>Продукты</header>
-      <form encType="multipart/form-data">
+      <form encType="multipart/form-data" >
         <input
           type="file"
           name="myImage"

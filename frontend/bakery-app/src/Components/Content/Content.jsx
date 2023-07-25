@@ -5,6 +5,8 @@ import axios from 'axios';
 
 function Content(props) {
 
+
+  const [cards, setCards] = useState([])
   const test_data_chapters = [
     {
       name: 'Выпечка'
@@ -41,9 +43,10 @@ function Content(props) {
 
 
   useEffect(() => {
-    // axios.get('/admin/cards').then((response) => {
-    //   setCards(response.data)
-    // })
+    axios.get('/restaurant/cards').then((response) => {
+      console.log(response.data);
+      setCards(response.data)
+    })
   }, [])
 
   return (
@@ -51,9 +54,6 @@ function Content(props) {
     <div className={classes.content_container}>
             <input className={classes.authoriaion_input_item} placeholder='Код' onChange={(e) => onChangeLogin(e)}></input>
             <div className={classes.authoriaion_enter} onClick={onClickRegistr}>Отправить код</div>
-
-      
-
       <header className={classes.content_header}>
         <span className={classes.content_header_text}>
           Наши товары
@@ -61,7 +61,7 @@ function Content(props) {
       </header >
       <div className={classes.content_catalog}>
         {test_data_chapters.map((chapter) => 
-          <Chapter products={props.products} name={chapter.name}/>
+          <Chapter products={cards} name={chapter.name}/>
         )}
       </div>
     </div>

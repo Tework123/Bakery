@@ -22,7 +22,7 @@ function Chapter({name, products}) {
       <div className={classes.chapter_products}>
         
           {products.map((product) =>
-              <ProductCard name={product.name} price={product.price} imageURL={product.imageURL} description={product.description}/>
+              <ProductCard name={product.name} price={product.price} imageURL={product.image} description={product.description}/>
             )}
       
       </div>
