@@ -15,7 +15,7 @@ function Registration(props) {
   }
 
 
-    
+  
 
   const onClickRegistr = () => {
     sendEmailRegistr()
@@ -33,11 +33,20 @@ function Registration(props) {
 
 
   return (
-    <div className={classes.authoriaion_content}>
-      <div className={classes.authoriaion_header}>Зарегистрироваться</div>
-      <input className={classes.authoriaion_input_item} placeholder='Логин' onChange={(e) => onChangeLogin(e)}></input>
-      <div className={classes.authoriaion_enter} onClick={onClickRegistr}>Зарегистрироваться</div>
-      <div className={classes.authoriaion_old_account}>Уже есть аккаунт</div>
+    <div className={classes.pincode_content}>
+      <div className={classes.pincode_header}>Введите код</div>
+      <div className={classes.pincode_inputs}>
+        <input className={classes.pincode_input_item}/>
+        <input className={classes.pincode_input_item}/>
+        <input className={classes.pincode_input_item}/>
+        <input className={classes.pincode_input_item}/>
+        <input
+          name='code'
+          type='hidden'
+          className={classes.pincode_input_hidden}
+          onChange={(e) => onChangeLogin(e)}/>
+      </div>
+      <div>Прислать код ещё раз</div>
     </div>
   );
 }

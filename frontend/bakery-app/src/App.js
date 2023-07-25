@@ -23,11 +23,7 @@ function App() {
   //Routing
   const router = createBrowserRouter([
     {
-      path: '/:token',
-      element: <AppWrapper authorization={{isAuthorizated: isAuthorizated, authorize:authorize}} />
-    },
-    {
-      path: '/',
+      path: '*',
       element: <AppWrapper authorization={{isAuthorizated: isAuthorizated, authorize:authorize}} />
     }
   ])
@@ -67,6 +63,7 @@ function App() {
 //    axios.post('/auth/register', {register: register}).then((response) => {console.log(response.data.data)})
 //
 //  }
+
 
 
 

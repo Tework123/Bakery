@@ -20,25 +20,7 @@ function Content(props) {
     }
   ]
 
-  const [cards, setCards] = useState([])
-  const [selectedImage, setSelectedImage] = useState(null);
-
-
-  const chooseFileImage = (e) => {
-    setSelectedImage(e.target.files[0])
-    console.log(e.target.files[0]);
-
-  }
-
-  const submitImage = () => {
-    const formData = new FormData();
-    console.log(selectedImage);
-    formData.append('card_image', selectedImage);
-    axios.post('/admin/cards', formData).then((response) => {
-      console.log(response)
-  
-      })
-  }
+ 
 
 
   const [login, setlogin] = useState('')
@@ -70,16 +52,7 @@ function Content(props) {
             <input className={classes.authoriaion_input_item} placeholder='Код' onChange={(e) => onChangeLogin(e)}></input>
             <div className={classes.authoriaion_enter} onClick={onClickRegistr}>Отправить код</div>
 
-      <form>
-        <input
-          type="file"
-          name="myImage"
-          onChange={(e) => {
-            chooseFileImage(e)
-          }}
-        />
-        <button onClick={submitImage}></button>
-      </form>
+      
 
       <header className={classes.content_header}>
         <span className={classes.content_header_text}>

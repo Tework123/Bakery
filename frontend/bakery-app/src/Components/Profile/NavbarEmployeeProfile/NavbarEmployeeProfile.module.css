@@ -1,0 +1,16 @@
+.navbaremp_container {
+    left: 0;
+    position: absolute;
+    width: 100%;
+    background-color: blanchedalmond;
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+    min-height: 40px;
+}
+
+.navbaremp_item {
+    flex: 1;
+    display: block;
+    text-align: center;
+}

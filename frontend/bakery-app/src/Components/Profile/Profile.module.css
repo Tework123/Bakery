@@ -1,0 +1,11 @@
+.profile_container {
+    flex-grow: 1;
+    padding: 0 100px;
+    position: relative;
+}
+
+.title {
+    font-size: 30px;
+    text-align: center;
+    margin-top: 50px;
+}

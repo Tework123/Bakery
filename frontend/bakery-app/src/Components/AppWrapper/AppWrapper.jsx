@@ -5,58 +5,56 @@ import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import Navbar from '../Navbar/Navbar';
 import classes from './AppWrapper.module.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Routes, useParams } from 'react-router-dom';
 import ModalWindow from '../ModalWindow/ModalWindow';
-import axios from 'axios';
-
-import { useCookies } from 'react-cookie';
-import { useNavigate } from "react-router-dom";
+import Profile from '../Profile/Profile';
 
 
 function AppWrapper(props) {
 
 
 
-  //Куки
-  const [cookies, setCookie] = useCookies(['token']);
 
   //Запрос, на то, зарегался ли человек
 
   const { token } = useParams();
-  const navigate = useNavigate();
 
 
   console.log(token);
 
-  const requestForSuccessfulRegistaration = () => {
-    if (!props.authorization.isAuthorizated) {
-      if (token) {
-        console.log('Отправка данных на сервер')
-        axios.post(`/auth/token_register`, { token: token }).then((responce) => {
-          console.log('Обработка данных с сервера')
-          props.authorization.authorize(responce.data.data)
+  // const requestForSuccessfulRegistaration = () => {
+  //   if (token) {
+  //     axios.post(`/register/${token}`, { token: token }).then((responce) => {
+  //       props.authorization.authorize(responce.data.data)
+  //     })
+  //   if (!props.authorization.isAuthorizated) {
+  //     if (token) {
+  //       console.log('Отправка данных на сервер')
+  //       axios.post(`/auth/token_register`, { token: token }).then((responce) => {
+  //         console.log('Обработка данных с сервера')
+  //         props.authorization.authorize(responce.data.data)
 
-          navigate("/");
+  //         navigate("/");
 
-          setCookie('token', token, { path: '/'});
-          console.log('Текущие куки:');
-          console.log(cookies);
-        })
-      // } else if (cookies.token) {
-      //   console.log('Отправка данных на сервер, если есть куки')
-      //   axios.post(`/auth/token_register`, { token: cookies.token }).then((responce) => {
-      //     console.log('Обработка данных с сервера')
-      //     props.authorization.authorize(responce.data.data)
+  //         console.log('Текущие куки:');
+  //         console.log();
+  //       })
+  //     // } else if (cookies.token) {
+  //     //   console.log('Отправка данных на сервер, если есть куки')
+  //     //   axios.get(`/auth/token`, { token: cookies.token }).then((responce) => {
+  //     //     console.log('Обработка данных с сервера')
+  //     //     props.authorization.authorize(responce.data.data)
 
-      //     console.log('Текущие куки:');
-      //     console.log(cookies);
-      //   })
-      }
-    }
-  }
+  //     //     console.log('Текущие куки:');
+  //     //     console.log(cookies);
+  //     //   })
+  //       }
+  //     }
+  //   }
+  // }
 
-  requestForSuccessfulRegistaration()
+  // requestForSuccessfulRegistaration()
   
 
   const test_data = [
@@ -135,6 +133,13 @@ function AppWrapper(props) {
       setStyle({ overflowY: 'scroll', paddingRight: 0 })
     }
   }
+  //Корзина и продукты в ней
+  const [basketProducts, setBasketProducts] = useState([])
+  useEffect(() => {
+    /*axios.get('/basket/products').then((responce) => {
+      setBasketProducts(responce.data)
+    })*/
+  })
 
 
 
@@ -155,7 +160,7 @@ function AppWrapper(props) {
   const mainPage = (
     <React.Fragment>
       <ModalBasket
-        basketProducts={test_data}
+        basketProducts={/*basketProducts*/test_data}
         changeModalWindow={changeModalWindow}
         isModalBasketOpen={isModalBasketOpen} />
 
@@ -163,7 +168,7 @@ function AppWrapper(props) {
         type={typeModalWindow}
         types={{ MODAL_AUTHORIZATION: MODAL_AUTHORIZATION, MODAL_REGISTRATION: MODAL_REGISTRATION }}
         closeModalWindow={closeModalWindow}
-        functions={{ requestForSuccessfulRegistaration: requestForSuccessfulRegistaration }}
+        functions={{ requestForSuccessfulRegistaration: ''/*requestForSuccessfulRegistaration*/ }}
         changeTypeModalWindow={changeTypeModalWindow}
         authorization={props.authorization} />}
       <Header
@@ -183,9 +188,7 @@ function AppWrapper(props) {
         types={{ MODAL_AUTHORIZATION: MODAL_AUTHORIZATION }}
         changeTypeModalWindow={changeTypeModalWindow}
         isAuthorizated={props.authorization.isAuthorizated} />
-      <div>
-
-      </div>
+      <Profile />
       <Footer />
     </React.Fragment>
   )
@@ -194,8 +197,8 @@ function AppWrapper(props) {
   return (
     <div className={classes.wrapper} style={style}>
       <Routes>
-        <Route path='/*' element={mainPage} />
-        <Route path='/profile' element={''} />
+        <Route path='/profile/*' element={profilePage} />
+        <Route path='/main' element={mainPage} />        
       </Routes>
     </div>
   );

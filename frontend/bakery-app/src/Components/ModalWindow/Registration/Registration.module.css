@@ -1,5 +1,5 @@
 
-.authoriaion_content {
+.pincode_content {
     position: relative;
     top: 70px;
     color: black;
@@ -8,25 +8,20 @@
     align-items: center;
 }
 
-.authoriaion_header {
+.pincode_header {
     margin-bottom: 20px;
     font-size: 30px;
 }
 
-.authoriaion_input_item {
-    margin-bottom: 15px;
-    height: 30px;
-    width: 300px;
+.pincode_input_item {
+    height: 50px;
+    width: 40px;
     border: 0.6px solid black;
     border-radius: 3px;
 }
 
-.authoriaion_enter {
-    color: blue;
-    cursor: pointer;
-}
-
-.authoriaion_new_account {
-    cursor: pointer;
-    color: brown;
+.pincode_inputs {
+    justify-content: space-between;
+    width: 50%;
+    display: flex;
 }
