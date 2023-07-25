@@ -19,6 +19,7 @@ class Index(Resource):
         print('backend branch')
         print('backend branch2')
         print('backend branch3')
+        print('backend2')
 
 
         pass
