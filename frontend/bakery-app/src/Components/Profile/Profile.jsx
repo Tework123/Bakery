@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import classes from './Profile.module.css';
 import axios from 'axios';
 
@@ -7,12 +7,14 @@ function Profile(props) {
 
   const [cards, setCards] = useState([])
   const [selectedImage, setSelectedImage] = useState(null);
-
+  const [image, setImage] = useState(null)
+  const [testImage, setTestImage] = useState('')
 
   const chooseFileImage = (e) => {
+    setImage(URL.createObjectURL(e.target.files[0]))
+    console.log(image);
     setSelectedImage(e.target.files[0])
     console.log(e.target.files[0]);
-
   }
 
   const submitImage = () => {
@@ -26,6 +28,12 @@ function Profile(props) {
 
     })
   }
+
+  useEffect(() => {
+    axios.get('/restaurant/cards').then((responce) => {
+      setTestImage(URL.createObjectURL(responce.data))
+    })
+  }, [])
 
   return (
     <div className={classes.profile_container}>
@@ -49,6 +57,7 @@ function Profile(props) {
           />
           <button onClick={submitImage}>Отправить картинку</button>
         </form>
+        <img alt="image from server not loaded" src={testImage}/>
       </div>
     </div>
   );

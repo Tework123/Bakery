@@ -18,8 +18,6 @@ function AppWrapper(props) {
 
 
 
-  //Куки
-  debugger
 
   //Запрос, на то, зарегался ли человек
 
