@@ -21,14 +21,18 @@ class Index(Resource):
     def get(self):
         cards = CardProduct.query.all()
 
-        print(cards)
+        print(cards[0].image)
         cards_new = []
         for row in cards:
             row = {'card_id': row.card_id, 'name': row.name, 'price': row.price, 'image': row.image}
             cards_new.append(row)
 
         for i in cards_new:
+            print(i)
             i['image'] = url_for('static', filename=i['image'])
+
+        for i in cards_new:
+            print(i)
 
         # import base64
         # # либо так отправляем, либо другими способами, вот здесь можно и закешировать (у юзера, а не у админа)
