@@ -16,6 +16,7 @@ from start_app import CONFIG
 
 class Index(Resource):
     def get(self):
+
         pass
 
 
