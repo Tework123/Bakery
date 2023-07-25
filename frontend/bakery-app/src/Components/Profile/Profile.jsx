@@ -1,43 +1,26 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classes from './Profile.module.css';
 import axios from 'axios';
+import NavbarEmployeeProfile from './NavbarEmployeeProfile/NavbarEmployeeProfile';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import OrdersTracking from './OrdersTracking/OrdersTracking';
+import ProductsTracking from './ProductsTracking/ProductsTracking';
 
 
 function Profile(props) {
+  
 
-  const [cards, setCards] = useState([])
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [image, setImage] = useState(null)
-  const [testImage, setTestImage] = useState('')
-
-  const chooseFileImage = (e) => {
-    setImage(URL.createObjectURL(e.target.files[0]))
-    console.log(image);
-    setSelectedImage(e.target.files[0])
-    console.log(e.target.files[0]);
-  }
-
-  const submitImage = () => {
-    const formData = new FormData();
-    console.log(selectedImage);
-    formData.append('image', selectedImage);
-    formData.append('name', 'Имя карточки');
-    formData.append('price', 999);
-    axios.post('/restaurant/cards', formData).then((response) => {
-      console.log(response)
-
-    })
-  }
 
   useEffect(() => {
-    axios.get('/restaurant/cards').then((responce) => {
-      setTestImage(URL.createObjectURL(responce.data))
-    })
+    // axios.get('/restaurant/cards').then((responce) => {
+    //   setTestImage(URL.createObjectURL(responce.data))
+    // })
   }, [])
 
-  return (
-    <div className={classes.profile_container}>
+  const profileAccoutInfo = (
+    <React.Fragment>
       <div className={classes.profile_user_information}>
+        <header className={classes.title}>Личная информация</header>
         <div className={classes.profile_field_item}>
           <div className={classes.profile_field_text}>Имя</div>
           <input />
@@ -46,20 +29,26 @@ function Profile(props) {
       <div className={classes.profile_order_history}>
 
       </div>
-      <div>
-        <form encType="multipart/form-data">
-          <input
-            type="file"
-            name="myImage"
-            onChange={(e) => {
-              chooseFileImage(e)
-            }}
-          />
-          <button onClick={submitImage}>Отправить картинку</button>
-        </form>
-        <img alt="image from server not loaded" src={testImage}/>
+    </React.Fragment>
+  )
+
+  return (
+    <div className={classes.profile_container}>
+      <NavbarEmployeeProfile/>
+      <Routes>
+        <Route
+          path='orders'
+          element={<OrdersTracking/>}/>
+        <Route
+          path='products'
+          element={<ProductsTracking/>}/>
+        <Route
+          path='/'
+          element={profileAccoutInfo}/>
+      </Routes>
+     
+        
       </div>
-    </div>
   );
 }
 

@@ -18,7 +18,7 @@ console.log(props);
   if (props.type === props.types.MODAL_REGISTRATION) {
     modalChangableWindow = registrationModal;
   } else if (props.type === props.types.MODAL_AUTHORIZATION){
-    modalChangableWindow = authorizationModal
+    modalChangableWindow = registrationModal//authorizationModal
   }
 
 

@@ -8,9 +8,6 @@ import classes from './AppWrapper.module.css';
 import React, { useEffect, useState } from 'react';
 import { Route, Routes, useParams } from 'react-router-dom';
 import ModalWindow from '../ModalWindow/ModalWindow';
-import axios from 'axios';
-
-import { useNavigate } from "react-router-dom";
 import Profile from '../Profile/Profile';
 
 
@@ -179,12 +176,8 @@ function AppWrapper(props) {
         changeTypeModalWindow={changeTypeModalWindow}
         isAuthorizated={props.authorization.isAuthorizated} />
       <Navbar changeModalWindow={changeModalWindow} />
-      {true ? <Profile/> :
-      <React.Fragment>
       <CaruselBox />
       <Content products={test_data} />
-      </React.Fragment>
-      }
       <Footer />
     </React.Fragment>
   )
@@ -195,9 +188,7 @@ function AppWrapper(props) {
         types={{ MODAL_AUTHORIZATION: MODAL_AUTHORIZATION }}
         changeTypeModalWindow={changeTypeModalWindow}
         isAuthorizated={props.authorization.isAuthorizated} />
-      <div>
-
-      </div>
+      <Profile />
       <Footer />
     </React.Fragment>
   )
@@ -206,8 +197,8 @@ function AppWrapper(props) {
   return (
     <div className={classes.wrapper} style={style}>
       <Routes>
-        <Route path='/*' element={mainPage} />
-        <Route path='/profile' element={''} />
+        <Route path='/profile/*' element={profilePage} />
+        <Route path='/main' element={mainPage} />        
       </Routes>
     </div>
   );

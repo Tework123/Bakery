@@ -1,0 +1,20 @@
+.title {
+    font-size: 30px;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.producttr_table {
+    background-color: antiquewhite;
+    border-collapse: separate;
+    width: 100%;
+}
+
+.producttr_table th {
+    text-align: left;
+    padding: 10px;
+}
+
+.producttr_table td {
+    padding: 10px;
+}
