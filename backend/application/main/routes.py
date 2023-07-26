@@ -17,18 +17,16 @@ class Index(Resource):
         'image': fields.String
     }
 
-    @marshal_with(card_fields)
+    # @marshal_with(card_fields)
     def get(self):
         cards = CardProduct.query.all()
 
-        print(cards[0].image)
         cards_new = []
         for row in cards:
             row = {'card_id': row.card_id, 'name': row.name, 'price': row.price, 'image': row.image}
             cards_new.append(row)
 
         for i in cards_new:
-            print(i)
             i['image'] = url_for('static', filename=i['image'])
 
         for i in cards_new:

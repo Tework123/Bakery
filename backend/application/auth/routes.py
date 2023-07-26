@@ -99,6 +99,8 @@ class LoginPhone(Resource):
     pass
 
 
+# давать роль пользователю, когда он вводит правильный код
+
 class LoginEmailCode(Resource):
     def post(self):
         data = login_email_code_data.parse_args()
