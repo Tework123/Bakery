@@ -6,6 +6,11 @@
 
 Ссылка на гитхаб: https://github.com/Tework123/Bakery/
 
+## Стартовая страница сайта: 
+
+![булочка с яблоком](https://github.com/Tework123/Bakery/assets/115368408/3fee89c2-36c2-493d-9026-5191ce5d7470)
+
+
 ## Использованные технологии:
 
 ### Frontend(писал FalconBone):
@@ -33,12 +38,6 @@
 - redis(cash)
 - worker(celery)
 
-Стартовая страница сайта: 
-
-
-Схема базы данных:
-
-
 ## Функциональность сайта:
 
 - авторизация пользователей по коду с почты или телефона
@@ -51,6 +50,24 @@ Also:
 
 - unit test api
 - кеширование стартовой страницы
+- проверка api с помощью postman
+- сгенерированная документация api с postman
+
+
+## Схема базы данных:
+
+![image](https://github.com/Tework123/Bakery/assets/115368408/1b9c6443-78dc-4302-adc7-824a72329320)
+
+
+
+## Документация api(postman):
+
+https://documenter.getpostman.com/view/25883857/2s946k6B7S
+
+## Макеты страниц:
+
+ссылка на гугл диск с фоточками
+
 
 ## Установка:
 
@@ -65,8 +82,7 @@ Also:
 
 Заходим в папку с приложением flask:
 
-    cd flask_car_testdrive
-    cd flask_car_testdrive
+    cd backend
     
 Устанавливаем зависимости:
 
