@@ -6,12 +6,12 @@
 
 Ссылка на гитхаб: https://github.com/Tework123/Bakery/
 
-# Использованные технологии:
+## Использованные технологии:
 
-Frontend(писал FalconBone):
+### Frontend(писал FalconBone):
 - React
 
-Backend(писал Tework123):
+### Backend(писал Tework123):
 - Flask Веб-фреймворк
 - Flask restful Для удобного написания api
 - Flask-login Создает сессии и куки
@@ -21,9 +21,9 @@ Backend(писал Tework123):
 - Pytest unit test
 
 
-Веб-приложение развернуто на VPS с помощью docker(из ветки main).
+### Веб-приложение развернуто на VPS с помощью docker(из ветки main).
 
-Docker-conteiners:
+### Docker-conteiners:
 
 - frontend(nginx+react-app)
 - backend(flask(qunicorn))
@@ -39,7 +39,7 @@ Docker-conteiners:
 Схема базы данных:
 
 
-# Реализованная функциональность сайта:
+## Функциональность сайта:
 
 - авторизация пользователей по коду с почты или телефона
 - панель админа для создания работников, просмотра статистики сайта
@@ -47,13 +47,12 @@ Docker-conteiners:
 - добавление позиций в корзину
 - заказ и оплата позиций
 
-
 Also:
 
 - unit test api
 - кеширование стартовой страницы
 
-#Установка:
+## Установка:
 
 Создаем новую папку, создаем виртуальное окружение, активируем его.
 
@@ -62,7 +61,7 @@ Also:
     git init 
     git clone https://github.com/Tework123/Bakery.git
 
-Установка backend:
+### Установка backend:
 
 Заходим в папку с приложением flask:
 
@@ -101,7 +100,7 @@ Also:
 
 Локально поднимаем postgres, redis.
 
-Установка frontend:
+### Установка frontend:
 
 - some code
 
