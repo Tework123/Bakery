@@ -2,7 +2,7 @@
 
 Сайт для доставки булочных изделий.
 
-Ссылка на сайт: https://tework123.ru/
+Ссылка на сайт: [link] https://tework123.ru/
 
 Ссылка на гитхаб: https://github.com/Tework123/Bakery/
 
