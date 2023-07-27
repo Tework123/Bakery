@@ -1,4 +1,4 @@
-![shrek](https://github.com/Tework123/Bakery/assets/115368408/42230264-6407-46f2-aa32-eee8390ec658)# Bakery
+# Bakery
 
 Сайт для доставки булочных изделий.
 
