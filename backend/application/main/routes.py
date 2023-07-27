@@ -17,40 +17,17 @@ class Index(Resource):
         'image': fields.String
     }
 
-    # @marshal_with(card_fields)
+    @marshal_with(card_fields)
     def get(self):
         cards = CardProduct.query.all()
 
-        cards_new = []
+        cards_dicts = []
         for row in cards:
-            row = {'card_id': row.card_id, 'name': row.name, 'price': row.price, 'image': row.image}
-            cards_new.append(row)
+            row = {'card_id': row.card_id, 'name': row.name, 'price': row.price,
+                   'image': url_for('static', filename=row.image)}
+            cards_dicts.append(row)
 
-        for i in cards_new:
-            i['image'] = url_for('static', filename=i['image'])
-
-        for i in cards_new:
-            print(i)
-
-        # import base64
-        # # либо так отправляем, либо другими способами, вот здесь можно и закешировать (у юзера, а не у админа)
-        # for card in cards:
-        #     file_path = CONFIG.basepath + 'application/static/' + card.card_image
-        #     with open(file_path, "rb") as image_file:
-        #         my_string = base64.b64encode(image_file.read()).decode("utf-8")
-        #
-        #     card.card_image = my_string
-        #
-        # # что-то из этого должно декодировать картинку и показывать на сайте(но это js будет делать)
-        # for card in cards:
-        #     my_string = base64.b64decode(card.card_image)
-        #     # with open(card.card_name, 'wb') as file:
-        #     #     file.write(my_string)
-        #     card.card_image = my_string
-        # # card.card_image = url_for('static', filename=card.card_image)
-        return cards_new
-    # при нажатии на карточку должно быть перенаправление на url с карточкой cargs/1 , на фронте должна
-    # отрываться окошко
+        return cards_dicts
 
 
 api_main.add_resource(Index, '/')

@@ -43,7 +43,7 @@ function Content(props) {
 
 
   useEffect(() => {
-    axios.get('/restaurant/cards').then((response) => {
+    axios.get('/main').then((response) => {
       console.log(response.data);
       setCards(response.data)
     })
