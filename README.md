@@ -10,8 +10,6 @@
 
 ![булочка с яблоком](https://github.com/Tework123/Bakery/assets/115368408/3fee89c2-36c2-493d-9026-5191ce5d7470)
 
-<img src="![shrek](https://github.com/Tework123/Bakery/assets/115368408/f4fe6fc7-a730-4820-aaea-a0e1132fccdf)
-" width="200" height="100">
 
 ## Использованные технологии:
 
