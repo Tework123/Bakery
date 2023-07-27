@@ -1,8 +1,8 @@
-# Bakery
+![shrek](https://github.com/Tework123/Bakery/assets/115368408/42230264-6407-46f2-aa32-eee8390ec658)# Bakery
 
 Сайт для доставки булочных изделий.
 
-Ссылка на сайт: [link](https://tework123.ru/)
+Ссылка на сайт: https://tework123.ru/
 
 Ссылка на гитхаб: https://github.com/Tework123/Bakery/
 
@@ -10,6 +10,8 @@
 
 ![булочка с яблоком](https://github.com/Tework123/Bakery/assets/115368408/3fee89c2-36c2-493d-9026-5191ce5d7470)
 
+<img src="![shrek](https://github.com/Tework123/Bakery/assets/115368408/f4fe6fc7-a730-4820-aaea-a0e1132fccdf)
+" width="200" height="100">
 
 ## Использованные технологии:
 
