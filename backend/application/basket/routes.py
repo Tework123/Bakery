@@ -61,17 +61,29 @@ class Index(Resource):
         order_product = OrderProduct.query.filter_by(order_id=basket.order_id, card_id=data['card_id']).first()
 
         # если такой товар уже есть в корзине, то нужно увеличить его amount на один
-        if order_product:
+        if order_product and data['action'] == '+':
             order_product.amount += 1
             order_product.price += card.price
             db.session.commit()
+            response = jsonify({'data': f'Товар {card.name} добавлен в корзину'})
+
+        if order_product and data['action'] == '-':
+            if order_product.amount == 1:
+                OrderProduct.query.filter_by(order_id=basket.order_id, card_id=data['card_id']).delete()
+                response = jsonify({'data': f'Товар {card.name} удален окончательно из корзины'})
+            else:
+                order_product.amount -= 1
+                order_product.price -= card.price
+                db.session.commit()
+                response = jsonify({'data': f'Товар {card.name} удален из корзины'})
+
         else:
             order_product = OrderProduct(order_id=basket.order_id, card_id=data['card_id'], price=card.price)
             db.session.add(order_product)
             db.session.flush()
             db.session.commit()
+            response = jsonify({'data': f'Товар {card.name} добавлен в корзину'})
 
-        response = jsonify({'data': f'Товар {card.name} добавлен в корзину'})
         response.status_code = 200
         return response
 
@@ -90,7 +102,7 @@ class Index(Resource):
         OrderProduct.query.filter_by(order_id=basket.order_id, card_id=data['card_id']).delete()
         db.session.commit()
 
-        response = jsonify({'data': f'Товар удален из корзины'})
+        response = jsonify({'data': f'Товар удален окончательно из корзины'})
         response.status_code = 200
         return response
 
@@ -134,7 +146,6 @@ class Buy(Resource):
         sum_price = 0
         for i in order_products:
             sum_price += i.price
-        print(sum_price)
         response = {'data': f'Перенаправление на страницу оплаты, цена заказа: {sum_price}'}
 
         # если страница оплаты возвращает True, то status = paid и заказ появляется у ресторана,
