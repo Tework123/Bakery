@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { Route, Routes, useParams } from 'react-router-dom';
 import ModalWindow from '../ModalWindow/ModalWindow';
 import Profile from '../Profile/Profile';
+import axios from 'axios';
 
 
 function AppWrapper(props) {
@@ -47,6 +48,8 @@ function AppWrapper(props) {
 
   // requestForSuccessfulRegistaration()
   
+
+
 
   const test_data = [
 
@@ -124,14 +127,40 @@ function AppWrapper(props) {
       setStyle({ overflowY: 'scroll', paddingRight: 0 })
     }
   }
-  //Корзина и продукты в ней
-  const [basketProducts, setBasketProducts] = useState([])
-  useEffect(() => {
-    /*axios.get('/basket/products').then((responce) => {
-      setBasketProducts(responce.data)
-    })*/
-  })
 
+
+    //Корзина и продукты в ней
+    const [basketProducts, setBasketProducts] = useState([])
+    useEffect(() => {
+      axios.get('/basket/products').then((responce) => {
+        setBasketProducts(responce.data)
+      })
+    }, [])
+  
+    const changeBasket = ({action, id}) => {
+      let newBasket = [...basketProducts];
+      let changeIndex;
+      basketProducts.forEach((element, index) => {
+        if (element.id === id) {
+          changeIndex = index;
+        }
+      });
+      if (action === '+') {
+        newBasket[changeIndex].amount++;
+      } else if (action === '-') {
+        if (newBasket[changeIndex].amount === 1) {
+          newBasket.splice(changeIndex, 1);
+        } else {
+          newBasket[changeIndex].amount--;
+        }
+      }
+      setBasketProducts(newBasket)
+    }
+
+  
+  const addProduct = (id) => {
+    changeBasket({action: '+', id: id})
+  }
 
 
 
@@ -151,9 +180,9 @@ function AppWrapper(props) {
   const mainPage = (
     <React.Fragment>
       <ModalBasket
-        basketProducts={/*basketProducts*/test_data}
         changeModalWindow={changeModalWindow}
-        isModalBasketOpen={isModalBasketOpen} />
+        isModalBasketOpen={isModalBasketOpen}
+        changeBasket={changeBasket} />
 
       {typeModalWindow && <ModalWindow
         type={typeModalWindow}
@@ -168,7 +197,7 @@ function AppWrapper(props) {
         isAuthorizated={props.authorization.isAuthorizated} />
       <Navbar changeModalWindow={changeModalWindow} />
       <CaruselBox />
-      <Content products={test_data} />
+      <Content products={test_data} addProduct={addProduct}/>
       <Footer />
     </React.Fragment>
   )

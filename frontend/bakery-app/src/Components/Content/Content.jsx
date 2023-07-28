@@ -43,14 +43,13 @@ function Content(props) {
 
 
   useEffect(() => {
-    axios.get('/restaurant/cards').then((response) => {
-      console.log(response.data);
-      setCards(response.data)
+    axios.get('/main').then((responce) => {
+      setCards(responce.data)
+      console.log(responce.data);
     })
   }, [])
 
   return (
-    
     <div className={classes.content_container}>
             <input className={classes.authoriaion_input_item} placeholder='Код' onChange={(e) => onChangeLogin(e)}></input>
             <div className={classes.authoriaion_enter} onClick={onClickRegistr}>Отправить код</div>
@@ -61,7 +60,7 @@ function Content(props) {
       </header >
       <div className={classes.content_catalog}>
         {test_data_chapters.map((chapter) => 
-          <Chapter products={cards} name={chapter.name}/>
+          <Chapter products={cards} name={chapter.name} addProduc={props.addProduct}/>
         )}
       </div>
     </div>

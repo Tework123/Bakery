@@ -1,10 +1,9 @@
-import { Fragment, useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import classes from './ModalBasket.module.css';
 import ProductCard from './ProductCard/ProductCard';
+import axios from 'axios';
 
 function ModalBasket(props) {
-
-
 
 
   let ref = useRef(null)
@@ -42,7 +41,7 @@ function ModalBasket(props) {
             {String(basketQuanitiy) + " товар"}
           </div>
           <div className={classes.modalbasket_busketproducts}>
-            {props.basketProducts.map((product) => <ProductCard name={product.name} quantity={product.quantity} description={product.description} />)}
+            {props.basketProducts.map((product) => <ProductCard name={product.name} quantity={product.amount} description={product.description} id={product.card_id} changeBasket={props.changeBasket}/>)}
           </div>
           <div className={classes.modalbasket_optional_offer}>
 
