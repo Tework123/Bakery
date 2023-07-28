@@ -33,28 +33,21 @@ class Cards(Resource):
     def get(self):
         cards = CardProduct.query.all()
 
-
-        import base64
-        # либо так отправляем, либо другими способами, вот здесь можно и закешировать (у юзера, а не у админа)
-        # for card in cards:
-        #     file_path = CONFIG.basepath + 'application/static/' + card.card_image
-        #     with open(file_path, "rb") as image_file:
-        #         my_string = base64.b64encode(image_file.read()).decode("utf-8")
-        #
-        #     card.card_image = my_string
-        # card.card_image = url_for('static', filename=card.card_image)
+        cards_dicts = []
+        for row in cards:
+            row = {'card_id': row.card_id, 'name': row.name, 'price': row.price,
+                   'image': url_for('static', filename=row.image)}
+            cards_dicts.append(row)
 
         # выводятся данные и на фронте расставляются в табличку с кнопками удалить, добавить
-        return cards
+        return cards_dicts
 
     @restaurant_login_required(current_user)
     def post(self):
 
         data = card_data.parse_args()
-        print(data)
 
         image = data['image']
-        print(image)
 
         # сохранение полученной картинки
         file_path = CONFIG.basepath + 'application/static/' + image.filename

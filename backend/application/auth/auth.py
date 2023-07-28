@@ -52,11 +52,7 @@ def send(to: str, msg: str):
 def login_required(user):
     def wrap(func):
         def wrapper(*args, **kwargs):
-            try:
-                user_id = user.user_id
-                # если анонимус - то ошибка, и все, а в login зададим remember 180 дней
-                # токен на почту отправляется
-            except:
+            if not user.is_authenticated:
                 response = jsonify({'data': 'Вы не зашли в аккаунт'})
                 response.status_code = 401
                 return response
@@ -75,9 +71,7 @@ def login_required(user):
 def restaurant_login_required(user):
     def wrap(func):
         def wrapper(*args, **kwargs):
-            try:
-                user_id = user.user_id
-            except:
+            if not user.is_authenticated:
                 response = jsonify({'data': 'Вы не зашли в аккаунт'})
                 response.status_code = 401
                 return response
@@ -97,9 +91,7 @@ def restaurant_login_required(user):
 def admin_login_required(user):
     def wrap(func):
         def wrapper(*args, **kwargs):
-            try:
-                user_id = user.user_id
-            except:
+            if not user.is_authenticated:
                 response = jsonify({'data': 'Вы не зашли в аккаунт'})
                 response.status_code = 401
                 return response

@@ -2,6 +2,7 @@ import logging
 import os
 from logging.handlers import SMTPHandler, RotatingFileHandler
 
+from celery import Celery
 from flask import Flask
 from flask_cors import CORS
 from flask_login import LoginManager
@@ -13,14 +14,18 @@ db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()
 mail = Mail()
+celery = Celery(__name__, broker='redis://127.0.0.1:6379')
 
 
 def create_app(config):
     app = Flask(__name__)
     cors = CORS(app, origins="*", supports_credentials=True)
+    # app.config['CORS_HEADERS'] = 'Content-Type'
 
     app.config.from_object(config)
     app.json.sort_keys = False
+
+    celery.conf.update(app.config)
 
     db.init_app(app)
     migrate.init_app(app, db)
