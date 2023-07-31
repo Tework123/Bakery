@@ -2,8 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import AppWrapper from './Components/AppWrapper/AppWrapper';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import Cookies from 'universal-cookie';
 
+ 
 let login;
+let cookies  = new Cookies();;
 
 function App() {
 
@@ -11,6 +14,7 @@ function App() {
   const [isAuthorizated, setIsAuthorizated] = useState(false)
   
   const authorize = (loginText) => {
+    console.log(cookies.getAll());
     setIsAuthorizated(true)
     login = loginText;
   }

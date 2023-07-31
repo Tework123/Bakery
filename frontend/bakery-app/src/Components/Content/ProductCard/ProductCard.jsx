@@ -4,23 +4,23 @@ function ProductCard(props) {
 
 
   const onClickAddProduct = () => {
-    props.addProduct(props.id)
+    props.addProduct(props.product)
   }
 
   return (
     <div className={classes.card_container}>
       <div className={classes.card_image}>
-        <img alt='No image' src={props.imageURL}/>
+        <img alt='No image' src={props.product.image}/>
       </div>
       <div className={classes.card_name}>
-        {props.name}
+        {props.product.name}
       </div>
       <div className={classes.card_description}>
-        {props.description}
+        {props.product.description}
       </div>
       <footer className={classes.card_bottom_place}>
         <div className={classes.card_price}>
-          {props.price}
+          {props.product.price}
         </div>
         <div className={classes.card_button__container}>
           <button onClick={onClickAddProduct}>В корзину</button>

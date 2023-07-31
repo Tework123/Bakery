@@ -10,46 +10,9 @@ import { Route, Routes, useParams } from 'react-router-dom';
 import ModalWindow from '../ModalWindow/ModalWindow';
 import Profile from '../Profile/Profile';
 import axios from 'axios';
-
+import Cookies from 'js-cookie'
 
 function AppWrapper(props) {
-
-  // const requestForSuccessfulRegistaration = () => {
-  //   if (!props.authorization.isAuthorizated) {
-  //     axios.post(`/register/${token}`, { token: token }).then((responce) => {
-  //       props.authorization.authorize(responce.data.data)
-  //     })
-  //   if (!props.authorization.isAuthorizated) {
-  //     if (token) {
-  //       console.log('Отправка данных на сервер')
-  //       axios.post(`/auth/token_register`, { token: token }).then((responce) => {
-  //         console.log('Обработка данных с сервера')
-  //         props.authorization.authorize(responce.data.data)
-
-  //         navigate("/");
-
-  //         console.log('Текущие куки:');
-  //         console.log();
-  //       })
-  //     // } else if (cookies.token) {
-  //     //   console.log('Отправка данных на сервер, если есть куки')
-  //     //   axios.get(`/auth/token`, { token: cookies.token }).then((responce) => {
-  //     //     console.log('Обработка данных с сервера')
-  //     //     props.authorization.authorize(responce.data.data)
-
-  //     //     console.log('Текущие куки:');
-  //     //     console.log(cookies);
-  //     //   })
-  //       }
-  //     }
-  //   }
-  // }
-
-
-  // requestForSuccessfulRegistaration()
-  
-
-
 
   const test_data = [
 
@@ -110,9 +73,7 @@ function AppWrapper(props) {
       quantity: 0
     },
   ]
-
-
-
+  console.log(Cookies.attributes);
 
   //Отвечает за октрытие/закрытие модлаьного окна корзины, меняя правый паддинг и скрывая содержимое за экраном
   const [style, setStyle] = useState({ overflowY: 'scroll' })
@@ -129,37 +90,62 @@ function AppWrapper(props) {
   }
 
 
-    //Корзина и продукты в ней
-    const [basketProducts, setBasketProducts] = useState([])
-    useEffect(() => {
-      axios.get('/basket/products').then((responce) => {
+  //Корзина и продукты в ней
+  const [basketProducts, setBasketProducts] = useState([])
+  useEffect(() => {
+    if (props.authorization.isAuthorizated) {
+      axios.get('/basket').then((responce) => {
         setBasketProducts(responce.data)
       })
-    }, [])
-  
-    const changeBasket = ({action, id}) => {
+    }
+  }, [])
+
+  const changeBasket = ({ action, id }) => {
+
+    let newBasket = [...basketProducts];
+    let changeIndex = null;
+
+    basketProducts.forEach((element, index) => {
+      if (element.id === id) {
+        changeIndex = index;
+      }
+    });
+
+    if (action === '+') {
+      newBasket[changeIndex].amount++;
+    } else if (action === '-') {
+      if (newBasket[changeIndex].amount === 1) {
+        newBasket.splice(changeIndex, 1);
+      } else {
+        newBasket[changeIndex].amount--;
+      }
+    }
+    setBasketProducts(newBasket)
+  }
+
+  const addProduct = (product) => {
+
+    debugger
+    if (props.authorization.isAuthorizated) {
       let newBasket = [...basketProducts];
-      let changeIndex;
+      let changeIndex = null;
+
       basketProducts.forEach((element, index) => {
-        if (element.id === id) {
+        if (element.id === product.card_id) {
           changeIndex = index;
         }
+      
       });
-      if (action === '+') {
+
+      if (changeIndex === null) {
+        newBasket.push({...product, amount: 1});
+      } else {
         newBasket[changeIndex].amount++;
-      } else if (action === '-') {
-        if (newBasket[changeIndex].amount === 1) {
-          newBasket.splice(changeIndex, 1);
-        } else {
-          newBasket[changeIndex].amount--;
-        }
       }
       setBasketProducts(newBasket)
+    } else {
+      alert('Нельзя пока не авторизован')
     }
-
-  
-  const addProduct = (id) => {
-    changeBasket({action: '+', id: id})
   }
 
 
@@ -182,7 +168,9 @@ function AppWrapper(props) {
       <ModalBasket
         changeModalWindow={changeModalWindow}
         isModalBasketOpen={isModalBasketOpen}
-        changeBasket={changeBasket} />
+        changeBasket={changeBasket} 
+        basketProducts={basketProducts}
+        isAuthorized={props.authorization.isAuthorizated}/>
 
       {typeModalWindow && <ModalWindow
         type={typeModalWindow}

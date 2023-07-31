@@ -45,7 +45,6 @@ function Content(props) {
   useEffect(() => {
     axios.get('/main').then((responce) => {
       setCards(responce.data)
-      console.log(responce.data);
     })
   }, [])
 
@@ -59,8 +58,8 @@ function Content(props) {
         </span>
       </header >
       <div className={classes.content_catalog}>
-        {test_data_chapters.map((chapter) => 
-          <Chapter products={cards} name={chapter.name} addProduc={props.addProduct}/>
+        {test_data_chapters.map((chapter, index) => 
+          <Chapter products={cards} name={chapter.name} addProduct={props.addProduct} key={index}/>
         )}
       </div>
     </div>

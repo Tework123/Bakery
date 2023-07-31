@@ -3,16 +3,18 @@ import axios from 'axios';
 
 function ProductCard(props) {
 
+  debugger
+
   const onClickPlus = () => {
-    axios.patch('/basket/product/add', {action: '+', card_id: props.card_id}).then((responce) => {
-      props.changeBasket({action: '+', id: props.card_id})
+    axios.patch('/basket', {action: '+', card_id: props.product.card_id}).then((responce) => {
+      props.changeBasket({action: '+', id: props.product.card_id})
       console.log(props.name + " добавлен в корзину");   
     })
   }
 
   const onClickMinus = () => {
-    axios.post('/basket/product/add', {action: '-', card_id: props.card_id}).then((responce) => {
-      props.changeBasket({action: '-', id: props.card_id})
+    axios.post('/basket', {action: '-', card_id: props.product.card_id}).then((responce) => {
+      props.changeBasket({action: '-', id: props.product.card_id})
       console.log(props.name + " удален из корзины");
     })
   }
@@ -24,17 +26,17 @@ function ProductCard(props) {
       </div>
       <div className={classes.card_description}>
         <div className={classes.card_name}>
-          {props.name}
+          {props.product.name}
         </div>
         <div className={classes.card_dop_text}>
-          {props.description}
+          {props.product.description}
         </div>
         <div className={classes.card_price}>
-          {props.price}
+          {props.product.price}
         </div>
         <div className={classes.card_button_add_delete}>
           <button onClick={onClickMinus}>-</button>
-          <div>{props.quantity}</div>
+          <div>{props.product.amount}</div>
           <button onClick={onClickPlus}>+</button>
         </div>
       </div>

@@ -3,7 +3,7 @@ import classes from './Chapter.module.css';
 
 
 
-function Chapter({name, products, addProduct}) {
+function Chapter(props) {
 
 
 
@@ -17,12 +17,12 @@ function Chapter({name, products, addProduct}) {
   return (
     <div className={classes.chapter_container}>
       <div className={classes.chapter_header}>
-        {name}
+        {props.name}
       </div>
       <div className={classes.chapter_products}>
         
-          {products.map((product) =>
-              <ProductCard name={product.name} price={product.price} imageURL={product.image} description={product.description} id={product.card_id} addProduct={addProduct}/>
+          {props.products.map((product) =>
+              <ProductCard product={product} addProduct={props.addProduct} key={product.card_id}/>
             )}
       
       </div>

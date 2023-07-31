@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import classes from './Authorization.module.css';
 import axios from 'axios';
 
+
 function Authorization(props) {
 
   const [login, setlogin] = useState('')
   function sendEmailAutho() {
-    axios.post('/auth/login', { email: login }).then((response) => {
+    axios.post('/auth/login', { email: login, credentials: 'include' }).then((response) => {
       console.log(response.data.data)
       if (response.data.data === 'Вход тестового работника выполнен успешно') {
+        
         debugger
         props.authorization.authorize(login)
         props.changeTypeModalWindow('')
