@@ -3,7 +3,6 @@ import axios from 'axios';
 
 function ProductCard(props) {
 
-  debugger
 
   const onClickPlus = () => {
     axios.patch('/basket', {action: '+', card_id: props.product.card_id}).then((responce) => {
@@ -13,7 +12,7 @@ function ProductCard(props) {
   }
 
   const onClickMinus = () => {
-    axios.post('/basket', {action: '-', card_id: props.product.card_id}).then((responce) => {
+    axios.patch('/basket', {action: '-', card_id: props.product.card_id}).then((responce) => {
       props.changeBasket({action: '-', id: props.product.card_id})
       console.log(props.name + " удален из корзины");
     })

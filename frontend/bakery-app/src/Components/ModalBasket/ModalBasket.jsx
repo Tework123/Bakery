@@ -29,7 +29,7 @@ function ModalBasket(props) {
 
         </div>
         <div ref={ref} className={classes.modalbasket_window} style={{ ...styleModalWindow, ...styleModalContainer }}>
-          {!props.isAuthorized ? undefined :
+          {!props.isAuthorizated ? undefined :
             <React.Fragment>
               <div className={classes.modalbasket_description_line}>
               </div>
