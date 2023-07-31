@@ -60,7 +60,7 @@ function Content(props) {
       </header >
       <div className={classes.content_catalog}>
         {test_data_chapters.map((chapter) => 
-          <Chapter products={cards} name={chapter.name} addProduc={props.addProduct}/>
+          <Chapter products={cards} name={chapter.name} addProduct={props.addProduct}/>
         )}
       </div>
     </div>

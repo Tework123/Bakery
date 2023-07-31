@@ -10,6 +10,7 @@ from application.models import User, CardProduct
 from flask_restful import Resource, marshal_with, fields
 
 
+# LEGACY
 class Index(Resource):
     card_fields = {
         'card_id': fields.Integer,

@@ -132,7 +132,7 @@ function AppWrapper(props) {
     //Корзина и продукты в ней
     const [basketProducts, setBasketProducts] = useState([])
     useEffect(() => {
-      axios.get('/basket/products').then((responce) => {
+      axios.get('/basket/').then((responce) => {
         setBasketProducts(responce.data)
       })
     }, [])
@@ -182,7 +182,9 @@ function AppWrapper(props) {
       <ModalBasket
         changeModalWindow={changeModalWindow}
         isModalBasketOpen={isModalBasketOpen}
-        changeBasket={changeBasket} />
+        changeBasket={changeBasket} 
+        basketProducts = {basketProducts}/>
+        
 
       {typeModalWindow && <ModalWindow
         type={typeModalWindow}

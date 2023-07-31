@@ -25,12 +25,7 @@ function ModalBasket(props) {
 
 
 
-  const [basketQuanitiy, setBasketQuantity] = useState(props.basketProducts.length)
-  let endOfTovar;
-  if (basketQuanitiy < 2) {
-    endOfTovar = ""
-  }
-
+  
     return (
       <div className={classes.modalbasket_main} style={styleModalContainer} onWheel={(e) => {onScrollContainer(e)}}>
         <div className={classes.modalbasket_container} onClick={props.changeModalWindow} >
@@ -38,7 +33,6 @@ function ModalBasket(props) {
         </div>
         <div ref={ref} className={classes.modalbasket_window} style={{...styleModalWindow, ...styleModalContainer}}>
           <div className={classes.modalbasket_description_line}>
-            {String(basketQuanitiy) + " товар"}
           </div>
           <div className={classes.modalbasket_busketproducts}>
             {props.basketProducts.map((product) => <ProductCard name={product.name} quantity={product.amount} description={product.description} id={product.card_id} changeBasket={props.changeBasket}/>)}
