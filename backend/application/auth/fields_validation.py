@@ -18,11 +18,10 @@ def login_email_validation(data):
 
 login_email_code_data = reqparse.RequestParser()
 login_email_code_data.add_argument('code', type=str, help='Требуется код из 4 цифр', required=True)
+login_email_code_data.add_argument('email', type=str, help='Требуется email', required=True)
 
 
 def login_email_code_validation(data):
-    print(data)
-    print(type(data))
     if len(data['code']) != 4:
         abort(400, message='Код должен содержать 4 цифры')
     if not data['code'].isdigit():

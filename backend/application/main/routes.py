@@ -17,7 +17,7 @@ class Index(Resource):
         'image': fields.String
     }
 
-    # @marshal_with(card_fields)
+    @marshal_with(card_fields)
     def get(self):
         cards = CardProduct.query.all()
 
@@ -27,21 +27,7 @@ class Index(Resource):
                    'image': url_for('static', filename=row.image)}
             cards_dicts.append(row)
 
-        response = jsonify({'data': cards_dicts})
-        response.status_code = 200
-        # response.set_cookie('cookie_name')
-
-        session['email'] = '123'
-        # можно в куки фласк логина попробовать роль юзера запихать
-        # я могу ему роль передать при первом get запросе  /main на картинки
-        # если что, можно в заголовке или в json отправить роль, если зарегистрирован
-
-        count = int(request.cookies.get('visitors count', 0))
-        count = count + 1
-        output = 'You visited this page for ' + str(count) + ' times'
-        response.set_cookie('visitors count', str(count), max_age=2000000)
-
-        return response
+        return cards_dicts
 
 
 class Cards(Resource):
@@ -66,21 +52,18 @@ class Cards(Resource):
 
 class Test(Resource):
     def get(self):
-        print(session['email'])
-        name = request.cookies.get('cookie_name')
-        print(name)
+        response = jsonify({'data': '123'})
 
-        name = request.cookies.get('remember_token')
-        print(name)
+        session['email'] = '123'
+        # можно в куки фласк логина попробовать роль юзера запихать
+        # я могу ему роль передать при первом get запросе  /main на картинки
+        # если что, можно в заголовке или в json отправить роль, если зарегистрирован
 
-        name = request.cookies.get('session')
-        print(name)
-
-        name = request.cookies.get('cookie_name')
-        print(name)
-
-        session2 = session.get('email')
-        return jsonify({'data': session2})
+        count = int(request.cookies.get('visitors count', 0))
+        count = count + 1
+        output = 'You visited this page for ' + str(count) + ' times'
+        response.set_cookie('visitors count', str(count), max_age=2000000)
+        return jsonify({'data': output})
 
 
 class Email(Resource):
