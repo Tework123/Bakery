@@ -64,26 +64,23 @@ class Index(Resource):
         if order_product and data['action'] == '+':
             order_product.amount += 1
             order_product.price += card.price
-            db.session.commit()
             response = jsonify({'data': f'Товар {card.name} добавлен в корзину'})
 
-        if order_product and data['action'] == '-':
+        elif order_product and data['action'] == '-':
             if order_product.amount == 1:
                 OrderProduct.query.filter_by(order_id=basket.order_id, card_id=data['card_id']).delete()
                 response = jsonify({'data': f'Товар {card.name} удален окончательно из корзины'})
             else:
                 order_product.amount -= 1
                 order_product.price -= card.price
-                db.session.commit()
                 response = jsonify({'data': f'Товар {card.name} удален из корзины'})
 
         else:
             order_product = OrderProduct(order_id=basket.order_id, card_id=data['card_id'], price=card.price)
             db.session.add(order_product)
-            db.session.flush()
-            db.session.commit()
-            response = jsonify({'data': f'Товар {card.name} добавлен в корзину'})
+            response = jsonify({'data': f'Товар {card.name} первый раз добавлен в корзину'})
 
+        db.session.commit()
         response.status_code = 200
         return response
 

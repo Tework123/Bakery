@@ -169,8 +169,8 @@ function AppWrapper(props) {
         changeModalWindow={changeModalWindow}
         isModalBasketOpen={isModalBasketOpen}
         changeBasket={changeBasket} 
-        basketProducts={basketProducts}
-        isAuthorized={props.authorization.isAuthorizated}/>
+        basketProducts = {basketProducts}/>
+        
 
       {typeModalWindow && <ModalWindow
         type={typeModalWindow}
