@@ -42,10 +42,7 @@ class Index(Resource):
 
     @login_required(current_user)
     def patch(self):
-        # наверное нужно передавать с фронта какой-то знак, что пользователь нажал на - или на +
-        # и уже тут с if провернуть операции, все таки это тоже patch
 
-        # кнопка добавить в корзину на карточке товара и значок + около этого товара в корзине
         data = basket_data.parse_args()
 
         card = CardProduct.query.filter_by(card_id=data['card_id']).first()
@@ -149,7 +146,6 @@ class Buy(Resource):
         # он может принять его или отклонить
         basket.status = 'paid'
         basket.date = datetime.datetime.now()
-        print(basket.date)
         db.session.commit()
         return order_products
 
