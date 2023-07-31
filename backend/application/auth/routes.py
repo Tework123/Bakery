@@ -19,7 +19,7 @@ from ..email.email import send_email_authentication, send_email_register
 
 
 def login_user_remember(user):
-    login_user(user, remember=True, duration=datetime.timedelta(days=180))
+    login_user(user, remember=True, duration=datetime.timedelta(days=365))
     db.session.commit()
 
 
@@ -159,9 +159,10 @@ class LoginEmailCode(Resource):
             return response
 
         login_user_remember(user)
+        # зашифровать куки с jwt token
 
         response = jsonify({'data': 'Аккаунт подтвержден'})
-        response.set_cookie('remember_token2', 'user', max_age=2000000)
+        response.set_cookie('remember_token2', User.role, max_age=86400 * 365)
         response.status_code = 200
         return response
 
@@ -189,8 +190,9 @@ class Logout(Resource):
             return response
 
         logout_user()
-        # вырубить куки с ролью
         response = jsonify({'data': 'Вы вышли из аккаунта'})
+        response.set_cookie('remember_token2', '', max_age=0)
+
         response.status_code = 200
         return response
 
