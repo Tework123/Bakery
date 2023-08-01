@@ -1,21 +1,15 @@
 import datetime
-import random
-
-from flask import jsonify, session, request, make_response
+import time
+from flask import jsonify
 from flask_login import login_user, current_user, logout_user
-
 from application import db
 from application.models import User, Order
 from flask_restful import Resource
-
-from config import Config
 from . import api_auth
-from .fields_validation import register_validation, login_data, login_validation, token_data, \
-    token_login_data, login_email_data, login_email_validation, login_email_code_data, login_email_code_validation
-from ..auth.auth import create_token, verify_token, register, login_required, send, create_code, \
-    example_users_validation
-
-from ..email.email import send_email_authentication, send_email_register
+from .fields_validation import login_email_data, login_email_validation, login_email_code_data, \
+    login_email_code_validation
+from ..auth.auth import create_code, example_users_validation
+from ..email.email import send_email_authentication, celery_task_send_email_authentication
 
 
 class LoginEmail(Resource):
@@ -44,7 +38,12 @@ class LoginEmail(Resource):
         if user:
             user.code = code
             db.session.commit()
+
+            # отправка кода на email
+
             send_email_authentication(data['email'], code)
+            celery_task_send_email_authentication(data['email'], code)
+
             response = jsonify({'data': 'Код для авторизации отправлен на почту'})
             response.status_code = 200
             return response
@@ -56,9 +55,8 @@ class LoginEmail(Resource):
         basket = Order(user_id=user.user_id)
         db.session.add(basket)
         db.session.commit()
-
-        # отправка кода на email
         send_email_authentication(data['email'], code)
+        celery_task_send_email_authentication(data['email'], code)
 
         response = jsonify({'data': 'Для подтверждения регистрации введите код из почты'})
         response.status_code = 200
