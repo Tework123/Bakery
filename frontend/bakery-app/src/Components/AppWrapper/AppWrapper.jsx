@@ -212,7 +212,7 @@ debugger
     <div className={classes.wrapper} style={style}>
       <Routes>
         <Route path='/profile/*' element={profilePage} />
-        <Route path='/main' element={mainPage} />        
+        <Route path='/*' element={mainPage} />        
       </Routes>
     </div>
   );

@@ -5,15 +5,13 @@ import NavbarEmployeeProfile from './NavbarEmployeeProfile/NavbarEmployeeProfile
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import OrdersTracking from './OrdersTracking/OrdersTracking';
 import ProductsTracking from './ProductsTracking/ProductsTracking';
-import Cookies from 'js-cookie'
 
 function Profile(props) {
-  
+
   const navigate = useNavigate()
 
   const exitFromAccount = () => {
-    Cookies.remove('remember_token2')
-    props.authorization.unAuthorize()
+    props.authorization.unAuthorize();
     navigate("../../main");
   }
 
@@ -44,6 +42,8 @@ function Profile(props) {
       <button style={{border: '1px solid black'}} onClick={exitFromAccount}>Выйти</button>
     </React.Fragment>
   )
+
+  console.log(props.authorization);
 
   return (
     <div className={classes.profile_container}>
