@@ -10,9 +10,10 @@ import { Route, Routes, useParams } from 'react-router-dom';
 import ModalWindow from '../ModalWindow/ModalWindow';
 import Profile from '../Profile/Profile';
 import axios from 'axios';
-import Cookies from 'js-cookie'
+import { useResize } from '../../Hooks/useResize';
 
 function AppWrapper(props) {
+  
 
   const test_data = [
 
@@ -73,7 +74,10 @@ function AppWrapper(props) {
       quantity: 0
     },
   ]
-  console.log(Cookies.attributes);
+
+
+  const windowWidth = useResize();
+
 
   //Отвечает за октрытие/закрытие модлаьного окна корзины, меняя правый паддинг и скрывая содержимое за экраном
   const [style, setStyle] = useState({ overflowY: 'scroll' })
@@ -100,17 +104,19 @@ function AppWrapper(props) {
     }
   }, [])
 
-  const changeBasket = ({ action, id }) => {
 
+  //функции отвечающие за добавление и удаление товаров корзины
+  const changeBasket = ({ action, id }) => {
+debugger
     let newBasket = [...basketProducts];
     let changeIndex = null;
 
     basketProducts.forEach((element, index) => {
-      if (element.id === id) {
+      if (element.card_id === id) {
         changeIndex = index;
       }
     });
-
+    
     if (action === '+') {
       newBasket[changeIndex].amount++;
     } else if (action === '-') {
@@ -125,13 +131,12 @@ function AppWrapper(props) {
 
   const addProduct = (product) => {
 
-    debugger
     if (props.authorization.isAuthorizated) {
       let newBasket = [...basketProducts];
       let changeIndex = null;
 
       basketProducts.forEach((element, index) => {
-        if (element.id === product.card_id) {
+        if (element.card_id === product.card_id) {
           changeIndex = index;
         }
       
@@ -169,7 +174,8 @@ function AppWrapper(props) {
         changeModalWindow={changeModalWindow}
         isModalBasketOpen={isModalBasketOpen}
         changeBasket={changeBasket} 
-        basketProducts = {basketProducts}/>
+        basketProducts={basketProducts}
+        isAuthorizated={props.authorization.isAuthorizated}/>
         
 
       {typeModalWindow && <ModalWindow
@@ -185,7 +191,7 @@ function AppWrapper(props) {
         isAuthorizated={props.authorization.isAuthorizated} />
       <Navbar changeModalWindow={changeModalWindow} />
       <CaruselBox />
-      <Content products={test_data} addProduct={addProduct}/>
+      <Content products={test_data} addProduct={addProduct} windowWidth={windowWidth}/>
       <Footer />
     </React.Fragment>
   )
@@ -196,7 +202,7 @@ function AppWrapper(props) {
         types={{ MODAL_AUTHORIZATION: MODAL_AUTHORIZATION }}
         changeTypeModalWindow={changeTypeModalWindow}
         isAuthorizated={props.authorization.isAuthorizated} />
-      <Profile />
+      <Profile authorization={props.authorization}/>
       <Footer />
     </React.Fragment>
   )

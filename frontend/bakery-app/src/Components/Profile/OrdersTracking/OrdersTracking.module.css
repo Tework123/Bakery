@@ -1,5 +1,25 @@
 .title {
     font-size: 30px;
-    text-align: center;
-    margin-top: 50px;
+    margin-top: 70px;
+    margin-bottom: 30px;
+}
+
+.ordertr_container table {
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    
+    border-collapse: separate;
+    width: 100%;
+    color: white;
+    border-collapse:collapse;
+}
+
+.ordertr_container th {
+    background-color: #3A3148;
+    font-weight: 100;
+    text-align: left;
+    padding: 10px;
+}
+
+.ordertr_container td {
+    padding: 10px;
 }

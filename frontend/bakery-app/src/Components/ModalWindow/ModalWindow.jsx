@@ -1,17 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classes from './ModalWindow.module.css';
 import Authorization from './Authorization/Authorization';
 import Registration from './Registration/Registration';
 
 function ModalWindow(props) {
 
-  
-console.log(props);
+
+
+  const [email, setEmail] = useState('')
+  const giveEmail = (sendedEmail) => {
+    setEmail(sendedEmail);
+  }
+
   const authorizationModal = (
-    <Authorization authorization={props.authorization} changeTypeModalWindow={props.changeTypeModalWindow} constTypesModal={{MODAL_REGISTRATION: props.types.MODAL_REGISTRATION}}/>
+    <Authorization
+      giveEmail={giveEmail}
+      authorization={props.authorization}
+      changeTypeModalWindow={props.changeTypeModalWindow}
+      constTypesModal={{MODAL_REGISTRATION: props.types.MODAL_REGISTRATION}}/>
   )
   const registrationModal = (
-    <Registration requestForSuccessfulRegistaration={props.functions.requestForSuccessfulRegistaration} changeTypeModalWindow={props.changeTypeModalWindow} constTypesModal={{MODAL_REGISTRATION: props.types.MODAL_AUTHORIZATION}}/>
+    <Registration
+      email={email}
+      authorization={props.authorization}
+      requestForSuccessfulRegistaration={props.functions.requestForSuccessfulRegistaration}
+      changeTypeModalWindow={props.changeTypeModalWindow}
+      constTypesModal={{MODAL_REGISTRATION: props.types.MODAL_AUTHORIZATION}}/>
   )
 
   let modalChangableWindow; 

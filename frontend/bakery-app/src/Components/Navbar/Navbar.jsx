@@ -3,12 +3,6 @@ import axios from 'axios';
 
 function Navbar(props) {
 
-  let style
-  // if (props.scroll < 60) {
-  //   style = {position: 'static'}
-  // } else {
-  //   style = {position: 'fixed'}
-  // }
 
   const onClickProfileTest = () => {
     axios.get('/profile/pass_orders').then((response) => {
@@ -16,10 +10,7 @@ function Navbar(props) {
     })   
   }
   return (
-    <nav className={classes.navbar_container} style={style}>
-       <div className={classes.item} onClick={onClickProfileTest}>
-              Личный кабинет
-            </div>
+    <nav className={classes.navbar_container}>
       <div className={classes.navbar_logo + " " + classes.item}>
 
       </div>
@@ -35,9 +26,11 @@ function Navbar(props) {
       <div className={classes.item}>
         Пироги
       </div>
-      <div className={classes.item + " " + classes.navbar_basket_button}>
-        <button onClick={props.changeModalWindow}>Корзина</button>
-      </div>
+      <button
+        className={classes.item + " " + classes.navbar_basket_button}
+        onClick={props.changeModalWindow}>
+        Корзина
+      </button>
     </nav>
   );
 }

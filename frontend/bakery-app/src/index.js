@@ -5,7 +5,6 @@ import App from './App';
 import axios from 'axios';
 import { CookiesProvider } from 'react-cookie';
 
-
 axios.defaults.withCredentials = true
 
 

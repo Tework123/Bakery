@@ -8,8 +8,12 @@
 }
 
 .chapter_products {
+
+
+}
+
+.chapter_products_row {
     display: flex;
-    flex-wrap: wrap;
-    margin-right: -36px;
-    border: 1px solid red;
+    justify-content: space-between;
+    margin-bottom: 30px;
 }
