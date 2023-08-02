@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classes from './ModalWindow.module.css';
 import Authorization from './Authorization/Authorization';
 import Registration from './Registration/Registration';
@@ -7,9 +7,9 @@ function ModalWindow(props) {
 
 
 
-  let email; 
+  const [email, setEmail] = useState('')
   const giveEmail = (sendedEmail) => {
-    email = sendedEmail
+    setEmail(sendedEmail);
   }
 
   const authorizationModal = (

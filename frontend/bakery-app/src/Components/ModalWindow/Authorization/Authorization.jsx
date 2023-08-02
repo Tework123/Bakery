@@ -7,11 +7,12 @@ function Authorization(props) {
 
   const [email, setemail] = useState('')
   function sendEmailAutho() {
-    axios.post('/auth/email', { email: email}).then((response) => {
+    axios.post('/auth/login', { email: email}).then((response) => {
       props.giveEmail(email)
       props.changeTypeModalWindow(props.constTypesModal.MODAL_REGISTRATION)
     })
   }
+
 
   const onClickEnter = () => {
     sendEmailAutho()
@@ -26,6 +27,7 @@ function Authorization(props) {
       <div className={classes.authoriaion_header}>Войти</div>
       <input className={classes.authoriaion_input_item} placeholder='Почта' onChange={(e) => onChangeEmail(e)}></input>
       <button className={classes.authoriaion_enter} onClick={onClickEnter}>Отправить пинкод на почту</button>
+      
     </div>
   );
 }

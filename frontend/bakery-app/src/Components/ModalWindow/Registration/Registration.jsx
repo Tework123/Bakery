@@ -4,14 +4,15 @@ import axios from 'axios';
 
 function Registration(props) {
 
-
-  let email;
+  
   const [pincode, setPincode] = useState()
 
   function sendPincodeToServer() {
-    axios.post('/auth/login_code', { code: pincode, email: email }).then((response) => {
+    console.log(props.email);
+    axios.post('/auth/login_code', { code: pincode, email: props.email }).then((response) => {
       console.log(response.data.data)
-      props.authorization.authorize(email)
+      props.authorization.authorize(props.email)
+      props.changeTypeModalWindow('')
     })
   }
 
@@ -41,6 +42,7 @@ function Registration(props) {
           />
       </div>
       <div>Прислать код ещё раз</div>
+      <button onClick={sendPincodeToServer}> ОТПРАВИТЬ КОД</button>
     </div>
   );
 }

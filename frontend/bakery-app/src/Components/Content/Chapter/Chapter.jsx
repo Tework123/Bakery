@@ -5,15 +5,8 @@ import classes from './Chapter.module.css';
 
 function Chapter(props) {
 
-  //функция в зависимости от количества текста будет менять
-  //высоту карточки, а также добавлять пустые карточки, чтобы 
-  //всё было в ряд ровно
-  function productsInChapter() {
-
-  }
 
   let rowLength;
-  console.log(props.windowWidth);
   if (props.windowWidth.isScreenXl) {
     rowLength = 4;
   } else if (props.windowWidth.isScreenLg) {

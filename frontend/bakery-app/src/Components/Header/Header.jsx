@@ -18,12 +18,14 @@ function Header(props) {
   return (
     <header className={classes.header_container}>
       <div className={classes.header_main}>
-        <div>Logo</div>
-        <div>Телефон, адрес</div>
+        <NavLink to='/main'>
+          <div>Logo</div>
+          <div>Телефон, адрес</div>
+        </NavLink>
         <div className={classes.right_actions}>
           {props.isAuthorizated ?
           <NavLink
-            to='/profile'>
+            to='/profile/information'>
             <div className={classes.item} onClick={onClickProfileTest}>
               Личный кабинет
             </div>

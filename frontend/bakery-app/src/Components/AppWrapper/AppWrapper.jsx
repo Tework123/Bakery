@@ -10,10 +10,10 @@ import { Route, Routes, useParams } from 'react-router-dom';
 import ModalWindow from '../ModalWindow/ModalWindow';
 import Profile from '../Profile/Profile';
 import axios from 'axios';
-import Cookies from 'js-cookie'
 import { useResize } from '../../Hooks/useResize';
 
 function AppWrapper(props) {
+  
 
   const test_data = [
 
@@ -74,8 +74,6 @@ function AppWrapper(props) {
       quantity: 0
     },
   ]
-  console.log(Cookies.get('visitors count'));
-
 
 
   const windowWidth = useResize();
@@ -204,7 +202,7 @@ debugger
         types={{ MODAL_AUTHORIZATION: MODAL_AUTHORIZATION }}
         changeTypeModalWindow={changeTypeModalWindow}
         isAuthorizated={props.authorization.isAuthorizated} />
-      <Profile />
+      <Profile authorization={props.authorization}/>
       <Footer />
     </React.Fragment>
   )

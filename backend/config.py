@@ -24,6 +24,7 @@ class Config(object):
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS')
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    REMEMBER_COOKIE_HTTPONLY = False
     ADMINS = os.environ.get('ADMINS')
     MAIN_ADMIN_EMAIL = os.environ.get('MAIN_ADMIN_EMAIL')
     basepath = os.path.abspath("") + '/'

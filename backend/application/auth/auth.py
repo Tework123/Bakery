@@ -56,10 +56,10 @@ def login_required(user):
                 response = jsonify({'data': 'Вы не зашли в аккаунт'})
                 response.status_code = 401
                 return response
-            if not user.verified:
-                response = jsonify({'data': 'Ваш аккаунт не подтвержден'})
-                response.status_code = 403
-                return response
+            # if not user.verified:
+            #     response = jsonify({'data': 'Ваш аккаунт не подтвержден'})
+            #     response.status_code = 403
+            #     return response
 
             return func(*args, **kwargs)
 
