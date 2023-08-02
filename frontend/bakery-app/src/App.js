@@ -46,7 +46,7 @@ function App() {
   }
 
   const unAuthorize = () => {
-    axios.get('auth/logout').then(() => {      
+    axios.get('/auth/logout').then(() => {      
       setIsAuthorizated(false)
       login = null;
     }) 
