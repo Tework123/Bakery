@@ -29,7 +29,9 @@ class TestAdminUnauthorized:
 
 @pytest.mark.usefixtures('client')
 class TestAdminAuthorized:
-
+    # может быть оставить тестового админа, но сделать ему сложный емайл и также авторизацию по коду
+    # в тестах можно это сделать, вместе с кодом отправлять, хотя код на почту улетает...
+    # надо реально оставить вход без пароля, но нужны сложные емайлы
     def test_auth_admin(self, client):
         response = client.post('/auth/login', json={"email": "adcde@mail.ru"})
 

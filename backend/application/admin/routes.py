@@ -24,7 +24,6 @@ class CreateRestaurant(Resource):
     restaurant_fields = {
         'user_id': fields.Integer,
         'email': fields.String,
-        # 'phone': fields.String,
         'role': fields.String
     }
 
@@ -57,6 +56,8 @@ class CreateRestaurant(Resource):
 
 
 class SiteStatistics(Resource):
+
+    # тут наверное нужно ссылка на яндекс метрику
     @admin_login_required(current_user)
     def get(self):
         return jsonify({'data': 'some statistics'})

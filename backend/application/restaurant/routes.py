@@ -98,46 +98,46 @@ class Cards(Resource):
     def patch(self):
         data = card_patch_data.parse_args()
         card = CardProduct.query.filter_by(card_id=data['card_id']).first()
-        if card:
-            change = ''
-            for item, key in data.items():
-                if item == 'card_id':
-                    continue
-                if key:
-                    if item == 'name':
-                        card.name = key
-                    elif item == 'price':
-                        card.price = key
-                    elif item == 'image':
-                        image = key
-
-                        # сохранение полученной картинки
-                        file_path = CONFIG.basepath + 'application/static/' + image.filename
-                        if not os.path.exists(file_path):
-                            image.save(file_path)
-
-                        # удаление старой картинки
-                        if card.image == '':
-                            card.image = 'some_image'
-
-                        file_path = CONFIG.basepath + 'application/static/' + card.image
-                        if os.path.exists(file_path):
-                            os.remove(file_path)
-
-                        card.image = key.filename
-
-                    change += item + ', '
-            change = change[:-2]
-
-            db.session.commit()
-
-            response = jsonify({'data': f'Следующие данные товара изменены: {change}'})
-            response.status_code = 200
-            return response
-        else:
+        if card is None:
             response = jsonify({'data': 'Данный товар не найден'})
             response.status_code = 200
             return response
+
+        change = ''
+        for item, key in data.items():
+            if item == 'card_id':
+                continue
+            if key:
+                if item == 'name':
+                    card.name = key
+                elif item == 'price':
+                    card.price = key
+                elif item == 'image':
+                    image = key
+
+                    # сохранение полученной картинки
+                    file_path = CONFIG.basepath + 'application/static/' + image.filename
+                    if not os.path.exists(file_path):
+                        image.save(file_path)
+
+                    # удаление старой картинки
+                    if card.image == '':
+                        card.image = 'some_image'
+
+                    file_path = CONFIG.basepath + 'application/static/' + card.image
+                    if os.path.exists(file_path):
+                        os.remove(file_path)
+
+                    card.image = key.filename
+
+                change += item + ', '
+        change = change[:-2]
+
+        db.session.commit()
+
+        response = jsonify({'data': f'Следующие данные товара изменены: {change}'})
+        response.status_code = 200
+        return response
 
 
 class Orders(Resource):

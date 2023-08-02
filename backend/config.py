@@ -38,6 +38,7 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     name = 'TestingConfig'
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI_POSTGRES_test')
+    SENTRY_ENV = 'development'
 
 
 class ProductionConfig(Config):
