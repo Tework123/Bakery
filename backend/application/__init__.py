@@ -10,6 +10,9 @@ from flask_mail import Mail
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
+
 db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()
@@ -23,6 +26,13 @@ def create_app(config):
 
     app.config.from_object(config)
     app.json.sort_keys = False
+
+    sentry_sdk.init(
+        dsn=config.dsn, integrations=[FlaskIntegration(), ],
+        environment=config.SENTRY_ENV,
+
+        traces_sample_rate=1.0
+    )
 
     celery.conf.update(app.config)
 

@@ -135,19 +135,16 @@ def register(email, role):
         register_response = 'Вход тестового пользователя выполнен успешно'
 
     if user:
-        login_user(user, remember=True, duration=datetime.timedelta(days=180))
-        user.verified = True
-        db.session.commit()
+        login_user(user, remember=True, duration=datetime.timedelta(days=365))
         return register_response
 
-    user = User(email=email, role=role, verified=True)
+    user = User(email=email, role=role)
     db.session.add(user)
     user = User.query.filter_by(email=email).first()
     basket = Order(user_id=user.user_id)
     db.session.add(basket)
-    db.session.flush()
     db.session.commit()
-    login_user(user, remember=True, duration=datetime.timedelta(days=180))
+    login_user(user, remember=True, duration=datetime.timedelta(days=365))
     return register_response
 
 
@@ -155,7 +152,6 @@ def create_code():
     code = ''
     for i in range(4):
         code += str(random.randrange(0, 10))
-    print(code)
     return code
 
 
