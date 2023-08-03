@@ -84,7 +84,6 @@ class LoginEmailCode(Resource):
         login_user(user, remember=True, duration=datetime.timedelta(days=365))
 
         response = jsonify({'data': 'Аккаунт подтвержден'})
-        print(current_user.role)
         response.set_cookie('remember_token2', current_user.role, max_age=86400 * 365)
         response.status_code = 200
         return response

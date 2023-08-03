@@ -137,15 +137,18 @@ def add_orders_base():
     db.session.commit()
 
     order_products = []
+    card_ids = {0: [1, 4], 1: [4, 8], 2: [8, 11]}
     for i in range(3):
+        next_id = card_ids[i]
         for j in range(1, 40):
-            card_id = random.randrange(1, 11)
+            card_id = random.randrange(next_id[0], next_id[1])
             amount = random.randrange(1, 7)
             prices = random.randrange(50, 250, 20)
             amount_1 = amount
             price_1 = prices * amount_1
             order_product = OrderProduct(order_id=j, card_id=card_id, amount=amount_1,
                                          price=price_1)
+
             order_products.append(order_product)
 
         db.session.add_all(order_products)
