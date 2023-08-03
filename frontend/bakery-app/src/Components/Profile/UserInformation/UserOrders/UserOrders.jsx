@@ -1,7 +1,7 @@
 import axios from 'axios';
 import OrderCard from '../OrderCard/OrderCard';
 import classes from './UserOrders.module.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function UserOrders(props) {
 
@@ -36,6 +36,15 @@ function UserOrders(props) {
     }
   }
 
+  const [userOrders, setUserOrders] = useState([]);
+
+  useEffect(() => {
+    axios.get('/profile/orders').then((responce)=> {
+      setUserOrders(responce.data)
+    })
+  }, [])
+  debugger
+
   return (
     <div className={classes.userorders_container}>
       <div className={classes.userorders_header}>
@@ -54,9 +63,9 @@ function UserOrders(props) {
         </div>
       </div>
       <div className={classes.userorders_cards}>
-        <OrderCard />
-        <OrderCard />
-        <OrderCard />
+        {userOrders.map(order => 
+          <OrderCard order={order}/>
+        )}
       </div>
     </div>
   );

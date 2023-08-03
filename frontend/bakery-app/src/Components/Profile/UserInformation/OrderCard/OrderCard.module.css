@@ -30,3 +30,7 @@
 .card_actions {
     margin-left: auto;
 }
+
+.card_images img{
+    width: 50px;
+}
