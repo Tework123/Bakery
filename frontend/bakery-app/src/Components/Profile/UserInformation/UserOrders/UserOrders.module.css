@@ -1,0 +1,44 @@
+.userorders_container {
+    grid-area: 'o';
+    color: black;
+    padding-left: 30px;
+}
+
+.userorders_header {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-end;
+}
+
+.title {
+    font-size: 30px;
+}
+
+.userorders_header_actions {
+    align-self: center;
+    margin-left: auto;
+}
+
+.userorders_header_actions button{
+    padding: 6px 8px;
+    width: 140px;
+    border: 1px solid rgba(142, 142, 142, 0.412);
+    border-collapse: collapse;
+}
+
+.left {
+    border-radius: 8px 0 0 8px;
+    background-color: rgb(238, 238, 238);
+}
+
+.right {
+    margin-left: -1px;
+    border-radius: 0 8px 8px 0;
+    background-color: rgb(238, 238, 238);
+}
+
+.active {
+    color: white;
+    background-color: #F39D12
+}

@@ -29,7 +29,7 @@
     border-radius: 5px;
     box-shadow: 0px 4px 5px -5px rgba(34, 60, 80, 0.6) inset;
     height: 30px;
-    width: 200px;
+    width: 160px;
     border: 1px solid rgba(0, 0, 0, 0.281);
     padding-left: 5px;
 }
@@ -53,3 +53,25 @@
     border: 1px solid rgba(0, 0, 0, 0.252);
     margin-right: 10px;
 }
+
+
+.list {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0px 4px 5px -5px rgba(34, 60, 80, 0.6) inset;
+    height: 30px;
+    width: 160px;
+    border: 1px solid rgba(0, 0, 0, 0.281);
+}
+
+.list select {
+    width: 100%;
+    padding: 0 0px;
+}
+
+.list select:focus {
+    outline: none;
+}
+

@@ -20,15 +20,22 @@ function OrdersFindForm(props) {
           <div className={classes.name}>
             Статус
           </div>
+          <div className={classes.list}>
+            <select>
+              <option>  Все        </option>
+              <option>  Доставлен </option>
+              <option>  В процессе</option>
+            </select>
+          </div>
         </div>
         <div className={classes.input_item}>
           <div className={classes.name}>
             Дата
           </div>
           <div>
-            <input></input>
+            <input type='date' ></input>
             <span>- - -</span>
-            <input></input>
+            <input type='date' ></input>
           </div>
         </div>
       </div>
