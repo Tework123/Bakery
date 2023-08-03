@@ -20,7 +20,15 @@ function NavbarEmployeeProfile(props) {
         className={({isActive, isPending}) =>
           isPending ? classes.isPending + " " + classes.navbaremp_item: isActive ? classes.isActive + " " + classes.navbaremp_item: classes.isPending + " " + classes.navbaremp_item}>
 
-        Заказы
+        База заказов
+
+      </NavLink>
+      <NavLink
+        to='neworders'
+        className={({isActive, isPending}) =>
+          isPending ? classes.isPending + " " + classes.navbaremp_item: isActive ? classes.isActive + " " + classes.navbaremp_item: classes.isPending + " " + classes.navbaremp_item}>
+
+        Текущие заказы
 
       </NavLink>
       <NavLink

@@ -43,7 +43,6 @@ function UserOrders(props) {
       setUserOrders(responce.data)
     })
   }, [])
-  debugger
 
   return (
     <div className={classes.userorders_container}>
