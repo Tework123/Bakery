@@ -11,6 +11,7 @@ from application.auth.auth import restaurant_login_required
 from application.models import CardProduct, Order, OrderProduct
 from application.restaurant import api_restaurant
 from application.restaurant.fields_validation import card_data, card_delete_data, card_patch_data, order_patch_data
+from application.restaurant.helpers import pass_orders_to_list_dicts, current_orders_to_list_dicts
 from start_app import CONFIG
 
 
@@ -140,7 +141,7 @@ class Cards(Resource):
         return response
 
 
-class Orders(Resource):
+class PassOrders(Resource):
     # заполнение корзины: basket, оплата: paid, кухня: prepared, ready,
     # canceled_restaurant, курьер: delivered, success, canceled_delivery
 
@@ -150,7 +151,6 @@ class Orders(Resource):
     parameter_marshaller = {
         "name": fields.String,
         "amount": fields.Integer,
-        'image': fields.String
     }
 
     card_fields = {
@@ -166,81 +166,84 @@ class Orders(Resource):
     @restaurant_login_required(current_user)
     @marshal_with(card_fields)
     def get(self):
-        # orders = db.session.query(Order.order_id,
-        #                           Order.text,
-        #                           Order.address,
-        #                           Order.date,
-        #                           db.func.string_agg(CardProduct.name, ', ').label('name'),
-        #                           db.func.string_agg(cast(OrderProduct.amount, sqlalchemy.String), ', ')
-        #                           .label('amount')) \
-        #     .join(OrderProduct, Order.order_id == OrderProduct.order_id) \
-        #     .join(CardProduct, OrderProduct.card_id == CardProduct.card_id) \
-        #     .group_by(Order.order_id,
-        #               Order.text,
-        #               Order.address,
-        #               Order.date, ) \
-        #     .where(or_(Order.status == 'paid',
-        #                Order.status == 'prepared',
-        #                Order.status == 'ready',
-        #                Order.status == 'canceled_restaurant',
-        #                Order.status == 'delivered',
-        #                Order.status == 'success',
-        #                Order.status == 'canceled_delivery',
-        #                )).all()
-
-        orders = (db.session.query(Order.order_id,
-                                   Order.text,
-                                   Order.address,
-                                   Order.date,
-                                   Order.status,
-                                   db.func.sum(OrderProduct.price).label('price'),
-                                   db.func.string_agg(CardProduct.name, ', ').label('name'),
-                                   db.func.string_agg(cast(OrderProduct.amount, sqlalchemy.String), ', ')
-                                   .label('amount'),
-                                   db.func.string_agg(cast(CardProduct.image, sqlalchemy.String), ', ')
-                                   .label('image')).
-                  join(OrderProduct, Order.order_id == OrderProduct.order_id)
-                  .join(CardProduct, OrderProduct.card_id == CardProduct.card_id)
-                  .group_by(Order.order_id,
-                            Order.text,
-                            Order.date)
-                  .all())
+        pass_orders = (db.session.query(Order.order_id,
+                                        Order.text,
+                                        Order.address,
+                                        Order.date,
+                                        Order.status,
+                                        db.func.sum(OrderProduct.price).label('price'),
+                                        db.func.string_agg(CardProduct.name, ', ').label('name'),
+                                        db.func.string_agg(cast(OrderProduct.amount, sqlalchemy.String), ', ')
+                                        .label('amount'))
+                       .join(OrderProduct, Order.order_id == OrderProduct.order_id)
+                       .join(CardProduct, OrderProduct.card_id == CardProduct.card_id)
+                       .group_by(Order.order_id,
+                                 Order.text,
+                                 Order.date).where(or_(Order.status == 'paid',
+                                                       Order.status == 'prepared',
+                                                       Order.status == 'ready',
+                                                       Order.status == 'canceled_restaurant',
+                                                       Order.status == 'delivered',
+                                                       Order.status == 'success',
+                                                       Order.status == 'canceled_delivery',
+                                                       ))).all()
 
         # преобразует строки с множеством значений в словари для последующей сериализации
-        list_dicts_orders = []
-        for row in orders:
-            for i in range(len(row)):
+        list_dicts_pass_orders = pass_orders_to_list_dicts(pass_orders)
 
-                if i == 6:
-                    list_cards = [list(a) for a in (zip(row[6].split(', '),
-                                                        row[7].split(', '),
-                                                        list(map(lambda image:
-                                                                 url_for('static', filename=image),
-                                                                 row[8].split(', ')))))]
-                    list_dicts_cards = []
-                    for i in list_cards:
-                        dicts = {}
-                        for j in range(len(i)):
-                            if j == 0:
-                                dicts['name'] = i[j]
-                            if j == 1:
-                                dicts['amount'] = i[j]
-                            else:
-                                dicts['image'] = i[j]
-                        list_dicts_cards.append(dicts)
+        return list_dicts_pass_orders
 
-            row = {'order_id': row.order_id, 'text': row.text, 'address': row.address, 'date': row.date, 'status': row.status,
-                   'price': row.price, 'cards': list_dicts_cards}
 
-            list_dicts_orders.append(row)
+class CurrentOrders(Resource):
+    parameter_marshaller = {
+        "name": fields.String,
+        "amount": fields.Integer,
+    }
 
-        return list_dicts_orders
+    card_fields = {
+        'order_id': fields.Integer,
+        'text': fields.String,
+        'date': fields.DateTime,
+        'address': fields.String,
+        'status': fields.String,
+        'price': fields.Integer,
+        'cards': fields.List(fields.Nested(parameter_marshaller))
+    }
+
+    @restaurant_login_required(current_user)
+    @marshal_with(card_fields)
+    def get(self):
+
+        current_orders = (db.session.query(Order.order_id,
+                                           Order.text,
+                                           Order.address,
+                                           Order.date,
+                                           Order.status,
+                                           db.func.sum(OrderProduct.price).label('price'),
+                                           db.func.string_agg(CardProduct.name, ', ').label('name'),
+                                           db.func.string_agg(cast(OrderProduct.amount, sqlalchemy.String), ', ')
+                                           .label('amount')).
+                          join(OrderProduct, Order.order_id == OrderProduct.order_id)
+                          .join(CardProduct, OrderProduct.card_id == CardProduct.card_id)
+                          .group_by(Order.order_id,
+                                    Order.text,
+                                    Order.date).where(or_(Order.status == 'paid',
+                                                          Order.status == 'prepared',
+                                                          Order.status == 'ready',
+                                                          Order.status == 'canceled_restaurant',
+                                                          Order.status == 'delivered',
+                                                          Order.status == 'canceled_delivery',
+                                                          )).all())
+
+        # преобразует строки с множеством значений в словари для последующей сериализации
+        list_dicts_current_orders = current_orders_to_list_dicts(current_orders)
+
+        return list_dicts_current_orders
 
     # сработает когда нажимают на кнопку рядом с заказом - принято к выполнению, готово, отменить
     @restaurant_login_required(current_user)
     def patch(self):
-        # Наверное надо опять передать какой знак, чтобы понять, какую кнопку нажал работник
-        # ready, prepared, canceled_restaurant
+
         data = order_patch_data.parse_args()
         order = Order.query.filter_by(order_id=data['order_id']).first()
         if order is None:
@@ -248,12 +251,23 @@ class Orders(Resource):
             response.status_code = 200
             return response
 
-        order.status = 'success'
+        if data['action'] == '':
+            order.status = 'success'
+        elif data['action'] == '':
+            order.status = 'success'
+        elif data['action'] == '':
+            order.status = 'success'
+
+        db.session.commit()
         response = jsonify({'data': 'Статус заказа изменен'})
         response.status_code = 200
         return response
 
 
+# если выносить в отдельную функцию запрос к базе из трех роутов, то если надо изменить в одном, то
+# поменяется везде, а может быть не надо менять везде. Короче надо сделать models или что-то типо такого
+# в каждой папке, чтобы можно было туда все sql запросы скинуть и разгрузить логику
 api_restaurant.add_resource(Index, '/')
 api_restaurant.add_resource(Cards, '/cards')
-api_restaurant.add_resource(Orders, '/orders')
+api_restaurant.add_resource(CurrentOrders, '/current_orders')
+api_restaurant.add_resource(PassOrders, '/pass_orders')

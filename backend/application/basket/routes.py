@@ -141,9 +141,10 @@ class Buy(Resource):
         for i in order_products:
             sum_price += i.price
         response = {'data': f'Перенаправление на страницу оплаты, цена заказа: {sum_price}'}
-
-        # если страница оплаты возвращает True, то status = paid и заказ появляется у ресторана,
-        # он может принять его или отклонить
+        if not response:
+            pass
+            # если страница оплаты возвращает True, то status = paid и заказ появляется у ресторана,
+            # он может принять его или отклонить
         basket.status = 'paid'
         basket.date = datetime.datetime.now()
         db.session.commit()

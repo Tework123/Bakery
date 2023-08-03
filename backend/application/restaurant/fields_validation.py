@@ -28,5 +28,6 @@ card_patch_data.add_argument('image', type=FileStorage, location='files', help='
 # изменение статуса заказа
 order_patch_data = reqparse.RequestParser()
 order_patch_data.add_argument('order_id', type=str, help='Нужен id заказа', required=True)
+order_patch_data.add_argument('action', type=str, help='Нужен action заказа', required=True)
 
 

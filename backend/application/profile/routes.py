@@ -12,6 +12,7 @@ from application.models import User, CardProduct, Order, OrderProduct
 from flask_restful import Resource, marshal_with, fields
 
 from application.profile import api_profile
+from application.profile.helpers import orders_to_list_dicts
 from start_app import CONFIG
 
 
@@ -34,54 +35,26 @@ class Orders(Resource):
     @login_required(current_user)
     @marshal_with(card_fields)
     def get(self):
-        start = time.time()
-        current_orders = (db.session.query(Order.order_id,
-                                           Order.text,
-                                           Order.date,
-                                           Order.status,
-                                           db.func.sum(OrderProduct.price).label('price'),
-                                           db.func.string_agg(CardProduct.name, ', ').label('name'),
-                                           db.func.string_agg(cast(OrderProduct.amount, sqlalchemy.String), ', ')
-                                           .label('amount'),
-                                           db.func.string_agg(cast(CardProduct.image, sqlalchemy.String), ', ')
-                                           .label('image')).
-                          join(OrderProduct, Order.order_id == OrderProduct.order_id)
-                          .join(CardProduct, OrderProduct.card_id == CardProduct.card_id)
-                          .group_by(Order.order_id,
-                                    Order.text,
-                                    Order.date)
-                          .where(Order.user_id == current_user.user_id).all())
-        end1 = time.time()
-        start2 = time.time()
+        orders = (db.session.query(Order.order_id,
+                                   Order.text,
+                                   Order.date,
+                                   Order.status,
+                                   db.func.sum(OrderProduct.price).label('price'),
+                                   db.func.string_agg(CardProduct.name, ', ').label('name'),
+                                   db.func.string_agg(cast(OrderProduct.amount, sqlalchemy.String), ', ')
+                                   .label('amount'),
+                                   db.func.string_agg(cast(CardProduct.image, sqlalchemy.String), ', ')
+                                   .label('image')).
+                  join(OrderProduct, Order.order_id == OrderProduct.order_id)
+                  .join(CardProduct, OrderProduct.card_id == CardProduct.card_id)
+                  .group_by(Order.order_id,
+                            Order.text,
+                            Order.date)
+                  .where(Order.user_id == current_user.user_id).all())
+
         # преобразует строки с множеством значений в словари для последующей сериализации
-        list_dicts_orders = []
-        for row in current_orders:
-            for i in range(len(row)):
-                if i == 5:
-                    list_cards = [list(a) for a in (zip(row[5].split(', '),
-                                                        row[6].split(', '),
-                                                        list(map(lambda image:
-                                                                 url_for('static', filename=image),
-                                                                 row[7].split(', ')))))]
-                    list_dicts_cards = []
-                    for i in list_cards:
-                        dicts = {}
-                        for j in range(len(i)):
-                            if j == 0:
-                                dicts['name'] = i[j]
-                            if j == 1:
-                                dicts['amount'] = i[j]
-                            else:
-                                dicts['image'] = i[j]
-                        list_dicts_cards.append(dicts)
+        list_dicts_orders = orders_to_list_dicts(orders)
 
-            row = {'order_id': row.order_id, 'text': row.text, 'date': row.date, 'status': row.status,
-                   'price': row.price, 'cards': list_dicts_cards}
-
-            list_dicts_orders.append(row)
-        end2 = time.time()
-        print(end1 - start)
-        print(end2 - start2)
         return list_dicts_orders
 
 
