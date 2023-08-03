@@ -10,7 +10,7 @@ function ProductCard(props) {
   return (
     <div className={classes.card_container}>
       <div className={classes.card_image}>
-        <img alt='No image' src={props.product.image}/>
+        <img alt='No image' src={props.product.image} loading="lazy"/>
       </div>
       <div className={classes.card_name}>
         {props.product.name}

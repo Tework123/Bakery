@@ -13,7 +13,6 @@ function Authorization(props) {
           console.log(response.data.data)
           props.authorization.authorize(props.email)
           props.changeTypeModalWindow('')
-          debugger
         })
       } else {
         props.giveEmail(email)
