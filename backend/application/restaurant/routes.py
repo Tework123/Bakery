@@ -147,40 +147,94 @@ class Orders(Resource):
     # после оплаты поступают на этот урл
     # id_order, name(whole), date,
     # когда заказ оплачен, наверное курьеру(если такое будет) надо тоже показать, что заказ готовится
+    parameter_marshaller = {
+        "name": fields.String,
+        "amount": fields.Integer,
+        'image': fields.String
+    }
+
     card_fields = {
         'order_id': fields.Integer,
         'text': fields.String,
         'date': fields.DateTime,
         'address': fields.String,
-        'amount': fields.String,
-        'name': fields.String,
+        'status': fields.String,
+        'price': fields.Integer,
+        'cards': fields.List(fields.Nested(parameter_marshaller))
     }
 
     @restaurant_login_required(current_user)
     @marshal_with(card_fields)
     def get(self):
-        orders = db.session.query(Order.order_id,
-                                  Order.text,
-                                  Order.address,
-                                  Order.date,
-                                  db.func.string_agg(CardProduct.name, ', ').label('name'),
-                                  db.func.string_agg(cast(OrderProduct.amount, sqlalchemy.String), ', ')
-                                  .label('amount')) \
-            .join(OrderProduct, Order.order_id == OrderProduct.order_id) \
-            .join(CardProduct, OrderProduct.card_id == CardProduct.card_id) \
-            .group_by(Order.order_id,
-                      Order.text,
-                      Order.address,
-                      Order.date, ) \
-            .where(or_(Order.status == 'paid',
-                       Order.status == 'prepared',
-                       Order.status == 'ready',
-                       Order.status == 'canceled_restaurant',
-                       Order.status == 'delivered',
-                       Order.status == 'success',
-                       Order.status == 'canceled_delivery',
-                       )).all()
-        return orders
+        # orders = db.session.query(Order.order_id,
+        #                           Order.text,
+        #                           Order.address,
+        #                           Order.date,
+        #                           db.func.string_agg(CardProduct.name, ', ').label('name'),
+        #                           db.func.string_agg(cast(OrderProduct.amount, sqlalchemy.String), ', ')
+        #                           .label('amount')) \
+        #     .join(OrderProduct, Order.order_id == OrderProduct.order_id) \
+        #     .join(CardProduct, OrderProduct.card_id == CardProduct.card_id) \
+        #     .group_by(Order.order_id,
+        #               Order.text,
+        #               Order.address,
+        #               Order.date, ) \
+        #     .where(or_(Order.status == 'paid',
+        #                Order.status == 'prepared',
+        #                Order.status == 'ready',
+        #                Order.status == 'canceled_restaurant',
+        #                Order.status == 'delivered',
+        #                Order.status == 'success',
+        #                Order.status == 'canceled_delivery',
+        #                )).all()
+
+        orders = (db.session.query(Order.order_id,
+                                   Order.text,
+                                   Order.address,
+                                   Order.date,
+                                   Order.status,
+                                   db.func.sum(OrderProduct.price).label('price'),
+                                   db.func.string_agg(CardProduct.name, ', ').label('name'),
+                                   db.func.string_agg(cast(OrderProduct.amount, sqlalchemy.String), ', ')
+                                   .label('amount'),
+                                   db.func.string_agg(cast(CardProduct.image, sqlalchemy.String), ', ')
+                                   .label('image')).
+                  join(OrderProduct, Order.order_id == OrderProduct.order_id)
+                  .join(CardProduct, OrderProduct.card_id == CardProduct.card_id)
+                  .group_by(Order.order_id,
+                            Order.text,
+                            Order.date)
+                  .all())
+
+        # преобразует строки с множеством значений в словари для последующей сериализации
+        list_dicts_orders = []
+        for row in orders:
+            for i in range(len(row)):
+
+                if i == 6:
+                    list_cards = [list(a) for a in (zip(row[6].split(', '),
+                                                        row[7].split(', '),
+                                                        list(map(lambda image:
+                                                                 url_for('static', filename=image),
+                                                                 row[8].split(', ')))))]
+                    list_dicts_cards = []
+                    for i in list_cards:
+                        dicts = {}
+                        for j in range(len(i)):
+                            if j == 0:
+                                dicts['name'] = i[j]
+                            if j == 1:
+                                dicts['amount'] = i[j]
+                            else:
+                                dicts['image'] = i[j]
+                        list_dicts_cards.append(dicts)
+
+            row = {'order_id': row.order_id, 'text': row.text, 'address': row.address, 'date': row.date, 'status': row.status,
+                   'price': row.price, 'cards': list_dicts_cards}
+
+            list_dicts_orders.append(row)
+
+        return list_dicts_orders
 
     # сработает когда нажимают на кнопку рядом с заказом - принято к выполнению, готово, отменить
     @restaurant_login_required(current_user)
