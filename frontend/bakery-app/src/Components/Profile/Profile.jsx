@@ -6,6 +6,8 @@ import OrdersTracking from './OrdersTracking/OrdersTracking';
 import ProductsTracking from './ProductsTracking/ProductsTracking';
 import UserInformation from './UserInformation/UserInformation';
 import Workers from './Workers/Workers';
+import ProductEditor from './ProductEditor/ProductEditor';
+import NewOrders from './NewOrders/NewOrders';
 
 function Profile(props) {
 
@@ -26,6 +28,12 @@ function Profile(props) {
           <Route
             path='products'
             element={<ProductsTracking />} />
+          <Route
+            path='editor/*'
+            element={<ProductEditor/>} />
+          <Route
+            path='neworders'
+            element={<NewOrders/>} />
         </React.Fragment> : ''}
 
         {props.authorization.userType === 'main_admin' ? <React.Fragment>

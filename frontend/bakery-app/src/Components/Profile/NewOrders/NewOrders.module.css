@@ -1,0 +1,71 @@
+.neworder_container {
+    
+}
+
+.title {
+    font-size: 30px;
+    margin-top: 70px;
+    margin-bottom: 30px;
+}
+
+.neworder_item {
+    margin: 0px 100px;
+    border: 1px solid black;
+    min-height: 160px;
+    padding: 10px;
+    margin-bottom: 26px;
+    border-radius: 10px;
+
+    display: flex;
+}
+
+.selected {
+    border: 2px solid red;
+    color: red;
+}
+
+.neworder_information{
+    width: 40%;
+    border-right: 1px solid black;
+}
+
+.neworder_name_id {
+    font-size: 30px;
+}
+
+.neworder_date {
+    margin-bottom: 20px;
+}
+
+.fixed_actions_container {
+    left: -16px;
+    padding-left: 16px;
+    bottom: 0px;
+    width: 100%;
+    min-height: 100px;
+    position: fixed;
+    background-color: rgb(232, 232, 232);
+    box-shadow: 0px -5px 5px -5px rgba(34, 60, 80, 0.6);
+}
+
+
+.neworder_products {
+    flex-grow: 1;
+}
+
+
+.neworder_item table{
+    font-size: 18px;
+    
+}
+
+.neworder_item td {
+    padding-left: 40px;
+    padding-bottom: 5px;
+}
+
+.neworder_title {
+    text-align: center;
+    font-size: 24px;
+    
+}

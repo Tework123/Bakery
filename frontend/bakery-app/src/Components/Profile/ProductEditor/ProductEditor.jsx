@@ -1,6 +1,8 @@
-import classes from './ProductAddChange.module.css';
+import { useState } from 'react';
+import classes from './ProductEditor.module.css';
+import axios from 'axios';
 
-function ProductAddChange(props) {
+function ProductEditor(props) {
   
   const [cards, setCards] = useState([])
   const [selectedImage, setSelectedImage] = useState(null);
@@ -28,13 +30,14 @@ function ProductAddChange(props) {
   }
   
   return (
-    <div className={classes.productchange_container}>
-      <div>
-        <div>Название</div>
+    <div className={classes.editor_container}>
+      <header className={classes.title}>Редактирование товара</header>
+      <div className={classes.editor_input_field}>
+        <div className={classes.editor_input_name}>Название</div>
         <input></input>
       </div>
-      <div>
-        <div>Словесное описание</div>
+      <div className={classes.editor_input_field}>
+        <div className={classes.editor_input_name}>Описание</div>
         <input></input>
       </div>
       <form encType="multipart/form-data" >
@@ -52,4 +55,4 @@ function ProductAddChange(props) {
   );
 }
 
-export default ProductAddChange;
+export default ProductEditor;
