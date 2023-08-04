@@ -107,30 +107,34 @@ function AppWrapper(props) {
 
   //функции отвечающие за добавление и удаление товаров корзины
   const changeBasket = ({ action, id }) => {
-debugger
-    let newBasket = [...basketProducts];
-    let changeIndex = null;
 
-    basketProducts.forEach((element, index) => {
-      if (element.card_id === id) {
-        changeIndex = index;
+    axios.patch('/basket', {action:action, card_id: id}).then(() => {
+      let newBasket = [...basketProducts];
+      let changeIndex = null;
+  
+      basketProducts.forEach((element, index) => {
+        if (element.card_id === id) {
+          changeIndex = index;
+        }
+      });
+      
+      if (action === '+') {
+        newBasket[changeIndex].amount++;
+      } else if (action === '-') {
+        if (newBasket[changeIndex].amount === 1) {
+          newBasket.splice(changeIndex, 1);
+        } else {
+          newBasket[changeIndex].amount--;
+        }
       }
-    });
+      setBasketProducts(newBasket)
+    })
     
-    if (action === '+') {
-      newBasket[changeIndex].amount++;
-    } else if (action === '-') {
-      if (newBasket[changeIndex].amount === 1) {
-        newBasket.splice(changeIndex, 1);
-      } else {
-        newBasket[changeIndex].amount--;
-      }
-    }
-    setBasketProducts(newBasket)
   }
 
   const addProduct = (product) => {
-
+    console.log(product);
+    axios.patch('/basket', {action:'+', card_id: product.card_id}).then(() => {
     if (props.authorization.isAuthorizated) {
       let newBasket = [...basketProducts];
       let changeIndex = null;
@@ -151,6 +155,7 @@ debugger
     } else {
       alert('Нельзя пока не авторизован')
     }
+  })
   }
 
 

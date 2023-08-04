@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import classes from './ProductEditor.module.css';
 import axios from 'axios';
+import ProductCard from '../../Content/ProductCard/ProductCard'
 
 function ProductEditor(props) {
   
@@ -31,6 +32,7 @@ function ProductEditor(props) {
   
   return (
     <div className={classes.editor_container}>
+      <div className={classes.editor_edit}>
       <header className={classes.title}>Редактирование товара</header>
       <div className={classes.editor_input_field}>
         <div className={classes.editor_input_name}>Название</div>
@@ -38,6 +40,10 @@ function ProductEditor(props) {
       </div>
       <div className={classes.editor_input_field}>
         <div className={classes.editor_input_name}>Описание</div>
+        <input></input>
+      </div>
+      <div className={classes.editor_input_field}>
+        <div className={classes.editor_input_name}>Цена</div>
         <input></input>
       </div>
       <form encType="multipart/form-data" >
@@ -51,6 +57,10 @@ function ProductEditor(props) {
         <button type='button' onClick={submitImage}>Отправить картинку</button>
       </form>
       <img alt="image from server not loaded" src={testImage}/>
+      </div>
+      <div className={classes.editor_preview}>
+        <ProductCard product={''}/>
+      </div>
     </div>
   );
 }
