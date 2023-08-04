@@ -186,7 +186,7 @@ class PassOrders(Resource):
                                                        Order.status == 'delivered',
                                                        Order.status == 'success',
                                                        Order.status == 'canceled_delivery',
-                                                       ))).all()
+                                                       ))).order_by(Order.date.desc()).all()
 
         # преобразует строки с множеством значений в словари для последующей сериализации
         list_dicts_pass_orders = pass_orders_to_list_dicts(pass_orders)
@@ -233,7 +233,7 @@ class CurrentOrders(Resource):
                                                           Order.status == 'canceled_restaurant',
                                                           Order.status == 'delivered',
                                                           Order.status == 'canceled_delivery',
-                                                          )).all())
+                                                          )).order_by(Order.date.desc()).all())
 
         # преобразует строки с множеством значений в словари для последующей сериализации
         list_dicts_current_orders = current_orders_to_list_dicts(current_orders)

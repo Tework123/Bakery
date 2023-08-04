@@ -110,6 +110,13 @@ def add_cards_base():
 
 def add_orders_base():
     baskets = []
+    user_id = [3, 4, 5, 6, 7]
+    for i in range(len(user_id)):
+        basket = Order(user_id=user_id[i], status='basket')
+        baskets.append(basket)
+    db.session.add_all(baskets)
+    db.session.commit()
+
     for i in range(1, 40):
         user_id = random.randrange(3, 8)
         texts = random.choices([
@@ -120,17 +127,17 @@ def add_orders_base():
         address = random.choices(['Белгородская область, город Воскресенск, ул. Славы, 07',
                                   'Ярославская область, город Дорохово, проезд Гагарина, 76',
                                   'Московская область, город Одинцово, спуск Гоголя, 98',
-                                  'Ленинградская область, город Орехово-Зуево, бульвар Бухарестская, 48',
+                                  'Ленинградская область, город Орехово-Зуево, бульвар Беляша, 48',
                                   'Челябинская область, город Кетозник, наб. Котлетова, 26',
                                   'Омская область, город Щекино, пр. Каршеринга, 16',
                                   'Смоленская область, город Дорохово, въезд Домодедовская, 60',
-                                  'Кировская область, город Ногинск, пл. Ладыгина, 33'],
+                                  'Кировская область, город Винница, пл. Величайшего, 33'],
                                  weights=(1, 1, 1, 1, 1, 1, 1, 1), k=1)
 
         date = datetime.now()
-        status_paid = random.choices(['paid', 'success', 'basket'], weights=[1, 3, 1], k=1)
+        status_paid = random.choices(['paid', 'success'], weights=[1, 3], k=1)
         basket = Order(user_id=user_id, text=texts, address=address,
-                       date=date - timedelta(minutes=random.randrange(5, 180)),
+                       date=date - timedelta(minutes=random.randrange(10, 3000)),
                        status=status_paid[0])
         baskets.append(basket)
     db.session.add_all(baskets)

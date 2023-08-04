@@ -1,6 +1,7 @@
 import datetime
 from flask import jsonify
 from flask_login import current_user
+from sqlalchemy import and_
 
 from application import db
 from application.auth.auth import login_required
@@ -31,8 +32,8 @@ class Index(Resource):
                                           CardProduct.image,
                                           OrderProduct.price).join(OrderProduct,
                                                                    Order.order_id == OrderProduct.order_id).join(
-            CardProduct, OrderProduct.card_id == CardProduct.card_id, isouter=True).where(
-            Order.user_id == current_user.user_id, Order.status == 'basket').all()
+            CardProduct, OrderProduct.card_id == CardProduct.card_id, isouter=True).where(and_(
+            Order.user_id == current_user.user_id, Order.status == 'basket')).all()
 
         if not order_products:
             response = {'data': 'Корзина пустая'}
@@ -55,6 +56,7 @@ class Index(Resource):
         if basket is None:
             basket = Order(user_id=current_user.user_id)
             db.session.add(basket)
+            db.session.commit()
         order_product = OrderProduct.query.filter_by(order_id=basket.order_id, card_id=data['card_id']).first()
 
         # если такой товар уже есть в корзине, то нужно увеличить его amount на один
@@ -72,10 +74,13 @@ class Index(Resource):
                 order_product.price -= card.price
                 response = jsonify({'data': f'Товар {card.name} удален из корзины'})
 
-        else:
+        elif data['action'] == '+':
             order_product = OrderProduct(order_id=basket.order_id, card_id=data['card_id'], price=card.price)
             db.session.add(order_product)
             response = jsonify({'data': f'Товар {card.name} первый раз добавлен в корзину'})
+
+        elif data['action'] == '-':
+            response = jsonify({'data': f'Товара {card.name} еще нет в корзине'})
 
         db.session.commit()
         response.status_code = 200
@@ -110,6 +115,7 @@ class Buy(Resource):
     # потом этот адрес запоминается,
     card_fields = {
         'data': fields.String,
+        'date': fields.DateTime,
         'order_id': fields.Integer,
         'amount': fields.Integer,
         'name': fields.String,
