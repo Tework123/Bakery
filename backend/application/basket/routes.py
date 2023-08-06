@@ -1,5 +1,6 @@
 import datetime
-from flask import jsonify
+from flask import jsonify, request, make_response
+from flask_cors import cross_origin
 from flask_login import current_user
 from sqlalchemy import and_
 
@@ -7,12 +8,14 @@ from application import db
 from application.auth.auth import login_required
 from application.basket import api_basket
 from application.basket.fields_validation import basket_data, basket_data_delete
+from application.basket.service import get_order_products, get_card_product, get_basket, create_basket, \
+    get_order_product
 
 from application.models import CardProduct, Order, OrderProduct
 from flask_restful import Resource, marshal_with, fields
 
 
-class Index(Resource):
+class UserIndex(Resource):
     card_fields = {
         'data': fields.String,
         'order_id': fields.Integer,
@@ -27,13 +30,7 @@ class Index(Resource):
     @login_required(current_user)
     @marshal_with(card_fields)
     def get(self):
-        order_products = db.session.query(Order.order_id, Order.user_id, OrderProduct.card_id, OrderProduct.amount,
-                                          CardProduct.name,
-                                          CardProduct.image,
-                                          OrderProduct.price).join(OrderProduct,
-                                                                   Order.order_id == OrderProduct.order_id).join(
-            CardProduct, OrderProduct.card_id == CardProduct.card_id, isouter=True).where(and_(
-            Order.user_id == current_user.user_id, Order.status == 'basket')).all()
+        order_products = get_order_products(current_user)
 
         if not order_products:
             response = {'data': 'Корзина пустая'}
@@ -43,21 +40,39 @@ class Index(Resource):
 
     @login_required(current_user)
     def patch(self):
+        print(current_user)
+        print(current_user)
+
+        # response = jsonify({'data': '123'})
+        # origin = request.headers.get('Origin')
+        # if request.method == 'OPTIONS':
+        #     response = make_response()
+        #     response.headers.add('Access-Control-Allow-Credentials', 'true')
+        #     response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        #     response.headers.add('Access-Control-Allow-Headers', 'x-csrf-token')
+        #     response.headers.add('Access-Control-Allow-Methods',
+        #                          'GET, POST, OPTIONS, PUT, PATCH, DELETE')
+        #     if origin:
+        #         response.headers.add('Access-Control-Allow-Origin', origin)
+        # else:
+        #     response.headers.add('Access-Control-Allow-Credentials', 'true')
+        #     if origin:
+        #         response.headers.add('Access-Control-Allow-Origin', origin)
+
+        # return response
 
         data = basket_data.parse_args()
 
-        card = CardProduct.query.filter_by(card_id=data['card_id']).first()
+        card = get_card_product(data['card_id'])
         if card is None:
             response = jsonify({'data': f'Такой товар не существует'})
             response.status_code = 200
             return response
 
-        basket = Order.query.filter_by(user_id=current_user.user_id, status='basket').first()
+        basket = get_basket(current_user.user_id)
         if basket is None:
-            basket = Order(user_id=current_user.user_id)
-            db.session.add(basket)
-            db.session.commit()
-        order_product = OrderProduct.query.filter_by(order_id=basket.order_id, card_id=data['card_id']).first()
+            create_basket(current_user.user_id)
+        order_product = get_order_product(basket.order_id, data['card_id'])
 
         # если такой товар уже есть в корзине, то нужно увеличить его amount на один
         if order_product and data['action'] == '+':
@@ -83,6 +98,7 @@ class Index(Resource):
             response = jsonify({'data': f'Товара {card.name} еще нет в корзине'})
 
         db.session.commit()
+
         response.status_code = 200
         return response
 
@@ -157,5 +173,5 @@ class Buy(Resource):
         return order_products
 
 
-api_basket.add_resource(Index, '/')
+api_basket.add_resource(UserIndex, '/')
 api_basket.add_resource(Buy, '/buy')

@@ -12,6 +12,7 @@ from flask_restful import Resource, marshal_with, fields
 from application.profile import api_profile
 from application.profile.fields_validation import profile_data, email_validation
 from application.profile.helpers import orders_to_list_dicts
+from application.profile.service import get_user, get_orders
 
 
 class Profile(Resource):
@@ -23,8 +24,8 @@ class Profile(Resource):
     @login_required(current_user)
     @marshal_with(profile_fields)
     def get(self):
-        profile = User.query.filter_by(user_id=current_user.user_id).first()
-        return profile
+        user = get_user(current_user.user_id)
+        return user
 
     @login_required(current_user)
     def patch(self):
@@ -69,23 +70,7 @@ class Orders(Resource):
     @login_required(current_user)
     @marshal_with(card_fields)
     def get(self):
-        orders = (db.session.query(Order.order_id,
-                                   Order.text,
-                                   Order.date,
-                                   Order.status,
-                                   db.func.sum(OrderProduct.price).label('price'),
-                                   db.func.string_agg(CardProduct.name, ', ').label('name'),
-                                   db.func.string_agg(cast(OrderProduct.amount, sqlalchemy.String), ', ')
-                                   .label('amount'),
-                                   db.func.string_agg(cast(CardProduct.image, sqlalchemy.String), ', ')
-                                   .label('image')).
-                  join(OrderProduct, Order.order_id == OrderProduct.order_id)
-                  .join(CardProduct, OrderProduct.card_id == CardProduct.card_id)
-                  .group_by(Order.order_id,
-                            Order.text,
-                            Order.date)
-                  .where(and_(Order.user_id == current_user.user_id, Order.status != 'basket')).order_by(
-            Order.date.desc()).all())
+        orders = get_orders(current_user.user_id)
 
         # преобразует строки с множеством значений в словари для последующей сериализации
         list_dicts_orders = orders_to_list_dicts(orders)

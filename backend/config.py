@@ -14,6 +14,8 @@ class Config(object):
 
     # flask-login settings for user backend cookies on frontend
     REMEMBER_COOKIE_HTTPONLY = False
+    SESSION_COOKIE_HTTPONLY = False
+    SESSION_COOKIE_SECURE = True
 
     # mail settings
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
