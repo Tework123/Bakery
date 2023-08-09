@@ -42,7 +42,7 @@ function UserOrders(props) {
     axios.get('/profile/orders').then((responce)=> {
       setUserOrders(responce.data)
     })
-      axios.get('/main').then((responce) => {
+      axios.get('/main/main').then((responce) => {
         console.log(responce.data);
       })
   }, [])
