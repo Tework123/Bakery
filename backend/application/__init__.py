@@ -22,9 +22,10 @@ celery = Celery(__name__, broker='redis://127.0.0.1:6379')
 
 def create_app(config):
     app = Flask(__name__)
-    cors = CORS(app, origins="*", supports_credentials=True)
+    CORS(app, supports_credentials=True)
 
     app.config.from_object(config)
+
     app.json.sort_keys = False
 
     sentry_sdk.init(

@@ -8,6 +8,7 @@ from flask_restful import Resource
 from . import api_auth
 from .fields_validation import login_email_data, login_email_validation, login_email_code_data, \
     login_email_code_validation
+from .service import get_user, create_user
 from ..auth.auth import create_code, example_users_validation
 from ..email.email import send_email_authentication, celery_task_send_email_authentication
 
@@ -31,7 +32,7 @@ class LoginEmail(Resource):
             response.status_code = 200
             return response
 
-        user = User.query.filter_by(email=email).first()
+        user = get_user(email)
         code = create_code()
 
         # если есть такой email в базе, но куков нет, то отправляется код на email
@@ -40,7 +41,6 @@ class LoginEmail(Resource):
             db.session.commit()
 
             # отправка кода на email
-
             send_email_authentication(data['email'], code)
             celery_task_send_email_authentication(data['email'], code)
 
@@ -49,12 +49,7 @@ class LoginEmail(Resource):
             return response
 
         # если такого email нет, то он добавляется в базу, отправляется код
-        user = User(email=email, role='user', code=code)
-        db.session.add(user)
-        user = User.query.filter_by(email=email).first()
-        basket = Order(user_id=user.user_id)
-        db.session.add(basket)
-        db.session.commit()
+        create_user(email, code)
         send_email_authentication(data['email'], code)
         celery_task_send_email_authentication(data['email'], code)
 
@@ -74,7 +69,7 @@ class LoginEmailCode(Resource):
         login_email_code_validation(data)
 
         code = int(data['code'])
-        user = User.query.filter_by(email=data['email']).first()
+        user = get_user(data['email'])
 
         if user.code != code:
             response = jsonify({'data': 'Код неверный'})

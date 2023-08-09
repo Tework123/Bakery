@@ -1,5 +1,7 @@
 import os
 
+from flask import request, make_response
+
 from config import DevelopmentConfig
 from config import ProductionConfig
 
@@ -12,3 +14,5 @@ else:
     CONFIG = ProductionConfig()
 
 app = create_app(CONFIG)
+
+

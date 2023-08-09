@@ -12,6 +12,8 @@ from application.models import CardProduct, Order, OrderProduct
 from application.restaurant import api_restaurant
 from application.restaurant.fields_validation import card_data, card_delete_data, card_patch_data, order_patch_data
 from application.restaurant.helpers import pass_orders_to_list_dicts, current_orders_to_list_dicts
+from application.restaurant.service import get_all_cards_product, add_card_product, delete_card_product, \
+    get_card_product, get_pass_orders, get_current_orders
 from start_app import CONFIG
 
 
@@ -32,8 +34,7 @@ class Cards(Resource):
     @restaurant_login_required(current_user)
     @marshal_with(card_fields)
     def get(self):
-        cards = CardProduct.query.all()
-
+        cards = get_all_cards_product()
         cards_dicts = []
         for row in cards:
             row = {'card_id': row.card_id, 'name': row.name, 'price': row.price,
@@ -57,9 +58,7 @@ class Cards(Resource):
             data['image'].save(file_path)
 
         try:
-            card = CardProduct(name=data['name'], price=data['price'], image=image.filename)
-            db.session.add(card)
-            db.session.flush()
+            add_card_product(data['name'], data['price'], image)
         except:
             db.session.rollback()
             response = jsonify({'data': 'Названия товара и картинки должны быть уникальными'})
@@ -74,7 +73,7 @@ class Cards(Resource):
     @restaurant_login_required(current_user)
     def delete(self):
         data = card_delete_data.parse_args()
-        card = CardProduct.query.filter_by(card_id=data['card_id']).first()
+        card = get_card_product(data['card_id'])
         if card is None:
             response = jsonify({'data': 'Такого товара нет'})
             response.status_code = 200
@@ -88,8 +87,7 @@ class Cards(Resource):
         if os.path.exists(file_path):
             os.remove(file_path)
 
-        CardProduct.query.filter_by(card_id=data['card_id']).delete()
-        db.session.commit()
+        delete_card_product(data['card_id'])
 
         response = jsonify({'data': 'Товар удален успешно'})
         response.status_code = 200
@@ -98,7 +96,7 @@ class Cards(Resource):
     @restaurant_login_required(current_user)
     def patch(self):
         data = card_patch_data.parse_args()
-        card = CardProduct.query.filter_by(card_id=data['card_id']).first()
+        card = get_card_product(data['card_id'])
         if card is None:
             response = jsonify({'data': 'Данный товар не найден'})
             response.status_code = 200
@@ -166,27 +164,7 @@ class PassOrders(Resource):
     @restaurant_login_required(current_user)
     @marshal_with(card_fields)
     def get(self):
-        pass_orders = (db.session.query(Order.order_id,
-                                        Order.text,
-                                        Order.address,
-                                        Order.date,
-                                        Order.status,
-                                        db.func.sum(OrderProduct.price).label('price'),
-                                        db.func.string_agg(CardProduct.name, ', ').label('name'),
-                                        db.func.string_agg(cast(OrderProduct.amount, sqlalchemy.String), ', ')
-                                        .label('amount'))
-                       .join(OrderProduct, Order.order_id == OrderProduct.order_id)
-                       .join(CardProduct, OrderProduct.card_id == CardProduct.card_id)
-                       .group_by(Order.order_id,
-                                 Order.text,
-                                 Order.date).where(or_(Order.status == 'paid',
-                                                       Order.status == 'prepared',
-                                                       Order.status == 'ready',
-                                                       Order.status == 'canceled_restaurant',
-                                                       Order.status == 'delivered',
-                                                       Order.status == 'success',
-                                                       Order.status == 'canceled_delivery',
-                                                       ))).order_by(Order.date.desc()).all()
+        pass_orders = get_pass_orders()
 
         # преобразует строки с множеством значений в словари для последующей сериализации
         list_dicts_pass_orders = pass_orders_to_list_dicts(pass_orders)
@@ -214,26 +192,7 @@ class CurrentOrders(Resource):
     @marshal_with(card_fields)
     def get(self):
 
-        current_orders = (db.session.query(Order.order_id,
-                                           Order.text,
-                                           Order.address,
-                                           Order.date,
-                                           Order.status,
-                                           db.func.sum(OrderProduct.price).label('price'),
-                                           db.func.string_agg(CardProduct.name, ', ').label('name'),
-                                           db.func.string_agg(cast(OrderProduct.amount, sqlalchemy.String), ', ')
-                                           .label('amount')).
-                          join(OrderProduct, Order.order_id == OrderProduct.order_id)
-                          .join(CardProduct, OrderProduct.card_id == CardProduct.card_id)
-                          .group_by(Order.order_id,
-                                    Order.text,
-                                    Order.date).where(or_(Order.status == 'paid',
-                                                          Order.status == 'prepared',
-                                                          Order.status == 'ready',
-                                                          Order.status == 'canceled_restaurant',
-                                                          Order.status == 'delivered',
-                                                          Order.status == 'canceled_delivery',
-                                                          )).order_by(Order.date.desc()).all())
+        current_orders = get_current_orders()
 
         # преобразует строки с множеством значений в словари для последующей сериализации
         list_dicts_current_orders = current_orders_to_list_dicts(current_orders)
@@ -264,9 +223,6 @@ class CurrentOrders(Resource):
         return response
 
 
-# если выносить в отдельную функцию запрос к базе из трех роутов, то если надо изменить в одном, то
-# поменяется везде, а может быть не надо менять везде. Короче надо сделать models или что-то типо такого
-# в каждой папке, чтобы можно было туда все sql запросы скинуть и разгрузить логику
 api_restaurant.add_resource(Index, '/')
 api_restaurant.add_resource(Cards, '/cards')
 api_restaurant.add_resource(CurrentOrders, '/current_orders')

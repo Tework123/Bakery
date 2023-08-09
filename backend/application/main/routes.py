@@ -1,7 +1,10 @@
 from flask import jsonify, url_for
+from flask_login import current_user
 from flask_restful import Resource, fields, marshal_with
+
+from application.main.service import get_all_cards, get_one_card
+from application.auth.auth import login_required
 from application.main import api_main
-from application.models import CardProduct
 
 
 class Index(Resource):
@@ -12,9 +15,10 @@ class Index(Resource):
         'image': fields.String
     }
 
+    @login_required(current_user)
     @marshal_with(card_fields)
     def get(self):
-        cards = CardProduct.query.all()
+        cards = get_all_cards()
 
         cards_dicts = []
         for row in cards:
@@ -35,7 +39,7 @@ class Cards(Resource):
 
     @marshal_with(card_fields)
     def get(self, card_id):
-        card = CardProduct.query.filter_by(card_id=card_id).first()
+        card = get_one_card(card_id)
         if card is None:
             response = jsonify({'data': 'Такого товара нет'})
         else:
