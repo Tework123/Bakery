@@ -6,7 +6,7 @@ import Header from '../Header/Header';
 import Navbar from '../Navbar/Navbar';
 import classes from './AppWrapper.module.css';
 import React, { useEffect, useState } from 'react';
-import { Route, Routes, useParams } from 'react-router-dom';
+import { Route, Routes} from 'react-router-dom';
 import ModalWindow from '../ModalWindow/ModalWindow';
 import Profile from '../Profile/Profile';
 import axios from 'axios';
@@ -108,7 +108,7 @@ function AppWrapper(props) {
   //функции отвечающие за добавление и удаление товаров корзины
   const changeBasket = ({ action, id }) => {
 
-    axios.patch('/basket', {action:action, card_id: id}).then(() => {
+    axios.patch('/basket', {action:action, card_id: id}).then((responce) => {
       let newBasket = [...basketProducts];
       let changeIndex = null;
   
@@ -127,7 +127,7 @@ function AppWrapper(props) {
           newBasket[changeIndex].amount--;
         }
       }
-      setBasketProducts(newBasket)
+      setBasketProducts(newBasket);
     })
     
   }
