@@ -1,3 +1,5 @@
+import logging
+
 from flask import jsonify, url_for
 from flask_login import current_user
 from flask_restful import Resource, fields, marshal_with
@@ -24,6 +26,11 @@ class Cards(Resource):
             row = {'card_id': row.card_id, 'name': row.name, 'price': row.price,
                    'image': url_for('static', filename=row.image)}
             cards_dicts.append(row)
+
+        log = logging.getLogger('tester.sub')
+
+        for i in cards_dicts:
+            log.warning(i)
 
         return cards_dicts
 
