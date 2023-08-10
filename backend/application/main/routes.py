@@ -15,7 +15,6 @@ class Cards(Resource):
         'image': fields.String
     }
 
-    @login_required(current_user)
     @marshal_with(card_fields)
     def get(self):
         cards = get_all_cards()
