@@ -24,7 +24,7 @@ function Content(props) {
 
 
   useEffect(() => {
-    axios.get('/main').then((responce) => {
+    axios.get('/main/', { withCredentials: true }).then((responce) => {
       setCards(responce.data)
     })
   }, [])

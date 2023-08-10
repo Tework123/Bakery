@@ -98,7 +98,7 @@ function AppWrapper(props) {
   const [basketProducts, setBasketProducts] = useState([])
   useEffect(() => {
     if (props.authorization.isAuthorizated) {
-      axios.get('/basket').then((responce) => {
+      axios.get('/basket/').then((responce) => {
         setBasketProducts(responce.data)
       })
     }
@@ -108,7 +108,7 @@ function AppWrapper(props) {
   //функции отвечающие за добавление и удаление товаров корзины
   const changeBasket = ({ action, id }) => {
 
-    axios.patch('/basket', {action:action, card_id: id}).then((responce) => {
+    axios.patch('/basket/', {action:action, card_id: id}).then((responce) => {
       let newBasket = [...basketProducts];
       let changeIndex = null;
   
@@ -134,7 +134,7 @@ function AppWrapper(props) {
 
   const addProduct = (product) => {
     console.log(product);
-    axios.patch('/basket', {action:'+', card_id: product.card_id}).then(() => {
+    axios.patch('/basket/', {action:'+', card_id: product.card_id}).then(() => {
     if (props.authorization.isAuthorizated) {
       let newBasket = [...basketProducts];
       let changeIndex = null;

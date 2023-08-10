@@ -8,7 +8,7 @@ function UserInformation(props) {
 
   const exitFromAccount = () => {
     props.authorization.unAuthorize();
-    navigate("../../main");
+    navigate("../../");
   }
 
   return (

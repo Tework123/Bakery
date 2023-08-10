@@ -7,7 +7,7 @@ from application.auth.auth import login_required
 from application.main import api_main
 
 
-class Index(Resource):
+class Cards(Resource):
     card_fields = {
         'card_id': fields.Integer,
         'name': fields.String,
@@ -15,7 +15,6 @@ class Index(Resource):
         'image': fields.String
     }
 
-    @login_required(current_user)
     @marshal_with(card_fields)
     def get(self):
         cards = get_all_cards()
@@ -29,7 +28,7 @@ class Index(Resource):
         return cards_dicts
 
 
-class Cards(Resource):
+class Card(Resource):
     card_fields = {
         'card_id': fields.Integer,
         'name': fields.String,
@@ -49,5 +48,5 @@ class Cards(Resource):
         return jsonify({'data': response})
 
 
-api_main.add_resource(Index, '/')
-api_main.add_resource(Cards, '/<int:card_id>')
+api_main.add_resource(Cards, '/')
+api_main.add_resource(Card, '/<int:card_id>')
