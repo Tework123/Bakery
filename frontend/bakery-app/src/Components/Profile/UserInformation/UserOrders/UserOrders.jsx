@@ -41,14 +41,7 @@ function UserOrders(props) {
   useEffect(() => {
     axios.get('/profile/orders').then((responce)=> {
       setUserOrders(responce.data)
-    })
-<<<<<<< HEAD
-=======
-      axios.get('/main/').then((responce) => {
-        console.log(responce.data);
-      })
->>>>>>> ac56ae5dbecc4cfbd14868f13a938da2b49ca96b
-  }, [])
+    })})
 
   return (
     <div className={classes.userorders_container}>
