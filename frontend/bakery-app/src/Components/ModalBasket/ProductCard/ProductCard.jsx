@@ -5,14 +5,14 @@ function ProductCard(props) {
 
 
   const onClickPlus = () => {
-    axios.patch('/basket', {action: '+', card_id: props.product.card_id}).then((responce) => {
+    axios.patch('/basket/', {action: '+', card_id: props.product.card_id}).then((responce) => {
       props.changeBasket({action: '+', id: props.product.card_id})
       console.log(props.name + " добавлен в корзину");   
     })
   }
 
   const onClickMinus = () => {
-    axios.patch('/basket', {action: '-', card_id: props.product.card_id}).then((responce) => {
+    axios.patch('/basket/', {action: '-', card_id: props.product.card_id}).then((responce) => {
       props.changeBasket({action: '-', id: props.product.card_id})
       console.log(props.name + " удален из корзины");
     })

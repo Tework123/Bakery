@@ -1,9 +1,6 @@
 import datetime
-from flask import jsonify, request, make_response
-from flask_cors import cross_origin
+from flask import jsonify
 from flask_login import current_user
-from sqlalchemy import and_
-
 from application import db
 from application.auth.auth import login_required
 from application.basket import api_basket
@@ -15,7 +12,7 @@ from application.models import CardProduct, Order, OrderProduct
 from flask_restful import Resource, marshal_with, fields
 
 
-class UserIndex(Resource):
+class Basket(Resource):
     card_fields = {
         'data': fields.String,
         'order_id': fields.Integer,
@@ -40,27 +37,6 @@ class UserIndex(Resource):
 
     @login_required(current_user)
     def patch(self):
-        print(current_user)
-        print(current_user)
-
-        # response = jsonify({'data': '123'})
-        # origin = request.headers.get('Origin')
-        # if request.method == 'OPTIONS':
-        #     response = make_response()
-        #     response.headers.add('Access-Control-Allow-Credentials', 'true')
-        #     response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
-        #     response.headers.add('Access-Control-Allow-Headers', 'x-csrf-token')
-        #     response.headers.add('Access-Control-Allow-Methods',
-        #                          'GET, POST, OPTIONS, PUT, PATCH, DELETE')
-        #     if origin:
-        #         response.headers.add('Access-Control-Allow-Origin', origin)
-        # else:
-        #     response.headers.add('Access-Control-Allow-Credentials', 'true')
-        #     if origin:
-        #         response.headers.add('Access-Control-Allow-Origin', origin)
-
-        # return response
-
         data = basket_data.parse_args()
 
         card = get_card_product(data['card_id'])
@@ -173,5 +149,5 @@ class Buy(Resource):
         return order_products
 
 
-api_basket.add_resource(UserIndex, '/')
+api_basket.add_resource(Basket, '/')
 api_basket.add_resource(Buy, '/buy')
