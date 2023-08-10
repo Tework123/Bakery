@@ -53,8 +53,6 @@ function App() {
   }
 
 
-
-
   //Routing
   const router = createBrowserRouter([
     {
