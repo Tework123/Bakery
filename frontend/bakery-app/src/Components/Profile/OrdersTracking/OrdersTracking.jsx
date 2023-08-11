@@ -8,7 +8,7 @@ function OrdersTracking(props) {
   const [orders, setOrders] = useState([])
 
   useEffect(() => {
-    axios.get('/restaurant/orders').then((responce) => {
+    axios.get('orders/current_orders').then((responce) => {
       setOrders(responce.data)
     })
   })

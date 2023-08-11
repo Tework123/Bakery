@@ -95,7 +95,7 @@ def add_cards_base():
               'булочка с изюмом.jpeg', 'булочка с клубникой.jpeg',
               'булочка с яблоком.jpeg', 'бутер.jpeg',
               'пирожок с мясом.jpeg', 'самса.jpeg',
-              'сырник.jpeg', 'шаурма.jpeg']
+              'сырник.jpeg', 'shrek.jpg']
 
     cards = []
     for i in range(len(names)):

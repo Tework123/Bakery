@@ -39,7 +39,7 @@ function UserOrders(props) {
   const [userOrders, setUserOrders] = useState([]);
 
   useEffect(() => {
-    axios.get('/profile/orders').then((responce)=> {
+    axios.get('/pass_orders').then((responce)=> {
       setUserOrders(responce.data)
     })
   }, [])
