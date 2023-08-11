@@ -11,10 +11,16 @@
 }
 
 .card_image {
-    height: 90px;
-    width: 90px;
-    border: 1px solid red;
     margin-right: 8px;
+    height: 80px;
+    width: 80px;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.card_image img {
+    height: 100%;
+    width: 100%;
 }
 
 .card_description {

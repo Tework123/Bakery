@@ -20,7 +20,7 @@ function ProductCard(props) {
       </div>
       <footer className={classes.card_bottom_place}>
         <div className={classes.card_price}>
-          {props.product.price}
+          {props.product.price + "₽"}
         </div>
         <div className={classes.card_button__container}>
           <button onClick={onClickAddProduct}>В корзину</button>

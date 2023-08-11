@@ -18,7 +18,7 @@ function Header(props) {
   return (
     <header className={classes.header_container}>
       <div className={classes.header_main}>
-        <NavLink to='/main'>
+        <NavLink to='../'>
           <div>Logo</div>
           <div>Телефон, адрес</div>
         </NavLink>

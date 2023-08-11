@@ -4,11 +4,6 @@ import axios from 'axios';
 function Navbar(props) {
 
 
-  const onClickProfileTest = () => {
-    axios.get('/profile/pass_orders').then((response) => {
-      console.log(response.data);
-    })   
-  }
   return (
     <nav className={classes.navbar_container}>
       <div className={classes.navbar_logo + " " + classes.item}>

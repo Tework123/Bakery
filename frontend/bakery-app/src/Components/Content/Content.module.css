@@ -1,10 +1,19 @@
 .content_container {
-    background-color: white;
+    
+    color: white;
+    background: repeating-linear-gradient(
+  90deg,
+  #57330d,
+  #57330d 50px,
+  #3c2309 50px,
+  #3c2309 100px
+);
     flex-grow: 1;
     padding: 0 100px;
 }
 
 .content_header {
+    padding-top: 40px;
     text-align: center;
 }
 

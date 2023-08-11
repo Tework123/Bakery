@@ -1,0 +1,21 @@
+.carusel {
+    position: relative;
+    width: inherit;
+    height: inherit;
+    margin: 0 auto;
+}
+
+.buttonSwitch {
+    z-index: 10;
+    position: absolute;
+    display: inline-block;
+    top: 48%
+}
+
+.goLeftBut {
+    left: 22%;
+}
+
+.goRightBut {
+    right: 22%;
+}

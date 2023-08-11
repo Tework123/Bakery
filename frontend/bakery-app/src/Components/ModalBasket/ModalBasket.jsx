@@ -29,7 +29,12 @@ function ModalBasket(props) {
 
         </div>
         <div ref={ref} className={classes.modalbasket_window} style={{ ...styleModalWindow, ...styleModalContainer }}>
-          {!props.isAuthorizated ? undefined :
+          {!props.isAuthorizated || props.basketProducts.length === 0 ? 
+            <div className={classes.modalbasket_empty}>
+              <span>Упс, кажется, ваша коризина пуста.</span>
+              <span>Выберите товары из каталога</span>
+            </div>
+          :
             <React.Fragment>
               <div className={classes.modalbasket_description_line}>
               </div>

@@ -101,7 +101,7 @@ function AppWrapper(props) {
       axios.get('/basket/').then((responce) => {
         setBasketProducts(responce.data)
       })
-    }
+    } 
   }, [])
 
 
