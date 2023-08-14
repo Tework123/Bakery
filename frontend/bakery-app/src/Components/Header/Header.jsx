@@ -25,7 +25,7 @@ function Header(props) {
         <div className={classes.right_actions}>
           {props.isAuthorizated ?
           <NavLink
-            to='/profile/information'>
+            to='/account/information'>
             <div className={classes.item} onClick={onClickProfileTest}>
               Личный кабинет
             </div>

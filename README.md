@@ -8,7 +8,7 @@
 
 ## Стартовая страница сайта: 
 
-![булочка с яблоком](https://github.com/Tework123/Bakery/assets/115368408/3fee89c2-36c2-493d-9026-5191ce5d7470)
+![image](https://github.com/Tework123/Bakery/assets/115368408/b390d93f-fc53-40cf-a13e-99534999984c)
 
 
 ## Использованные технологии:
@@ -63,6 +63,9 @@ Also:
 ## Документация api(postman):
 
 https://documenter.getpostman.com/view/25883857/2s946k6B7S
+
+![image](https://github.com/Tework123/Bakery/assets/115368408/08d2515f-d409-42e5-b2bc-2e6837c54434)
+
 
 ## Макеты страниц:
 

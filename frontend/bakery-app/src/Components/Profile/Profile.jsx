@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './Profile.module.css';
 import NavbarEmployeeProfile from './NavbarEmployeeProfile/NavbarEmployeeProfile';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import OrdersTracking from './OrdersTracking/OrdersTracking';
 import ProductsTracking from './ProductsTracking/ProductsTracking';
 import UserInformation from './UserInformation/UserInformation';
