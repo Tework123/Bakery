@@ -58,33 +58,42 @@ class TestRestaurantUnauthorized:
 
         assert response.status_code == 200
         assert response.get_json() == [{'card_id': 1,
-                                        'image': 'блины с мясом.jpeg',
+                                        'image': '/static/%D0%B1%D0%BB%D0%B8%D0%BD%D1%8B%20%D1%81%20%D0%BC%D1%8F%D1%81%D0%BE%D0%BC.jpeg',
                                         'name': 'блины с мясом',
                                         'price': 100},
                                        {'card_id': 2,
-                                        'image': 'булочка с вишней.jpeg',
+                                        'image': '/static/%D0%B1%D1%83%D0%BB%D0%BE%D1%87%D0%BA%D0%B0%20%D1%81%20%D0%B2%D0%B8%D1%88%D0%BD%D0%B5%D0%B9.jpeg',
                                         'name': 'булочка с вишней',
                                         'price': 200},
                                        {'card_id': 3,
-                                        'image': 'булочка с изюмом.jpeg',
+                                        'image': '/static/%D0%B1%D1%83%D0%BB%D0%BE%D1%87%D0%BA%D0%B0%20%D1%81%20%D0%B8%D0%B7%D1%8E%D0%BC%D0%BE%D0%BC.jpeg',
                                         'name': 'булочка с изюмом',
                                         'price': 150},
                                        {'card_id': 4,
-                                        'image': 'булочка с клубникой.jpeg',
+                                        'image': '/static/%D0%B1%D1%83%D0%BB%D0%BE%D1%87%D0%BA%D0%B0%20%D1%81%20%D0%BA%D0%BB%D1%83%D0%B1%D0%BD%D0%B8%D0%BA%D0%BE%D0%B9.jpeg',
                                         'name': 'булочка с клубникой',
                                         'price': 120},
                                        {'card_id': 5,
-                                        'image': 'булочка с яблоком.jpeg',
+                                        'image': '/static/%D0%B1%D1%83%D0%BB%D0%BE%D1%87%D0%BA%D0%B0%20%D1%81%20%D1%8F%D0%B1%D0%BB%D0%BE%D0%BA%D0%BE%D0%BC.jpeg',
                                         'name': 'булочка с яблоком',
                                         'price': 300},
-                                       {'card_id': 6, 'image': 'бутер.jpeg', 'name': 'бутер', 'price': 140},
+                                       {'card_id': 6,
+                                        'image': '/static/%D0%B1%D1%83%D1%82%D0%B5%D1%80.jpeg',
+                                        'name': 'бутер',
+                                        'price': 140},
                                        {'card_id': 7,
-                                        'image': 'пирожок с мясом.jpeg',
+                                        'image': '/static/%D0%BF%D0%B8%D1%80%D0%BE%D0%B6%D0%BE%D0%BA%20%D1%81%20%D0%BC%D1%8F%D1%81%D0%BE%D0%BC.jpeg',
                                         'name': 'пирожок с мясом',
                                         'price': 120},
-                                       {'card_id': 8, 'image': 'самса.jpeg', 'name': 'самса', 'price': 180},
-                                       {'card_id': 9, 'image': 'сырник.jpeg', 'name': 'сырник', 'price': 100},
-                                       {'card_id': 10, 'image': 'шаурма.jpeg', 'name': 'шаурма', 'price': 70}]
+                                       {'card_id': 8,
+                                        'image': '/static/%D1%81%D0%B0%D0%BC%D1%81%D0%B0.jpeg',
+                                        'name': 'самса',
+                                        'price': 180},
+                                       {'card_id': 9,
+                                        'image': '/static/%D1%81%D1%8B%D1%80%D0%BD%D0%B8%D0%BA.jpeg',
+                                        'name': 'сырник',
+                                        'price': 100},
+                                       {'card_id': 10, 'image': '/static/shrek.jpg', 'name': 'шаурма', 'price': 70}]
 
     # Не понятно, как сохранять картинки в локальном хранилище пайтест. Какой в этом смысл,
     # я не смогу отправить картинку на ручку, валидатор не пропустит, лучше тогда просто из базы
@@ -119,8 +128,11 @@ class TestRestaurantUnauthorized:
         assert response.status_code == 401
         assert response.get_json() == {'data': 'Вы не зашли в аккаунт'}
 
+    # падают тесты, потому что команду заполнения базы надо редактировать, list_index_error
+    # 'date': response[0]['date'],
+
     def test_restaurant_orders_get(self, client):
-        response = client.get('/restaurant/orders')
+        response = client.get('/restaurant/current_orders')
 
         assert response.status_code == 200
         response = response.get_json()

@@ -35,6 +35,7 @@ class Cards(Resource):
         return cards_dicts
 
 
+# надо посмотреть, что выводит фронт в картинках, тестировать на компе, а то этот долго собирает
 class Card(Resource):
     card_fields = {
         'card_id': fields.Integer,

@@ -19,19 +19,17 @@ server {
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
-    root /usr/share/nginx/html;
-
+    root   /usr/share/nginx/html;
 
     location / {
 
-        try_files $uri $uri/ =404;
-        add_header Cache-Control "no-cache";
+        try_files $uri $uri/ /index.html;
+        index  index.html index.htm;
 
     }
 
-    location /static {
-        expires 1y;
-        add_header Cache-Control "public";
+     location backend/application/static {
+        include /etc/nginx/mime.types;
     }
 
     location /admin {
@@ -53,9 +51,8 @@ server {
         proxy_pass http://backend:5000/cards/;
     }
 
-    location /main {
-
-        proxy_pass http://backend:5000/main/;
+    location /api {
+        proxy_pass http://backend:5000/api/;
     }
     location /profile {
 

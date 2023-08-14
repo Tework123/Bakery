@@ -56,46 +56,47 @@ class TestBasketAuthorized:
         assert response.status_code == 200
         assert response.get_json() == {'amount': 0,
                                        'data': 'Корзина пустая',
+                                       'date': None,
                                        'image': None,
                                        'name': None,
                                        'order_id': 0,
                                        'price': 0}
 
     def test_basket_patch_not_found(self, client):
-        response = client.patch('/basket/', json={'card_id': 112000})
+        response = client.patch('/basket/', json={'card_id': 112000, "action": "+"})
 
         assert response.status_code == 200
         assert response.get_json() == {'data': 'Такой товар не существует'}
 
     def test_basket_delete_not_found(self, client):
-        response = client.delete('/basket/', json={'card_id': 112000})
+        response = client.delete('/basket/', json={'card_id': 112000, "action": "+"})
 
         assert response.status_code == 200
         assert response.get_json() == {'data': 'В вашей корзине нет такого товара'}
 
     def test_basket_patch_success(self, client):
-        response = client.patch('/basket/', json={'card_id': 1})
+        response = client.patch('/basket/', json={'card_id': 1, "action": "+"})
 
         assert response.status_code == 200
-        assert response.get_json() == {'data': 'Товар блины с мясом добавлен в корзину'}
+        assert response.get_json() == {'data': 'Товар блины с мясом первый раз добавлен в корзину'}
 
     def test_basket_delete_success(self, client):
-        response = client.delete('/basket/', json={'card_id': 1})
+        response = client.delete('/basket/', json={'card_id': 1, "action": "-"})
 
         assert response.status_code == 200
-        assert response.get_json() == {'data': 'Товар удален из корзины'}
+        assert response.get_json() == {'data': 'Товар удален окончательно из корзины'}
 
     def test_basket_patch_success_2(self, client):
-        response = client.patch('/basket/', json={'card_id': 1})
+        response = client.patch('/basket/', json={'card_id': 1, "action": "+"})
 
         assert response.status_code == 200
-        assert response.get_json() == {'data': 'Товар блины с мясом добавлен в корзину'}
+        assert response.get_json() == {'data': 'Товар блины с мясом первый раз добавлен в корзину'}
 
     def test_basket_patch_success_3(self, client):
-        response = client.patch('/basket/', json={'card_id': 2})
+        response = client.patch('/basket/', json={'card_id': 2, "action": "+"})
 
         assert response.status_code == 200
-        assert response.get_json() == {'data': 'Товар булочка с вишней добавлен в корзину'}
+        assert response.get_json() == {'data': 'Товар булочка с вишней первый раз добавлен в корзину'}
 
     def test_basket_get_full(self, client):
         response = client.get('/basket/')
@@ -106,17 +107,17 @@ class TestBasketAuthorized:
                                         'data': None,
                                         'image': 'блины с мясом.jpeg',
                                         'name': 'блины с мясом',
-                                        'order_id': 12,
+                                        'order_id': 13,
                                         'price': 100,
-                                        'user_id': 8},
+                                        'user_id': 9},
                                        {'amount': 1,
                                         'card_id': 2,
                                         'data': None,
                                         'image': 'булочка с вишней.jpeg',
                                         'name': 'булочка с вишней',
-                                        'order_id': 12,
+                                        'order_id': 13,
                                         'price': 200,
-                                        'user_id': 8}]
+                                        'user_id': 9}]
 
     def test_basket_buy_get_full(self, client):
         response = client.get('/basket/buy')
@@ -124,15 +125,17 @@ class TestBasketAuthorized:
         assert response.status_code == 200
         assert response.get_json() == [{'amount': 1,
                                         'data': None,
+                                        'date': None,
                                         'image': 'блины с мясом.jpeg',
                                         'name': 'блины с мясом',
-                                        'order_id': 12,
+                                        'order_id': 13,
                                         'price': 100},
                                        {'amount': 1,
                                         'data': None,
+                                        'date': None,
                                         'image': 'булочка с вишней.jpeg',
                                         'name': 'булочка с вишней',
-                                        'order_id': 12,
+                                        'order_id': 13,
                                         'price': 200}]
 
     def test_auth_logout(self, client):
