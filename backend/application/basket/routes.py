@@ -1,5 +1,5 @@
 import datetime
-from flask import jsonify
+from flask import jsonify, url_for
 from flask_login import current_user
 from application import db
 from application.auth.auth import login_required
@@ -14,7 +14,6 @@ from flask_restful import Resource, marshal_with, fields
 
 class Basket(Resource):
     card_fields = {
-        'data': fields.String,
         'order_id': fields.Integer,
         'user_id': fields.Integer,
         'card_id': fields.Integer,
@@ -30,10 +29,18 @@ class Basket(Resource):
         order_products = get_order_products(current_user)
 
         if not order_products:
-            response = {'data': 'Корзина пустая'}
+            response = {'name': 'Корзина пустая'}
             return response, 200
 
-        return order_products
+        basket_dicts = []
+        for row in order_products:
+            row = {'order_id': row.order_id, 'user_id': row.user_id,
+                   'image': url_for('static', filename=row.image),
+                   'card_id': row.card_id, 'amount': row.amount, 'name': row.name,
+                   'price': row.price}
+            basket_dicts.append(row)
+
+        return basket_dicts
 
     @login_required(current_user)
     def patch(self):

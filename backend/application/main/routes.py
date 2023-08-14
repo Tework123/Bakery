@@ -20,17 +20,16 @@ class Cards(Resource):
     @marshal_with(card_fields)
     def get(self):
         cards = get_all_cards()
-
         cards_dicts = []
         for row in cards:
             row = {'card_id': row.card_id, 'name': row.name, 'price': row.price,
                    'image': url_for('static', filename=row.image)}
             cards_dicts.append(row)
 
-        log = logging.getLogger('tester.sub')
+        # log = logging.getLogger('tester.sub')
 
-        for i in cards_dicts:
-            log.warning(i)
+        # for i in cards_dicts:
+        #     log.warning(i)
 
         return cards_dicts
 

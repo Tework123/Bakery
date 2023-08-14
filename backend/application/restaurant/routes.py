@@ -139,6 +139,25 @@ class Cards(Resource):
         return response
 
 
+class Card(Resource):
+    card_fields = {
+        'card_id': fields.Integer,
+        'name': fields.String,
+        'price': fields.Integer,
+        'image': fields.String
+    }
+
+    # здесь отправка картинок и всего остального для работников ресторана(тут с кнопками)
+    @restaurant_login_required(current_user)
+    @marshal_with(card_fields)
+    def get(self, card_id):
+        card = get_card_product(card_id)
+
+        card.image = url_for('static', filename=card.image)
+
+        return card
+
+
 class PassOrders(Resource):
     # заполнение корзины: basket, оплата: paid, кухня: prepared, ready,
     # canceled_restaurant, курьер: delivered, success, canceled_delivery
@@ -225,5 +244,6 @@ class CurrentOrders(Resource):
 
 api_restaurant.add_resource(Index, '/')
 api_restaurant.add_resource(Cards, '/cards')
+api_restaurant.add_resource(Card, '/cards/<int:card_id>')
 api_restaurant.add_resource(CurrentOrders, '/current_orders')
 api_restaurant.add_resource(PassOrders, '/pass_orders')
