@@ -4,14 +4,14 @@ import pytest
 @pytest.mark.usefixtures('client')
 class TestProfileUnauthorized:
 
-    def test_profile_current_orders_get(self, client):
-        response = client.get('/profile/current_orders')
+    def test_profile_orders_get(self, client):
+        response = client.get('/profile/orders')
 
         assert response.status_code == 401
         assert response.get_json() == {'data': 'Вы не зашли в аккаунт'}
 
-    def test_profile_pass_orders_get(self, client):
-        response = client.get('/profile/pass_orders')
+    def test_profile_get(self, client):
+        response = client.get('/profile/')
 
         assert response.status_code == 401
         assert response.get_json() == {'data': 'Вы не зашли в аккаунт'}
@@ -23,8 +23,8 @@ class TestProfileAuthorized:
     def test_auth(self, client):
         response = client.post('/auth/login', json={"email": "user@mail.ru"})
 
-    def test_profile_current_orders_get(self, client):
-        response = client.get('/profile/current_orders')
+    def test_profile_orders_get(self, client):
+        response = client.get('/profile/orders')
 
         assert response.status_code == 200
         assert response.get_json() == [{'address': None,
@@ -35,18 +35,13 @@ class TestProfileAuthorized:
                                         'status': 'paid',
                                         'text': None}]
 
-    def test_profile_pass_orders_get(self, client):
-        response = client.get('/profile/pass_orders')
-
-        assert response.status_code == 200
-        assert response.get_json() == []
-
     def test_profile_pass_orders_1_get(self, client):
-        response = client.get('/profile/pass_orders/1')
+        response = client.get('/profile/orders/1')
 
         assert response.status_code == 200
         assert response.get_json() == {'amount': None,
                                        'data': 'У вас нет такого заказа',
+                                       'image': None,
                                        'name': None,
                                        'order_id': 0,
                                        'price': 0,

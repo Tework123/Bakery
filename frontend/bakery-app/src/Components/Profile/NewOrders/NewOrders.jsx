@@ -24,7 +24,7 @@ function NewOrders(props) {
 
 
   useEffect(() => {
-    axios.get('/restaurant/orders').then((responce) => {
+    axios.get('/restaurant/current_orders').then((responce) => {
       setOrders(responce.data.map(order => ({...order, selected: false})))
     })
   }, [])

@@ -8,4 +8,4 @@ RUN npm run build
 
 FROM nginx:1.25-alpine
 COPY --from=build-step /app/build /usr/share/nginx/html
-COPY deployment/nginx/nginx1.default.conf /etc/nginx/conf.d/default.conf
+COPY deployment/nginx/sdfsf /etc/nginx/conf.d/default.conf
