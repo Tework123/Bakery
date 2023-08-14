@@ -35,8 +35,8 @@ function Chapter(props) {
       </div>
       <div className={classes.chapter_products}>
         
-          {rowsProducts.map((row) =>
-          <div className={classes.chapter_products_row}>
+          {rowsProducts.map((row, index) =>
+          <div className={classes.chapter_products_row} key={index}>
             {row.map(product => <ProductCard product={product} addProduct={props.addProduct} key={product.card_id}/>)}
           </div>
       )}

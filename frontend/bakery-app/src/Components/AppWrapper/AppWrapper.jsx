@@ -216,7 +216,7 @@ function AppWrapper(props) {
   return (
     <div className={classes.wrapper} style={style}>
       <Routes>
-        <Route path='/profile/*' element={profilePage} />
+        <Route path='/account/*' element={profilePage} />
         <Route path='/*' element={mainPage} />        
       </Routes>
     </div>
