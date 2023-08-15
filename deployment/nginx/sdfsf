@@ -30,6 +30,8 @@ server {
 
      location backend/application/static {
         include /etc/nginx/mime.types;
+                root /root/Bakery/backend/application/static/;
+
     }
 
     location /admin {
