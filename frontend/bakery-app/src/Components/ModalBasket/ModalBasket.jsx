@@ -22,6 +22,7 @@ function ModalBasket(props) {
     styleModalContainer = { display: 'none' }
     styleModalWindow = {right: 450}
   }
+  console.log(props.basketProducts);
 
     return (
       <div className={classes.modalbasket_main} style={styleModalContainer} onWheel={(e) => { onScrollContainer(e) }}>
@@ -29,7 +30,7 @@ function ModalBasket(props) {
 
         </div>
         <div ref={ref} className={classes.modalbasket_window} style={{ ...styleModalWindow, ...styleModalContainer }}>
-          {!props.isAuthorizated || props.basketProducts.length === 0 ? 
+          {!props.isAuthorizated || props.basketProducts.length === 0 || props.basketProducts.name === 'Корзина пустая'? 
             <div className={classes.modalbasket_empty}>
               <span>Упс, кажется, ваша коризина пуста.</span>
               <span>Выберите товары из каталога</span>

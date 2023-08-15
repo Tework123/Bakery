@@ -9,11 +9,24 @@
 }
 
 .editor_input_field input{
-    background-color: #F3F3F3;
     border: 0.6px solid rgba(0, 0, 0, 0.119);
     border-radius: 6px;
     height: 35px;
     width: 350px;
     padding-left: 5px;
     margin-bottom: 20px;
+}
+
+.editor_input_field input:focus{ 
+    border: 0.6px solid rgba(0, 0, 0, 0.4);
+    box-shadow: 0px -1px 10px 2px rgba(34, 60, 80, 0.1);
+}
+
+
+.editor_input_name {
+    margin-bottom: 10px;
+}
+
+.description input{
+    height: 200px;
 }

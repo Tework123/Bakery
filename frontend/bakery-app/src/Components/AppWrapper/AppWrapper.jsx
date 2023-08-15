@@ -14,7 +14,7 @@ import { useResize } from '../../Hooks/useResize';
 
 function AppWrapper(props) {
   
-
+  
   const test_data = [
 
     {
@@ -97,11 +97,13 @@ function AppWrapper(props) {
   //Корзина и продукты в ней
   const [basketProducts, setBasketProducts] = useState([])
   useEffect(() => {
-    if (props.authorization.isAuthorizated) {
+    debugger 
+    if (props.authorization.cookiesCheck()) {
       axios.get('/basket/').then((responce) => {
         setBasketProducts(responce.data)
       })
     } 
+    debugger
   }, [])
 
 

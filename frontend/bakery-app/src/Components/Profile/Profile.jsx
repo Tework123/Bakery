@@ -11,7 +11,7 @@ import NewOrders from './NewOrders/NewOrders';
 
 function Profile(props) {
 
-
+  
 
   return (
     <div className={classes.profile_container}>
@@ -29,7 +29,7 @@ function Profile(props) {
             path='products'
             element={<ProductsTracking />} />
           <Route
-            path='editor/*'
+            path='editor/:card_id'
             element={<ProductEditor/>} />
           <Route
             path='neworders'

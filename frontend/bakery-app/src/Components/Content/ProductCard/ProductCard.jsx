@@ -6,6 +6,7 @@ function ProductCard(props) {
   const onClickAddProduct = () => {
     props.addProduct(props.product)
   }
+  
 
   return (
     <div className={classes.card_container}>

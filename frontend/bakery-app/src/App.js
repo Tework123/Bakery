@@ -11,27 +11,32 @@ let login;
 function App() {
 
   const [userType, setUserType] = useState('')
-  
-  useEffect(() => {
-      if (Cookies.get('remember_token2') === undefined) {
-        setUserType('');
-        setIsAuthorizated(false)
-      } else if (Cookies.get('remember_token2') === 'user') {
-        setUserType('user');
-        setIsAuthorizated(true);
-      } else if (Cookies.get('remember_token2') === 'restaurant') {
-        setUserType('restaurant')
-        setIsAuthorizated(true);
-      } else if (Cookies.get('remember_token2') === 'main_admin') {
-        setUserType('main_admin')
-        setIsAuthorizated(true);
-      } else {
-        alert('Неизвестный пользователь')
-      }
-  })
-  
-  
+
   const [isAuthorizated, setIsAuthorizated] = useState(false)
+  
+  const cookiesCheck = () => {
+    debugger
+    if (Cookies.get('remember_token2') === undefined) {
+      setUserType('');
+      setIsAuthorizated(false)
+      return(false)
+    } else if (Cookies.get('remember_token2') === 'user') {
+      setUserType('user');
+      setIsAuthorizated(true);
+      return(true)
+    } else if (Cookies.get('remember_token2') === 'restaurant') {
+      setUserType('restaurant')
+      setIsAuthorizated(true);
+      return(true)
+    } else if (Cookies.get('remember_token2') === 'main_admin') {
+      setUserType('main_admin')
+      setIsAuthorizated(true);
+      return(true)
+    } else {
+      alert('Неизвестный пользователь')
+      return(false)
+    }
+  }
   
   const authorize = (loginText) => {
     if (loginText === 'user@mail.ru') {
@@ -57,7 +62,7 @@ function App() {
   const router = createBrowserRouter([
     {
       path: '*',
-      element: <AppWrapper authorization={{isAuthorizated: isAuthorizated, authorize:authorize, userType: userType, setUserType: setUserType, unAuthorize: unAuthorize}} />
+      element: <AppWrapper authorization={{isAuthorizated: isAuthorizated, authorize:authorize, userType: userType, setUserType: setUserType, unAuthorize: unAuthorize, cookiesCheck: cookiesCheck}} />
     }
   ])
 

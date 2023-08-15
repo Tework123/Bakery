@@ -1,20 +1,28 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import classes from './ProductEditor.module.css';
 import axios from 'axios';
 import ProductCard from '../../Content/ProductCard/ProductCard'
+import { useParams } from 'react-router-dom';
 
 function ProductEditor(props) {
   
-  const [cards, setCards] = useState([])
   const [selectedImage, setSelectedImage] = useState(null);
-  const [image, setImage] = useState(null)
-  const [testImage, setTestImage] = useState('')
+  const {card_id} = useParams()
+  let product;
+
+  useEffect(() => {
+    if (card_id !== 'new') {
+      axios.get(`/restaurant/cards/${card_id}`).then((response) => {
+        product = response.data;
+        console.log(response.data);
+      })
+    }
+  }, [])
+  
 
   const chooseFileImage = (e) => {
-    setImage(URL.createObjectURL(e.target.files[0]))
-    console.log(image);
-    setSelectedImage(e.target.files[0])
-    console.log(e.target.files[0]);
+    setSelectedImage(URL.createObjectURL(e.target.files[0]))
+    console.log(selectedImage);
   }
 
   const submitImage = () => {
@@ -34,15 +42,15 @@ function ProductEditor(props) {
     <div className={classes.editor_container}>
       <div className={classes.editor_edit}>
       <header className={classes.title}>Редактирование товара</header>
-      <div className={classes.editor_input_field}>
+      <div className={classes.editor_input_field + " " + classes.name}>
         <div className={classes.editor_input_name}>Название</div>
         <input></input>
       </div>
-      <div className={classes.editor_input_field}>
+      <div className={classes.editor_input_field  + " " + classes.description}>
         <div className={classes.editor_input_name}>Описание</div>
         <input></input>
       </div>
-      <div className={classes.editor_input_field}>
+      <div className={classes.editor_input_field + " " + classes.price}>
         <div className={classes.editor_input_name}>Цена</div>
         <input></input>
       </div>
@@ -56,10 +64,9 @@ function ProductEditor(props) {
         />
         <button type='button' onClick={submitImage}>Отправить картинку</button>
       </form>
-      <img alt="image from server not loaded" src={testImage}/>
       </div>
       <div className={classes.editor_preview}>
-        <ProductCard product={''}/>
+        <ProductCard product={product} test={true}/>
       </div>
     </div>
   );

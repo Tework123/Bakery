@@ -24,8 +24,9 @@ function Content(props) {
 
 
   useEffect(() => {
-    axios.get('/main/', { withCredentials: true }).then((responce) => {
+    axios.get('/main/').then((responce) => {
       setCards(responce.data)
+      console.log(responce.data[0].image);
     })
   }, [])
 

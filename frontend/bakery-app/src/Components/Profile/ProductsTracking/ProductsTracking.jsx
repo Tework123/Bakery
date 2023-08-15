@@ -27,10 +27,12 @@ function ProductsTracking(props) {
     },
   ])
 
+
   useEffect(() => {
-    /*axios.get('/restaurant/cards').then((responce) => {
+    axios.get('/main/').then((responce) => {
+      setProducts(responce.data)
       console.log(responce.data);
-    })*/
+    })
   }, [])
 
   const openProductEditor = (id) => {
@@ -57,8 +59,8 @@ function ProductsTracking(props) {
         </thead>
         <tbody>
           {products.map(product => (
-            <tr onClick={e => openProductEditor(product.id)}>
-              <td>{product.id}</td>
+            <tr onClick={e => openProductEditor(product.card_id)}>
+              <td>{product.card_id}</td>
               <td>{product.name}</td>
               <td>{product.category}</td>
             </tr>))}
