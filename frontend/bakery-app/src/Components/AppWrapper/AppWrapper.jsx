@@ -97,13 +97,11 @@ function AppWrapper(props) {
   //Корзина и продукты в ней
   const [basketProducts, setBasketProducts] = useState([])
   useEffect(() => {
-    debugger 
     if (props.authorization.cookiesCheck()) {
       axios.get('/basket/').then((responce) => {
         setBasketProducts(responce.data)
       })
     } 
-    debugger
   }, [])
 
 

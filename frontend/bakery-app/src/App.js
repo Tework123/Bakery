@@ -15,7 +15,6 @@ function App() {
   const [isAuthorizated, setIsAuthorizated] = useState(false)
   
   const cookiesCheck = () => {
-    debugger
     if (Cookies.get('remember_token2') === undefined) {
       setUserType('');
       setIsAuthorizated(false)

@@ -6,7 +6,6 @@ import ButtonSwitch from './ButtonSwitch/ButtonSwitch';
 const images = ['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'gray']
 const componentImages = [images[images.length - 1], images[0],images[1],images[2]]
 
-console.log(componentImages)
 function Carusel(props) {
 
   

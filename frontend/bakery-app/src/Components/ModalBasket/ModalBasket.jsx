@@ -22,7 +22,6 @@ function ModalBasket(props) {
     styleModalContainer = { display: 'none' }
     styleModalWindow = {right: 450}
   }
-  console.log(props.basketProducts);
 
     return (
       <div className={classes.modalbasket_main} style={styleModalContainer} onWheel={(e) => { onScrollContainer(e) }}>
@@ -40,7 +39,7 @@ function ModalBasket(props) {
               <div className={classes.modalbasket_description_line}>
               </div>
               <div className={classes.modalbasket_busketproducts}>
-                {props.basketProducts.map((product) => <ProductCard product={product} changeBasket={props.changeBasket} />)}
+                {props.basketProducts.map((product) => <ProductCard product={product} changeBasket={props.changeBasket} key={product.card_id}/>)}
               </div>
               <div className={classes.modalbasket_optional_offer}>
 
