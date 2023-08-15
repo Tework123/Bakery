@@ -8,16 +8,14 @@ function ProductEditor(props) {
   
   const [selectedImage, setSelectedImage] = useState(null);
   const {card_id} = useParams()
-  let product;
+  const [product, setProduct] = useState()
 
-  useEffect(() => {
-    if (card_id !== 'new') {
-      axios.get(`/restaurant/cards/${card_id}`).then((response) => {
-        product = response.data;
-        console.log(response.data);
-      })
-    }
-  }, [])
+  if (card_id !== 'new') {
+    axios.get(`/restaurant/cards/${card_id}`).then((response) => {
+      product = response.data;
+      console.log(response.data);
+    })
+  }
   
 
   const chooseFileImage = (e) => {
