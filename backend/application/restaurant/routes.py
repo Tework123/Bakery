@@ -10,7 +10,8 @@ from application import db
 from application.auth.auth import restaurant_login_required
 from application.models import CardProduct, Order, OrderProduct
 from application.restaurant import api_restaurant
-from application.restaurant.fields_validation import card_data, card_delete_data, card_patch_data, order_patch_data
+from application.restaurant.fields_validation import card_data, card_delete_data, card_patch_data, order_patch_data, \
+    card_data_validation
 from application.restaurant.helpers import pass_orders_to_list_dicts, current_orders_to_list_dicts
 from application.restaurant.service import get_all_cards_product, add_card_product, delete_card_product, \
     get_card_product, get_pass_orders, get_current_orders
@@ -48,11 +49,13 @@ class Cards(Resource):
     def post(self):
 
         data = card_data.parse_args()
+        print(data)
+        card_data_validation(data)
 
         image = data['image']
 
         # сохранение полученной картинки
-        file_path = CONFIG.basepath + 'application/static/' + image.filename
+        file_path = CONFIG.basepath + 'application/back_static/' + image.filename
 
         if not os.path.exists(file_path):
             data['image'].save(file_path)
@@ -66,7 +69,7 @@ class Cards(Resource):
             return response
 
         db.session.commit()
-        response = jsonify({'data': 'Товар добавлен успешно'})
+        response = jsonify({'data': f'Товар добавлен успешно {image}, {image.filename}'})
         response.status_code = 200
         return response
 

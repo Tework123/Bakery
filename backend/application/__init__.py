@@ -21,7 +21,9 @@ celery = Celery(__name__, broker='redis://127.0.0.1:6379')
 
 
 def create_app(config):
-    app = Flask(__name__)
+    # app = Flask(__name__, static_folder='../../frontend/bakery-app/build/static/',
+    #             )
+    app = Flask(__name__, static_folder='back_static')
     CORS(app, supports_credentials=True)
 
     app.config.from_object(config)

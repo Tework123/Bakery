@@ -1,3 +1,4 @@
+import flask_restful
 from werkzeug.datastructures import FileStorage
 from flask_restful import reqparse
 
@@ -6,6 +7,14 @@ card_data = reqparse.RequestParser()
 card_data.add_argument('name', type=str, location='form', help='Требуется имя товара', required=True)
 card_data.add_argument('price', type=int, location='form', help='Требуется цена товара', required=True)
 card_data.add_argument('image', type=FileStorage, location='files', help='Требуется картинка товара', required=True)
+
+
+# возможно, надо везде прописать?  Хотя для картинок, для картинки надо по другому проверить, там класс
+def card_data_validation(data):
+    for i in data.items():
+        if i[1] == '':
+            flask_restful.abort(400, error=f'Пустое поле: {i[0]}')
+
 
 # как то записать фоточку товара сюда
 
@@ -29,5 +38,3 @@ card_patch_data.add_argument('image', type=FileStorage, location='files', help='
 order_patch_data = reqparse.RequestParser()
 order_patch_data.add_argument('order_id', type=str, help='Нужен id заказа', required=True)
 order_patch_data.add_argument('action', type=str, help='Нужен action заказа', required=True)
-
-
