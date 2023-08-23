@@ -23,7 +23,10 @@ services:
       - ./deployment/nginx:/etc/nginx/conf.d
       - ./deployment/certbot/conf:/etc/letsencrypt
       - ./deployment/certbot/www:/var/www/certbot
+
     command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+    depends_on:
+      - backend
 
   certbot:
     container_name: certbot
@@ -68,3 +71,6 @@ services:
       - BACKUP_KEEP_WEEKS=4
       - BACKUP_KEEP_MONTHS=6
       - HEALTHCHECK_PORT=81
+
+volumes:
+  static-volume:

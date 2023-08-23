@@ -1,36 +1,41 @@
+
 server {
-    listen 80;
-    server_name tework123.ru;
+        listen 80;
+        server_name tework123.ru;
 
-    location /.well-known/acme-challenge/ {
-        root /var/www/certbot;
+        location /.well-known/acme-challenge/ {
+            root /var/www/certbot;
+        }
+
+        location / {
+            return 301 https://tework123.ru$request_uri;
+        }
     }
 
-    location / {
-        return 301 https://tework123.ru$request_uri;
-    }
-
-}
 server {
     listen 443 ssl;
     server_name tework123.ru;
+
     ssl_certificate /etc/letsencrypt/live/tework123.ru/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/tework123.ru/privkey.pem;
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
     root   /usr/share/nginx/html;
+    index  index.html;
+
 
     location / {
 
-        try_files $uri $uri/ /index.html;
-        index  index.html index.htm;
+        try_files $uri $uri/ =404;
 
     }
 
-     location backend/application/static {
-        include /etc/nginx/mime.types;
+    location /back_static {
+        proxy_pass http://backend:5000/back_static;
+
     }
+
 
     location /admin {
 
@@ -51,8 +56,9 @@ server {
         proxy_pass http://backend:5000/cards/;
     }
 
-    location /api {
-        proxy_pass http://backend:5000/api/;
+    location /main {
+        proxy_pass http://backend:5000/main/;
+
     }
     location /profile {
 

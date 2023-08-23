@@ -24,7 +24,9 @@ function Content(props) {
 
 
   useEffect(() => {
-    axios.get('/main/').then((responce) => {
+    axios.get('/main/', {headers: {
+      'Content-Type': 'image/jpeg',
+  }}).then((responce) => {
       setCards(responce.data)
       console.log(responce.data[0].image);
     })
