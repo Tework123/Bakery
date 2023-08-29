@@ -2,8 +2,23 @@
     margin-top: 40px;
 }
 
+
 .title {
     font-size: 30px;
     margin-top: 70px;
     margin-bottom: 30px;
+}
+
+.add_worker_button {
+    margin-bottom: 16px;
+    display: block;
+    background-color: rgb(224, 224, 224);
+    border-radius: 10px;
+    padding: 10px 10px;
+    margin-right: 0;
+}
+
+.workers_list {
+    display: flex;
+    flex-wrap: wrap;
 }

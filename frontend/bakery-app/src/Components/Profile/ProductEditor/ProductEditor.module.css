@@ -30,3 +30,29 @@
 .description input{
     height: 200px;
 }
+
+.editor_preview {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.save_product {
+    width: 350px;
+    background-color: #F39D12;
+    border-radius: 24px;
+    padding: 10px;
+    margin: 20px 0 10px 0;
+    font-size: 20px;
+}
+
+.delete_product {
+    color: white;
+    width: 350px;
+    background-color: #ca1919;
+    border-radius: 24px;
+    padding: 10px;
+    margin: 0px 0px 20px;
+    font-size: 20px;
+}

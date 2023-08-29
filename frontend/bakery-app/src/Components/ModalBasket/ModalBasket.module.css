@@ -49,6 +49,9 @@
 
 
 .modalbasket_empty {
+    text-align: center;
+    font-size: 20px;
+    margin-top: 500px;
     display: flex;
     justify-content: center;
     align-items: center;

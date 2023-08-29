@@ -9,13 +9,31 @@ function ProductEditor(props) {
   const [selectedImage, setSelectedImage] = useState(null);
   const {card_id} = useParams()
   const [product, setProduct] = useState()
+  const [name, setName] = useState('')
+  const [price, setPrice] = useState(0)
+  const [description, setDescription] = useState('')
 
-  if (card_id !== 'new') {
-    axios.get(`/restaurant/cards/${card_id}`).then((response) => {
-      product = response.data;
-      console.log(response.data);
-    })
+  const onChangeName = (e) => {
+    setName(e.target.value)
+  } 
+  
+  const onChangeDescription = (e) => {
+    
   }
+  const onChangePrice = (e) => {
+    setPrice(e.target.value)
+  }
+
+  useEffect(() => {
+    if (card_id !== 'new') {
+      axios.get(`/restaurant/cards/${card_id}`).then((response) => {
+        setProduct(response.data)
+        setName(response.data.name)
+        setPrice(response.data.price)
+        setSelectedImage(response.data.image)
+      })
+    }
+  }, [])
   
 
   const chooseFileImage = (e) => {
@@ -42,15 +60,15 @@ function ProductEditor(props) {
       <header className={classes.title}>Редактирование товара</header>
       <div className={classes.editor_input_field + " " + classes.name}>
         <div className={classes.editor_input_name}>Название</div>
-        <input></input>
+        <input value={name} onChange={(e) => onChangeName(e)}></input>
       </div>
       <div className={classes.editor_input_field  + " " + classes.description}>
         <div className={classes.editor_input_name}>Описание</div>
-        <input></input>
+        <input value={description} onChange={(e) => onChangeDescription(e)}></input>
       </div>
       <div className={classes.editor_input_field + " " + classes.price}>
         <div className={classes.editor_input_name}>Цена</div>
-        <input></input>
+        <input value={price} onChange={(e) => onChangePrice(e)}></input>
       </div>
       <form encType="multipart/form-data" >
         <input
@@ -60,11 +78,14 @@ function ProductEditor(props) {
             chooseFileImage(e)
           }}
         />
-        <button type='button' onClick={submitImage}>Отправить картинку</button>
+        <button type='button' onClick={''} className={classes.save_product}>Сохранить товар</button>
+        
+        <button type='button' onClick={''} className={classes.delete_product}>Удалить товар</button>
+        
       </form>
       </div>
       <div className={classes.editor_preview}>
-        <ProductCard product={product} test={true}/>
+        <ProductCard product={{price: price, description: description, name: name, image: selectedImage}} test={true}/>
       </div>
     </div>
   );

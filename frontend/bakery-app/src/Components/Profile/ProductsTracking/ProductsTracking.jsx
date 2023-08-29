@@ -47,7 +47,7 @@ function ProductsTracking(props) {
         <div className={classes.producttr_search}>
           <input></input>
         </div>
-        <button className={classes.producttr_button_add_product}>Добавить товар</button>
+        <button className={classes.producttr_button_add_product} onClick={e => openProductEditor('new')}>Добавить товар</button>
       </div>
       <table className={classes.producttr_table}>
         <thead>

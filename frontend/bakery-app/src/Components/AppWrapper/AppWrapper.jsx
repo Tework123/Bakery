@@ -138,7 +138,7 @@ function AppWrapper(props) {
     if (props.authorization.isAuthorizated) {
       let newBasket = [...basketProducts];
       let changeIndex = null;
-
+      debugger
       basketProducts.forEach((element, index) => {
         if (element.card_id === product.card_id) {
           changeIndex = index;
