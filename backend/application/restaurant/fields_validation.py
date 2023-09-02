@@ -10,6 +10,7 @@ card_data.add_argument('image', type=FileStorage, location='files', help='Тре
 
 
 # возможно, надо везде прописать?  Хотя для картинок, для картинки надо по другому проверить, там класс
+# сама формочка реакта не даст отправить пустую строку или не прикрепить файл
 def card_data_validation(data):
     for i in data.items():
         if i[1] == '':

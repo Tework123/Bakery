@@ -42,7 +42,7 @@ class LoginEmail(Resource):
 
             # отправка кода на email
             send_email_authentication(data['email'], code)
-            celery_task_send_email_authentication(data['email'], code)
+            # celery_task_send_email_authentication(data['email'], code)
 
             response = jsonify({'data': 'Код для авторизации отправлен на почту'})
             response.status_code = 200
@@ -51,7 +51,7 @@ class LoginEmail(Resource):
         # если такого email нет, то он добавляется в базу, отправляется код
         create_user(email, code)
         send_email_authentication(data['email'], code)
-        celery_task_send_email_authentication(data['email'], code)
+        # celery_task_send_email_authentication(data['email'], code)
 
         response = jsonify({'data': 'Для подтверждения регистрации введите код из почты'})
         response.status_code = 200
